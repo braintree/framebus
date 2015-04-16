@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+</head>
+<body>
+frame3.html
+<input id="polo-text">
+<script src="/js/test-app.js"></script>
+<script>
+
+  framebus.on('Marco', function (reply) {
+    var polo = document.getElementById('polo-text').value;
+    reply(polo);
+  });
+</script>
+</body>
+</html>

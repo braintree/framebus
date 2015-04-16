@@ -1,0 +1,4 @@
+node_modules/
+spec/functional/public/js/
+npm-debug.log
+phantomjsdriver.log

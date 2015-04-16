@@ -1,0 +1,46 @@
+{
+  "name": "framebus",
+  "description": "Framebus allows you to easily send messages across frames (and iframes) with a simple bus.",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:braintree/framebus"
+  },
+  "homepage": "https://github.com/braintree/framebus",
+  "version": "1.0.0",
+  "main": "dist/framebus.js",
+  "browser": "dist/framebus.js",
+  "files": [
+    "dist/framebus.js",
+    "dist/framebus.min.js"
+  ],
+  "scripts": {
+    "test": "gulp test",
+    "start": "./bin/www"
+  },
+  "license": "MIT",
+  "author": "braintree <code@getbraintree.com>",
+  "devDependencies": {
+    "async": "^0.9.0",
+    "chai": "^1.9.1",
+    "del": "^1.1.0",
+    "ejs": "^1.0.0",
+    "express": "^4.10.4",
+    "gulp": "^3.8.0",
+    "gulp-concat": "^2.4.2",
+    "gulp-eslint": "^0.5.0",
+    "gulp-mocha": "^0.4.1",
+    "gulp-remove-code": "^1.0.1",
+    "gulp-rename": "^1.2.0",
+    "gulp-size": "^1.1.0",
+    "gulp-streamify": "0.0.5",
+    "gulp-uglify": "^0.3.0",
+    "morgan": "^1.5.0",
+    "node-static": "^0.7.6",
+    "phantomjs": "1.9.11",
+    "selenium-standalone": "2.43.1-5",
+    "sinon": "^1.10.2",
+    "sinon-chai": "^2.5.0",
+    "vinyl-source-stream": "^1.0.0",
+    "wd-sync": "^1.2.5"
+  }
+}

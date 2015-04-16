@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+</head>
+<body>
+  index.html
+    <script>window.name = "root-frame";</script>
+    <script src="/js/test-app.js"></script>
+    <script>
+    framebus.on("Marco", function () { app.printToDOM('FAIL: [index] received "Marco"'); });
+    </script>
+    <iframe src="/html/frame1.html" name="frame1"></iframe>
+    <iframe src="/html/frame2.html" name="frame2"></iframe>
+    <iframe src="http://<%= domain %>:<%= port2 %>/html/frame3.html" name="frame3"></iframe>
+</body>
+</html>

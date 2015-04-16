@@ -1,0 +1,6 @@
+#!/usr/bin/env node
+
+'use strict';
+
+var server = require('../spec/functional/server');
+server.start(function () { console.log('') }, true);
