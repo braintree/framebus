@@ -1,4 +1,4 @@
 node_modules/
-spec/functional/public/js/
+spec/functional/public/js/test-app.js
 npm-debug.log
 phantomjsdriver.log
