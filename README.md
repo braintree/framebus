@@ -1,5 +1,7 @@
-Framebus
+Framebus 
 ========
+
+[![Build Status](https://travis-ci.org/braintree/framebus.svg)](https://travis-ci.org/braintree/framebus)
 
 Framebus allows you to easily send messages across frames (and iframes) with a simple bus.
 
