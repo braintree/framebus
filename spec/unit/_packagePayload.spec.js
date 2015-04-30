@@ -1,15 +1,10 @@
 'use strict';
 
 describe('_packagePayload', function () {
-  beforeEach(function () {
-    this.args = ['event', {}, '*'];
-  });
-
   it('should add event to payload', function () {
     var expected = 'event name';
-    this.args[0] = expected;
 
-    var result = this.bus._packagePayload.apply(this.bus, this.args);
+    var result = this.bus._packagePayload(expected, [], '*');
     var actual = JSON.parse(result).event;
 
     expect(actual).to.equal(expected);
@@ -17,22 +12,22 @@ describe('_packagePayload', function () {
 
   it('should add data to payload', function () {
     var expected = { some: 'data' };
-    this.args[1] = expected;
+    var args = [expected];
 
-    var result = this.bus._packagePayload.apply(this.bus, this.args);
-    var actual = JSON.parse(result).data;
+    var result = this.bus._packagePayload('event', args, '*');
+    var actual = JSON.parse(result);
 
-    expect(actual).to.deep.equal(expected);
+    expect(actual.args[0]).to.deep.equal(expected);
   });
 
   it('should add reply to payload if data is function', function () {
-    this.args[1] = function () {};
+    var args = [function () {}];
 
-    var result = this.bus._packagePayload.apply(this.bus, this.args);
+    var result = this.bus._packagePayload('event', args, '*');
     var actual = JSON.parse(result);
 
     expect(actual.reply).to.be.a('string');
-    expect(actual.data).not.to.exist;
+    expect(actual.args).to.be.empty;
   });
 
   it('should throw error with prefix text when element cannot be stringified', function () {
@@ -41,10 +36,10 @@ describe('_packagePayload', function () {
       get: function () { throw new Error('Cross-origin denied'); },
       enumerable: true
     });
-    this.args[1] = payload;
+    var args = [payload];
 
     var fn = function () {
-      this.bus._packagePayload.apply(this.bus, this.args);
+      var result = this.bus._packagePayload('event', args, '*');
     }.bind(this);
 
     expect(fn).to.throw('Could not stringify event: ');

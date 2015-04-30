@@ -6,7 +6,7 @@ describe('_dispatch', function () {
     var origin = 'https://example.com';
     this.bus.target(origin).subscribe('test event', subscriber);
 
-    this.bus._dispatch(origin, 'test event', 'data', origin)
+    this.bus._dispatch(origin, 'test event', ['data']);
 
     expect(subscriber).to.have.been.called;
   });
@@ -16,7 +16,7 @@ describe('_dispatch', function () {
     var origin = 'https://example.com';
     this.bus.target(origin).subscribe('test event', subscriber);
 
-    this.bus._dispatch(origin, 'different event', 'data', null)
+    this.bus._dispatch(origin, 'different event', ['data']);
 
     expect(subscriber).not.to.have.been.called;
   });
@@ -26,7 +26,7 @@ describe('_dispatch', function () {
     var origin = 'https://example.com';
     this.bus.target(origin).subscribe('test event', subscriber);
 
-    this.bus._dispatch('https://domain.com', 'test event', 'data', null)
+    this.bus._dispatch('https://domain.com', 'test event', ['data']);
 
     expect(subscriber).not.to.have.been.called;
   });
