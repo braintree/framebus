@@ -6,7 +6,7 @@ describe('subscribe', function () {
     var origin = 'https://example.com';
     var fn = function () {};
 
-    this.bus.subscribe(event, fn, origin);
+    this.bus.target(origin).subscribe(event, fn);
 
     expect(this.bus._getSubscribers()[origin][event]).to.contain(fn);
   });
