@@ -9,9 +9,9 @@ frame3.html
 <input id="polo-text">
 <script src="/js/test-app.js"></script>
 <script>
-
-  framebus.on('Marco', function (reply) {
+  framebus.on('Marco', function (question, reply) {
     var polo = document.getElementById('polo-text').value;
+    app.printToDOM(question);
     reply(polo);
   });
 </script>

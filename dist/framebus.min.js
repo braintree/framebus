@@ -147,7 +147,7 @@
   }
 
   function _onmessage(e) {
-    var payload, args;
+    var payload;
     if (typeof e.data !== 'string') { return; }
 
     payload = _unpackPayload(e);

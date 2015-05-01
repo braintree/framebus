@@ -13,7 +13,7 @@ frame1-inner.html
   var button = document.getElementById('marco-button')
 
   button.onclick = function () {
-    framebus.target(remoteOrigin).emit("Marco", function (reply, origin){
+    framebus.target(remoteOrigin).emit("Marco", "are you there?", function (reply){
       app.printToDOM(reply);
     });
   };
