@@ -58,13 +58,14 @@ __alises__: `sub`, `on`
 
 __returns__: `true` if the subscriber was successfully added, `false` otherwise
 
+Unless already bound to a scope, the listener will be executed with `this` set
+to the `MessageEvent` received over postMessage.
+
 | Argument                       | Type     | Description                                                 |
 | ------------------------------ | -------- | ----------------------------------------------------------- |
 | `event`                        | String   | The name of the event                                       |
-| `fn(arg..., callback, event)`  | Function | Event handler                                               |
-| `↳ data`                       | any      | The data that was published with the event                  |
-| `↳ callback(data)`             | Function | A callback for sending data directly back to the emitter    |
-| `↳ event`                      | String   | The `MessageEvent` object from the underlying `postMessage` |
+| `fn([arg...] [, callback])`    | Function | Event handler. Arguments are from the `publish` invocation  |
+| ↳ `this`                       | scope    | The `MessageEvent` object from the underlying `postMessage` |
 
 #### `unsubscribe('event', fn): boolean`
 __aliases__: `unsub`, `off`

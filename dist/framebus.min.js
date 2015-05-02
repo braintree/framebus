@@ -153,19 +153,17 @@
     payload = _unpackPayload(e);
     if (!payload) { return; }
 
-    payload.args.push(e);
-
-    _dispatch('*', payload.event, payload.args);
-    _dispatch(e.origin, payload.event, payload.args);
+    _dispatch('*', payload.event, payload.args, e);
+    _dispatch(e.origin, payload.event, payload.args, e);
   }
 
-  function _dispatch(origin, event, args) {
+  function _dispatch(origin, event, args, e) {
     var i;
     if (!subscribers[origin]) { return; }
     if (!subscribers[origin][event]) { return; }
 
     for (i = 0; i < subscribers[origin][event].length; i++) {
-      subscribers[origin][event][i].apply(null, args);
+      subscribers[origin][event][i].apply(e, args);
     }
   }
 
