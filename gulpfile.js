@@ -29,7 +29,7 @@ gulp.task('build', function () {
     .pipe(removeCode({ production: true }))
     .pipe(streamify(size({ showFiles: true })))
     .pipe(gulp.dest('dist'))
-    // .pipe(streamify(uglify()))
+    .pipe(streamify(uglify()))
     .pipe(rename('framebus.min.js'))
     .pipe(streamify(size({ showFiles: true })))
     .pipe(streamify(size({ showFiles: true, gzip: true })))
