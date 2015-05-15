@@ -171,6 +171,10 @@
     var i;
     frame.postMessage(payload, origin);
 
+    if (frame.opener) {
+      _broadcast(frame.opener, payload, origin);
+    }
+
     for (i = 0; i < frame.frames.length; i++) {
       _broadcast(frame.frames[i], payload, origin);
     }
