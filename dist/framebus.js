@@ -8,8 +8,20 @@
     root.framebus = factory();
   }
 })(this, function () {
+<<<<<<< HEAD
   var win, framebus;
+=======
+  var win;
+  var popups = [];
+>>>>>>> Adds popup handling without cyclic broadcasts
   var subscribers = {};
+  var prefix = '/*framebus*/';
+
+  function include(popup) {
+    if (popup instanceof Window) {
+      popups.push(popup);
+    }
+  }
 
   function target(origin) {
     var key;
@@ -76,8 +88,15 @@
 
   function _packagePayload(event, args, origin) {
     var packaged = false;
+<<<<<<< HEAD
     var payload = { event: event };
     var reply = args[args.length - 1];
+=======
+    var payload = {
+      event: event,
+      origin: origin
+    };
+>>>>>>> Adds popup handling without cyclic broadcasts
 
     if (typeof reply === 'function') {
       payload.reply = _subscribeReplier(reply, origin);
@@ -87,7 +106,7 @@
     payload.args = args;
 
     try {
-      packaged = JSON.stringify(payload);
+      packaged = prefix + JSON.stringify(payload);
     } catch (e) {
       throw new Error('Could not stringify event: ' + e.message);
     }
@@ -97,13 +116,13 @@
   function _unpackPayload(e) {
     var payload, replyOrigin, replySource, replyEvent;
 
+    if (e.data.slice(0, prefix.length) !== prefix ) { return false; }
+
     try {
-      payload = JSON.parse(e.data);
+      payload = JSON.parse(e.data.slice(prefix.length));
     } catch (err) {
       return false;
     }
-
-    if (payload.event == null) { return false; }
 
     if (payload.reply != null) {
       replyOrigin = e.origin;
@@ -153,8 +172,14 @@
     payload = _unpackPayload(e);
     if (!payload) { return; }
 
+<<<<<<< HEAD
     _dispatch('*', payload.event, payload.args, e);
     _dispatch(e.origin, payload.event, payload.args, e);
+=======
+    _dispatch('*', payload.event, payload.data, e.origin);
+    _dispatch(e.origin, payload.event, payload.data, e.origin);
+    _broadcastPopups(e.data, payload.origin);
+>>>>>>> Adds popup handling without cyclic broadcasts
   }
 
   function _dispatch(origin, event, args, e) {
@@ -171,12 +196,28 @@
     var i;
     frame.postMessage(payload, origin);
 
-    if (frame.opener) {
-      _broadcast(frame.opener, payload, origin);
+    if (frame.opener && frame.opener !== win) {
+      _broadcast(frame.opener.top, payload, origin);
     }
 
     for (i = 0; i < frame.frames.length; i++) {
       _broadcast(frame.frames[i], payload, origin);
+    }
+
+    _broadcastPopups(payload, origin);
+  }
+
+  function _broadcastPopups(payload, origin) {
+    var i, popup;
+
+    for (i = popups.length - 1; i >= 0; i--) {
+      popup = popups[i];
+
+      if (popup.closed === true) {
+        popups = popups.slice(i, 1);
+      } else {
+        _broadcast(popup.top, payload, origin);
+      }
     }
   }
 

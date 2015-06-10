@@ -6,6 +6,7 @@
 </head>
 <body>
 frame2.html
+<a target="about:blank" href="http://<%= domain %>:<%= port2 %>/html/frame3.html">Open popup</a>
 <script src="/js/test-app.js"></script>
 <script>
 framebus.on("Marco", function () { app.printToDOM('FAIL: [frame 2] received "Marco"'); });
