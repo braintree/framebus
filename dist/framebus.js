@@ -93,7 +93,7 @@
     var reply = args[args.length - 1];
 =======
     var payload = {
-      event: event,
+      event:  event,
       origin: origin
     };
 >>>>>>> Adds popup handling without cyclic broadcasts
@@ -116,7 +116,7 @@
   function _unpackPayload(e) {
     var payload, replyOrigin, replySource, replyEvent;
 
-    if (e.data.slice(0, prefix.length) !== prefix ) { return false; }
+    if (e.data.slice(0, prefix.length) !== prefix) { return false; }
 
     try {
       payload = JSON.parse(e.data.slice(prefix.length));
@@ -144,7 +144,7 @@
 
   function _attach(w) {
     if (win) { return; }
-    win = w;
+    win = w || window;
 
     if (win.addEventListener) {
       win.addEventListener('message', _onmessage, false);
@@ -241,10 +241,15 @@
     return false;
   }
 
-  _attach(window);
+  _attach();
 
+<<<<<<< HEAD
   framebus = {
     target:                   target,
+=======
+  return {
+    include:                  include,
+>>>>>>> Fixing tests after prefix addition
     publish:                  publish,
     pub:                      publish,
     trigger:                  publish,
