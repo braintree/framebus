@@ -8,12 +8,8 @@
     root.framebus = factory();
   }
 })(this, function () {
-<<<<<<< HEAD
   var win, framebus;
-=======
-  var win;
   var popups = [];
->>>>>>> Adds popup handling without cyclic broadcasts
   var subscribers = {};
   var prefix = '/*framebus*/';
 
@@ -88,15 +84,11 @@
 
   function _packagePayload(event, args, origin) {
     var packaged = false;
-<<<<<<< HEAD
-    var payload = { event: event };
-    var reply = args[args.length - 1];
-=======
     var payload = {
       event:  event,
       origin: origin
     };
->>>>>>> Adds popup handling without cyclic broadcasts
+    var reply = args[args.length - 1];
 
     if (typeof reply === 'function') {
       payload.reply = _subscribeReplier(reply, origin);
@@ -172,14 +164,9 @@
     payload = _unpackPayload(e);
     if (!payload) { return; }
 
-<<<<<<< HEAD
     _dispatch('*', payload.event, payload.args, e);
     _dispatch(e.origin, payload.event, payload.args, e);
-=======
-    _dispatch('*', payload.event, payload.data, e.origin);
-    _dispatch(e.origin, payload.event, payload.data, e.origin);
     _broadcastPopups(e.data, payload.origin);
->>>>>>> Adds popup handling without cyclic broadcasts
   }
 
   function _dispatch(origin, event, args, e) {
@@ -243,13 +230,9 @@
 
   _attach();
 
-<<<<<<< HEAD
   framebus = {
     target:                   target,
-=======
-  return {
     include:                  include,
->>>>>>> Fixing tests after prefix addition
     publish:                  publish,
     pub:                      publish,
     trigger:                  publish,
