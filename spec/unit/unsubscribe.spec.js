@@ -9,7 +9,7 @@ describe('unsubscribe', function () {
     s[origin] = {};
     s[origin][event] = [function () {}, fn];
 
-    this.bus.unsubscribe(event, fn, origin);
+    this.bus.target(origin).unsubscribe(event, fn);
 
     expect(s[origin][event]).not.to.contain(fn);
     expect(s[origin][event].length).to.equal(1);
@@ -23,7 +23,7 @@ describe('unsubscribe', function () {
     s[origin] = {};
     s[origin][event] = [function () {}, fn];
 
-    this.bus.unsubscribe(event, fn, origin);
+    this.bus.target(origin).unsubscribe(event, fn);
 
     expect(s[origin][event].length).to.equal(1);
   });
@@ -36,7 +36,7 @@ describe('unsubscribe', function () {
     s[origin] = {};
     s[origin][event] = [function () {}, fn];
 
-    var actual = this.bus.unsubscribe(event, fn, origin);
+    var actual = this.bus.target(origin).unsubscribe(event, fn);
 
     expect(actual).to.be.true;
   });
@@ -49,7 +49,7 @@ describe('unsubscribe', function () {
     s[origin] = {};
     s[origin][event] = [function () {}, fn];
 
-    var actual = this.bus.unsubscribe('another event', fn, origin);
+    var actual = this.bus.target(origin).unsubscribe('another event', fn);
 
     expect(actual).to.be.false;
   });
@@ -62,7 +62,7 @@ describe('unsubscribe', function () {
     s[origin] = {};
     s[origin][event] = [function () {}, fn];
 
-    var actual = this.bus.unsubscribe(event, fn, 'https://another.domain');
+    var actual = this.bus.target('https://another.domain').unsubscribe(event, fn);
 
     expect(actual).to.be.false;
   });

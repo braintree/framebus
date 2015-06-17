@@ -13,25 +13,28 @@ describe('_unpackPayload', function () {
     expect(actual).to.be.false;
   });
 
-  it('should return event and data in payload', function () {
+  it('should return event and args in payload', function () {
     var event = 'event name';
-    var data = 'my string';
+    var args = ['my string'];
     var actual = this.bus._unpackPayload({
-      data: JSON.stringify({event: event, data: data })
+      data: JSON.stringify({event: event, args: args })
     });
 
     expect(actual.event).to.equal(event);
-    expect(actual.data).to.equal(data);
+    expect(actual.args.length).to.equal(1);
+    expect(actual.args).to.contain('my string');
   });
 
-  it('should return event and data in payload', function () {
+  it('should return event and args and reply in payload', function () {
     var event = 'event name';
     var reply = '123129085-4234-1231-99887877';
+    var args = ['some data'];
     var actual = this.bus._unpackPayload({
-      data: JSON.stringify({event: event, reply: reply })
+      data: JSON.stringify({event: event, reply: reply, args: args })
     });
 
     expect(actual.event).to.equal(event);
-    expect(actual.data).to.be.a('function');
+    expect(actual.args[1]).to.be.a('function');
+    expect(actual.args[0]).to.equal('some data');
   });
 });

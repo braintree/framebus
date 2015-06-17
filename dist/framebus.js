@@ -8,16 +8,34 @@
     root.framebus = factory();
   }
 })(this, function () {
-  var win;
+  var win, framebus;
   var subscribers = {};
 
-  function publish(event, data, origin) {
-    var payload;
-    origin = origin || '*';
+  function target(origin) {
+    var key;
+    var targetedFramebus = {};
+
+    for (key in framebus) {
+      if (!framebus.hasOwnProperty(key)) { continue; }
+
+      targetedFramebus[key] = framebus[key];
+    }
+
+    targetedFramebus._origin = origin || '*';
+
+    return targetedFramebus;
+  }
+
+  function publish(event) {
+    var payload, args;
+    var origin = this._origin || '*';
+
     if (typeof event !== 'string') { return false; }
     if (typeof origin !== 'string') { return false; }
 
-    payload = _packagePayload(event, data, origin);
+    args = Array.prototype.slice.call(arguments, 1);
+
+    payload = _packagePayload(event, args, origin);
     if (payload === false) { return false; }
 
     _broadcast(win.top, payload, origin);
@@ -25,8 +43,9 @@
     return true;
   }
 
-  function subscribe(event, fn, origin) {
-    origin = origin || '*';
+  function subscribe(event, fn) {
+    var origin = this._origin || '*';
+
     if (_subscriptionArgsInvalid(event, fn, origin)) { return false; }
 
     subscribers[origin] = subscribers[origin] || {};
@@ -36,9 +55,9 @@
     return true;
   }
 
-  function unsubscribe(event, fn, origin) {
+  function unsubscribe(event, fn) {
     var i, subscriberList;
-    origin = origin || '*';
+    var origin = this._origin || '*';
 
     if (_subscriptionArgsInvalid(event, fn, origin)) { return false; }
 
@@ -55,15 +74,17 @@
     return false;
   }
 
-  function _packagePayload(event, data, origin) {
+  function _packagePayload(event, args, origin) {
     var packaged = false;
     var payload = { event: event };
+    var reply = args[args.length - 1];
 
-    if (typeof data === 'function') {
-      payload.reply = _subscribeReplier(data, origin);
-    } else {
-      payload.data = data;
+    if (typeof reply === 'function') {
+      payload.reply = _subscribeReplier(reply, origin);
+      args = args.slice(0, -1);
     }
+
+    payload.args = args;
 
     try {
       packaged = JSON.stringify(payload);
@@ -74,7 +95,7 @@
   }
 
   function _unpackPayload(e) {
-    var payload, replyOrigin, replySource;
+    var payload, replyOrigin, replySource, replyEvent;
 
     try {
       payload = JSON.parse(e.data);
@@ -87,13 +108,16 @@
     if (payload.reply != null) {
       replyOrigin = e.origin;
       replySource = e.source;
+      replyEvent = payload.reply;
 
-      payload.data = function reply(data) {
-        var replyPayload = _packagePayload(payload.reply, data, replyOrigin);
+      payload.reply = function reply(data) {
+        var replyPayload = _packagePayload(replyEvent, [data], replyOrigin);
         if (replyPayload === false) { return false; }
 
         replySource.postMessage(replyPayload, replyOrigin);
       };
+
+      payload.args.push(payload.reply);
     }
 
     return payload;
@@ -129,17 +153,17 @@
     payload = _unpackPayload(e);
     if (!payload) { return; }
 
-    _dispatch('*', payload.event, payload.data, e.origin);
-    _dispatch(e.origin, payload.event, payload.data, e.origin);
+    _dispatch('*', payload.event, payload.args, e);
+    _dispatch(e.origin, payload.event, payload.args, e);
   }
 
-  function _dispatch(origin, event, data, eventOrigin) {
+  function _dispatch(origin, event, args, e) {
     var i;
     if (!subscribers[origin]) { return; }
     if (!subscribers[origin][event]) { return; }
 
     for (i = 0; i < subscribers[origin][event].length; i++) {
-      subscribers[origin][event][i](data, eventOrigin);
+      subscribers[origin][event][i].apply(e, args);
     }
   }
 
@@ -157,10 +181,10 @@
 
     function replier(d, o) {
       fn(d, o);
-      unsubscribe(uuid, replier, origin);
+      framebus.target(origin).unsubscribe(uuid, replier);
     }
 
-    subscribe(uuid, replier, origin);
+    framebus.target(origin).subscribe(uuid, replier);
     return uuid;
   }
 
@@ -174,7 +198,8 @@
 
   _attach(window);
 
-  return {
+  framebus = {
+    target:                   target,
     publish:                  publish,
     pub:                      publish,
     trigger:                  publish,
@@ -186,4 +211,6 @@
     unsub:                    unsubscribe,
     off:                      unsubscribe
   };
+
+  return framebus;
 });

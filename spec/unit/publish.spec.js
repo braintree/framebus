@@ -12,13 +12,13 @@ describe('publish', function () {
   });
 
   it('should return false if origin is not a string', function () {
-    var actual = this.bus.publish("event", "", { origin: "object"});
+    var actual = this.bus.target({ origin: "object"}).publish("event", "");
 
     expect(actual).to.be.false;
   });
 
   it('should return true if origin and event are strings', function () {
-    var actual = this.bus.publish("event", "", "https://example.com");
+    var actual = this.bus.target("https://example.com").publish("event", "");
 
     expect(actual).to.be.true;
   });

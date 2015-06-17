@@ -15,7 +15,7 @@ describe('Reply Events', function () {
     done();
   });
 
-  it('should only publish to targeted domains', wrap(function () {
+  it('should only publish to targeted domains and print reply', wrap(function () {
     browser.init({ browserName: 'phantomjs' });
     browser.get('http://localhost:3099'); // pull out, variablize
 
@@ -45,13 +45,13 @@ describe('Reply Events', function () {
 
     browser.window(rootWindowName);
     browser.frame('frame3');
-    var frame3Received = browser.elementByTagNameIfExists('p');
+    var frame3ReceivedQuestion = browser.elementByTagName('p').text();
 
     browser.quit();
 
     expect(indexReceived).to.be.undefined;
     expect(frame1Received).to.be.undefined;
     expect(frame2Received).to.be.undefined;
-    expect(frame3Received).to.be.undefined;
+    expect(frame3ReceivedQuestion).to.equal('are you there?');
   }));
 });

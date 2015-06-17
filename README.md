@@ -27,42 +27,55 @@ bus.on('message', function (data) {
 
 ## API
 
-#### `publish('event', (data or callback) [, toOrigin]): boolean`
+#### `target(origin): framebus`
+
+__returns__: a chainable instance of framebus that operates on the chosen origin.
+
+This method is used in conjuction with `publish`, `subscribe`, and `unsubscribe` to restrict their results to the given origin. By default, an origin of `'*'` is used.
+
+```javascript
+framebus.target('https://example.com').on('my cool event', function () {});
+// will ignore all incoming 'my cool event' NOT from 'https://example.com'
+```
+
+| Argument         | Type     | Description                                          |
+| ---------------- | -------- | ---------------------------------------------------- |
+| `origin`         | String   | (default: `'*'`) only target frames with this origin |
+
+#### `publish('event' [, arg...] [, callback]): boolean`
 __aliases__: `pub`, `trigger`, `emit`
 
 __returns__: `true` if the event was successfully published, `false` otherwise
 
 | Argument         | Type     | Description                                          |
 | ---------------- | -------- | ---------------------------------------------------- |
-| `event`        | String   | The name of the event                                |
-| `data`           | any      | The data to give to subscribers                      |
+| `event`          | String   | The name of the event                                |
+| `arg`            | any      | The data to give to subscribers                      |
 | `callback(data)` | Function | Give subscribers a function for easy, direct replies |
-| `toOrigin`       | String   | (default: `'*'`) only target frames with this origin |
 
-#### `subscribe('event', fn [, fromOrigin]): boolean`
+#### `subscribe('event', fn): boolean`
 __alises__: `sub`, `on`
 
 __returns__: `true` if the subscriber was successfully added, `false` otherwise
 
+Unless already bound to a scope, the listener will be executed with `this` set
+to the `MessageEvent` received over postMessage.
+
 | Argument                       | Type     | Description                                                 |
 | ------------------------------ | -------- | ----------------------------------------------------------- |
-| `event`                      | String   | The name of the event                                       |
-| `fn(data or callback, origin)` | Function | Event handler                                               |
-| `↳ data`                       | any      | The data that was published with the event                  |
-| `↳ callback(data)`             | Function | A callback for sending data directly back to the emitter    |
-| `↳ origin`                     | String   | The origin address that originated the event                |
-| `fromOrigin`                   | String   | (default: `'*'`) only subscribe to events from this origin  |
+| `event`                        | String   | The name of the event                                       |
+| `fn([arg...] [, callback])`    | Function | Event handler. Arguments are from the `publish` invocation  |
+| ↳ `this`                       | scope    | The `MessageEvent` object from the underlying `postMessage` |
 
-#### `unsubscribe('event', fn [, fromOrigin]): boolean`
+#### `unsubscribe('event', fn): boolean`
 __aliases__: `unsub`, `off`
 
 __returns__: `true` if the subscriber was successfully removed, `false` otherwise
 
 | Argument     | Type     | Description                                          |
 | ------------ | -------- | ---------------------------------------------------- |
-| `event`    | String   | The name of the event                                |
+| `event`      | String   | The name of the event                                |
 | `fn`         | Function | The function that was subscribed                     |
-| `fromOrigin` | String   | The origin, if given during `subscribe`              |
 
 ## Pitfalls
 
@@ -73,7 +86,7 @@ event delegation
 
 __framebus__ allows convenient event delegation across iframe borders. By
 default it will broadcast events to all iframes on the page, regardless of
-origin. Use the optional `origin` parameter when you know the exact domain of
+origin. Use the optional `target()` method when you know the exact domain of
 the iframes you are communicating with. This will protect your event data from
 malicious domains.
 
@@ -119,9 +132,10 @@ as follows:
    callback function to send data back to the emitter's origin
 
     ```javascript
-    framebus.on('Marco!', function (callback) {
+    framebus.target('http://emitter.example.com')
+      .on('Marco!', function (callback) {
          callback('Polo!');
-     }, 'http://emitter.example.com')
+      });
     ```
 
 1. The one-time-use function on `http://listener.example.com` publishes an event
