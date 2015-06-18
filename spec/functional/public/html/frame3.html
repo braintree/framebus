@@ -6,9 +6,17 @@
 </head>
 <body>
 frame3.html
-<input id="polo-text">
+<input id="polo-text" placeholder="Marco reply"><br/>
+
+<input id="popup-message">
+<button id="send">Send popup a message</button>
+
 <script src="/js/test-app.js"></script>
 <script>
+  document.querySelector('#send').addEventListener('click', function () {
+    framebus.emit('message', document.querySelector('#popup-message').value);
+  });
+
   framebus.on('Marco', function (question, reply) {
     var polo = document.getElementById('polo-text').value;
     app.printToDOM(question);

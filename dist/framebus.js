@@ -14,9 +14,11 @@
   var prefix = '/*framebus*/';
 
   function include(popup) {
-    if (popup instanceof Window) {
-      popups.push(popup);
-    }
+    if (popup == null) { return; }
+    if (popup.Window == null) { return; }
+    if (popup.constructor !== popup.Window) { return; }
+
+    popups.push(popup);
   }
 
   function target(origin) {
@@ -190,8 +192,6 @@
     for (i = 0; i < frame.frames.length; i++) {
       _broadcast(frame.frames[i], payload, origin);
     }
-
-    _broadcastPopups(payload, origin);
   }
 
   function _broadcastPopups(payload, origin) {
