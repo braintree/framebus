@@ -15,11 +15,11 @@ describe('Popup Events', function () {
     done();
   });
 
-  it.skip('should be able to receive events from opener frames', wrap(function () {
+  it('should be able to receive events from opener frames', wrap(function () {
     var actual;
     var expected = 'hello from frame3!';
 
-    browser.init({ browserName: 'phantomjs' });
+    browser.init({ browserName: 'firefox' });
     browser.get('http://localhost:3099'); // pull out, variablize
 
     var rootWindowName = browser.windowName();
@@ -39,12 +39,43 @@ describe('Popup Events', function () {
     browser.window("popup");
 
     browser.waitForElementByTagName('p', function (el) {
-      return el.innerHTML != null;
+      return el.innerHTML !== '';
     }, 1000);
-    actual = browser.text('p');
+    actual = browser.elementByTagName('p').text();
 
     browser.quit();
 
     expect(actual).to.equal(expected);
+  }));
+
+  it('should be able to send events to opener frames', wrap(function () {
+    var actual;
+    var expected = 'hello from popup!';
+
+    browser.init({ browserName: 'firefox' });
+    browser.get('http://localhost:3099'); // pull out, variablize
+
+    var rootWindowName = browser.windowName();
+
+    browser.elementById('open-popup').click();
+
+    browser.window("popup");
+    browser.waitForElementByTagName('body', function (el) {
+      return el.innerHTML != null;
+    }, 1000);
+    browser.elementById('from-popup-message').type(expected);
+    browser.elementById('send').click();
+
+    browser.window(rootWindowName);
+    browser.frame('frame2');
+
+    browser.waitForElementByTagName('p', function (el) {
+      return el.innerHTML !== '';
+    }, 1000);
+    actual = browser.elementByTagName('p').text();
+
+    browser.quit();
+
+    expect(actual).to.contain(expected);
   }));
 });

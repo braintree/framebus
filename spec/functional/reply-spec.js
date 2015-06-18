@@ -16,7 +16,7 @@ describe('Reply Events', function () {
   });
 
   it('should only publish to targeted domains and print reply', wrap(function () {
-    browser.init({ browserName: 'phantomjs' });
+    browser.init({ browserName: 'firefox' });
     browser.get('http://localhost:3099'); // pull out, variablize
 
     var rootWindowName = browser.windowName();
