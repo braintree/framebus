@@ -77,6 +77,21 @@ __returns__: `true` if the subscriber was successfully removed, `false` otherwis
 | `event`      | String   | The name of the event                                |
 | `fn`         | Function | The function that was subscribed                     |
 
+#### `include(popup): boolean`
+
+__returns__: `true` if the popup was successfully included, `false` otherwise
+
+```javascript
+var popup = window.open('https://example.com');
+
+framebus.include(popup);
+framebus.emit('hello popup and friends!');
+```
+
+| Argument     | Type     | Description                                          |
+| ------------ | -------- | ---------------------------------------------------- |
+| `popup`      | Window   | The popup refrence returned by `window.open`         |
+
 ## Pitfalls
 
 These are some things to keep in mind while using __framebus__ to handle your
