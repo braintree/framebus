@@ -9,7 +9,18 @@
   }
 })(this, function () {
   var win, framebus;
+  var popups = [];
   var subscribers = {};
+  var prefix = '/*framebus*/';
+
+  function include(popup) {
+    if (popup == null) { return false; }
+    if (popup.Window == null) { return false; }
+    if (popup.constructor !== popup.Window) { return false; }
+
+    popups.push(popup);
+    return true;
+  }
 
   function target(origin) {
     var key;
@@ -76,7 +87,10 @@
 
   function _packagePayload(event, args, origin) {
     var packaged = false;
-    var payload = { event: event };
+    var payload = {
+      event:  event,
+      origin: origin
+    };
     var reply = args[args.length - 1];
 
     if (typeof reply === 'function') {
@@ -87,7 +101,7 @@
     payload.args = args;
 
     try {
-      packaged = JSON.stringify(payload);
+      packaged = prefix + JSON.stringify(payload);
     } catch (e) {
       throw new Error('Could not stringify event: ' + e.message);
     }
@@ -97,13 +111,13 @@
   function _unpackPayload(e) {
     var payload, replyOrigin, replySource, replyEvent;
 
+    if (e.data.slice(0, prefix.length) !== prefix) { return false; }
+
     try {
-      payload = JSON.parse(e.data);
+      payload = JSON.parse(e.data.slice(prefix.length));
     } catch (err) {
       return false;
     }
-
-    if (payload.event == null) { return false; }
 
     if (payload.reply != null) {
       replyOrigin = e.origin;
@@ -125,7 +139,7 @@
 
   function _attach(w) {
     if (win) { return; }
-    win = w;
+    win = w || window;
 
     if (win.addEventListener) {
       win.addEventListener('message', _onmessage, false);
@@ -155,6 +169,7 @@
 
     _dispatch('*', payload.event, payload.args, e);
     _dispatch(e.origin, payload.event, payload.args, e);
+    _broadcastPopups(e.data, payload.origin, e.source);
   }
 
   function _dispatch(origin, event, args, e) {
@@ -171,8 +186,26 @@
     var i;
     frame.postMessage(payload, origin);
 
+    if (frame.opener && frame.opener !== win) {
+      _broadcast(frame.opener.top, payload, origin);
+    }
+
     for (i = 0; i < frame.frames.length; i++) {
       _broadcast(frame.frames[i], payload, origin);
+    }
+  }
+
+  function _broadcastPopups(payload, origin, source) {
+    var i, popup;
+
+    for (i = popups.length - 1; i >= 0; i--) {
+      popup = popups[i];
+
+      if (popup.closed === true) {
+        popups = popups.slice(i, 1);
+      } else if (source !== popup) {
+        _broadcast(popup.top, payload, origin);
+      }
     }
   }
 
@@ -196,10 +229,11 @@
     return false;
   }
 
-  _attach(window);
+  _attach();
 
   framebus = {
     target:                   target,
+    include:                  include,
     publish:                  publish,
     pub:                      publish,
     trigger:                  publish,

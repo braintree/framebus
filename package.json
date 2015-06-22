@@ -14,7 +14,7 @@
     "dist/framebus.min.js"
   ],
   "scripts": {
-    "test": "gulp test",
+    "test": "xvfb-run --server-num=99 gulp test",
     "start": "./bin/www"
   },
   "license": "MIT",

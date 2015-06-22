@@ -5,6 +5,7 @@ chai.use(require('sinon-chai'));
 
 global.sinon = require('sinon');
 global.expect = chai.expect;
+global.messagePrefix = '/*framebus*/'
 
 before(function () {
   this.sandbox = sinon.sandbox.create();

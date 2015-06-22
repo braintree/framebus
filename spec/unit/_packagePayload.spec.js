@@ -4,8 +4,8 @@ describe('_packagePayload', function () {
   it('should add event to payload', function () {
     var expected = 'event name';
 
-    var result = this.bus._packagePayload(expected, [], '*');
-    var actual = JSON.parse(result).event;
+    var result = this.bus._packagePayload.call(this.bus, expected, [], '*');
+    var actual = JSON.parse(result.replace(messagePrefix,'')).event;
 
     expect(actual).to.equal(expected);
   });
@@ -14,8 +14,8 @@ describe('_packagePayload', function () {
     var expected = { some: 'data' };
     var args = [expected];
 
-    var result = this.bus._packagePayload('event', args, '*');
-    var actual = JSON.parse(result);
+    var result = this.bus._packagePayload.call(this.bus, 'event', args, '*');
+    var actual = JSON.parse(result.replace(messagePrefix,''));
 
     expect(actual.args[0]).to.deep.equal(expected);
   });
@@ -23,8 +23,8 @@ describe('_packagePayload', function () {
   it('should add reply to payload if data is function', function () {
     var args = [function () {}];
 
-    var result = this.bus._packagePayload('event', args, '*');
-    var actual = JSON.parse(result);
+    var result = this.bus._packagePayload.call(this.bus, 'event', args, '*');
+    var actual = JSON.parse(result.replace(messagePrefix,''));
 
     expect(actual.reply).to.be.a('string');
     expect(actual.args).to.be.empty;
