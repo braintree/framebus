@@ -14,11 +14,12 @@
   var prefix = '/*framebus*/';
 
   function include(popup) {
-    if (popup == null) { return; }
-    if (popup.Window == null) { return; }
-    if (popup.constructor !== popup.Window) { return; }
+    if (popup == null) { return false; }
+    if (popup.Window == null) { return false; }
+    if (popup.constructor !== popup.Window) { return false; }
 
     popups.push(popup);
+    return true;
   }
 
   function target(origin) {
@@ -168,7 +169,7 @@
 
     _dispatch('*', payload.event, payload.args, e);
     _dispatch(e.origin, payload.event, payload.args, e);
-    _broadcastPopups(e.data, payload.origin);
+    _broadcastPopups(e.data, payload.origin, e.source);
   }
 
   function _dispatch(origin, event, args, e) {
@@ -194,7 +195,7 @@
     }
   }
 
-  function _broadcastPopups(payload, origin) {
+  function _broadcastPopups(payload, origin, source) {
     var i, popup;
 
     for (i = popups.length - 1; i >= 0; i--) {
@@ -202,7 +203,7 @@
 
       if (popup.closed === true) {
         popups = popups.slice(i, 1);
-      } else {
+      } else if (source !== popup) {
         _broadcast(popup.top, payload, origin);
       }
     }

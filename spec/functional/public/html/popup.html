@@ -10,13 +10,20 @@ popup.html
 <button id="send">Send</button>
 <script src="/js/test-app.js"></script>
 <script>
-  framebus.on('message', function (message) {
-    app.printToDOM(message);
-  });
+  framebus.on('message', app.printToDOM);
 
   document.querySelector('#send').addEventListener('click', function () {
     framebus.emit('from-popup', document.querySelector('#from-popup-message').value);
   }, false);
+
+  var count = 0;
+  framebus.on('from-popup', function() {
+    count++;
+
+    if (count > 1) {
+      app.printToDOM('FAILURE received "from-popup" multiple times');
+    }
+  });
 </script>
 </body>
 </html>

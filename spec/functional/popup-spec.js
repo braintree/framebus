@@ -78,4 +78,35 @@ describe('Popup Events', function () {
 
     expect(actual).to.contain(expected);
   }));
+
+  it('should not double-receive events in popups', wrap(function () {
+    var actual;
+    var expected = 'hello from popup!';
+
+    browser.init({ browserName: 'firefox' });
+    browser.get('http://localhost:3099'); // pull out, variablize
+
+    var rootWindowName = browser.windowName();
+
+    browser.elementById('open-popup').click();
+
+    browser.window("popup");
+    browser.waitForElementByTagName('body', function (el) {
+      return el.innerHTML != null;
+    }, 1000);
+    browser.elementById('from-popup-message').type(expected);
+    browser.elementById('send').click();
+
+    browser.window(rootWindowName);
+    browser.frame('frame2');
+
+    browser.waitForElementByTagName('p', function (el) {
+      return el.innerHTML !== '';
+    }, 1000);
+    actual = browser.elementByTagName('p').text();
+
+    browser.quit();
+
+    expect(actual).not.to.contain('FAILURE');
+  }));
 });
