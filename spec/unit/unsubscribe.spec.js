@@ -1,6 +1,14 @@
 'use strict';
 
 describe('unsubscribe', function () {
+  it('should be directly usable', function () {
+    var unsubscribe = this.bus.unsubscribe;
+
+    expect(function () {
+      unsubscribe('event', function () {});
+    }).not.to.throw();
+  });
+
   it('should remove subscriber given event and origin', function () {
     var event = 'the event';
     var origin = 'https://example.com';

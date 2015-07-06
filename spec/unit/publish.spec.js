@@ -5,6 +5,14 @@ describe('publish', function () {
     this.bus._attach(mkWindow());
   });
 
+  it('should be directly usable', function () {
+    var publish = this.bus.publish;
+
+    expect(function () {
+       publish("event", "data");
+    }).not.to.throw();
+  });
+
   it('should return false if event is not a string', function () {
     var actual = this.bus.publish({}, "");
 

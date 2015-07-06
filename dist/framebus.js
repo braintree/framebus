@@ -39,10 +39,10 @@
 
   function publish(event) {
     var payload, args;
-    var origin = this._origin || '*';
+    var origin = _getOrigin(this);
 
-    if (typeof event !== 'string') { return false; }
-    if (typeof origin !== 'string') { return false; }
+    if (_isntString(event)) { return false; }
+    if (_isntString(origin)) { return false; }
 
     args = Array.prototype.slice.call(arguments, 1);
 
@@ -55,7 +55,7 @@
   }
 
   function subscribe(event, fn) {
-    var origin = this._origin || '*';
+    var origin = _getOrigin(this);
 
     if (_subscriptionArgsInvalid(event, fn, origin)) { return false; }
 
@@ -68,7 +68,7 @@
 
   function unsubscribe(event, fn) {
     var i, subscriberList;
-    var origin = this._origin || '*';
+    var origin = _getOrigin(this);
 
     if (_subscriptionArgsInvalid(event, fn, origin)) { return false; }
 
@@ -83,6 +83,14 @@
     }
 
     return false;
+  }
+
+  function _getOrigin(scope) {
+    return scope && scope._origin || '*';
+  }
+
+  function _isntString(string) {
+    return typeof string !== 'string';
   }
 
   function _packagePayload(event, args, origin) {
@@ -162,7 +170,7 @@
 
   function _onmessage(e) {
     var payload;
-    if (typeof e.data !== 'string') { return; }
+    if (_isntString(e.data)) { return; }
 
     payload = _unpackPayload(e);
     if (!payload) { return; }
@@ -222,9 +230,9 @@
   }
 
   function _subscriptionArgsInvalid(event, fn, origin) {
-    if (typeof event !== 'string') { return true; }
+    if (_isntString(event)) { return true; }
     if (typeof fn !== 'function') { return true; }
-    if (typeof origin !== 'string') { return true; }
+    if (_isntString(origin)) { return true; }
 
     return false;
   }
