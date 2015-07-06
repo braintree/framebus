@@ -1,3 +1,13 @@
+unreleased
+==========
+
+* Exceptions are no longer thrown when `publish`, `subscribe` or `unsubscribe` were invoked directly.
+
+  ```javascript
+    var publish = framebus.publish;
+    publish('event');
+  ```
+
 2.0.0
 =====
 
