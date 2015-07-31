@@ -192,7 +192,10 @@
 
   function _broadcast(frame, payload, origin) {
     var i;
-    frame.postMessage(payload, origin);
+
+    try {
+      frame.postMessage(payload, origin);
+    } catch (_) { return; }
 
     if (frame.opener && frame.opener !== win) {
       _broadcast(frame.opener.top, payload, origin);

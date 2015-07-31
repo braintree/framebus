@@ -1,6 +1,17 @@
 'use strict';
 
 describe('_broadcast', function () {
+  it('should not throw exception when postMessage is denied', function () {
+    var frame = mkFrame(this);
+    frame.postMessage = function () {
+      throw new Error('Invalid calling object');
+    }
+
+    var self = this;
+    expect(function () {
+      self.bus._broadcast(frame, 'payload', '*');
+    }).not.to.throw();
+  });
   it('should postMessage to current frame', function () {
     var frame = mkFrame(this);
     this.bus._broadcast(frame, 'payload', '*');
