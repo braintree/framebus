@@ -41,6 +41,20 @@ describe('_broadcast', function () {
     expect(frame.opener.top.postMessage).to.have.been.called;
   });
 
+  it('should not postMessage to window.opener if it has closed', function () {
+    var frame = mkFrame(this);
+    frame.opener = {};
+    frame.opener.closed = true;
+    frame.opener.top = {
+      postMessage: this.sandbox.spy(),
+      frames: []
+    };
+
+    this.bus._broadcast(frame, 'payload', '*');
+
+    expect(frame.opener.top.postMessage).not.to.have.been.called;
+  });
+
   it("should postMessage to the window.opener's child frames", function () {
     var frame = mkFrame(this);
 

@@ -1,7 +1,8 @@
 unreleased
 ==========
 
-* Do not throw exceptions when a `frame.postMessage` is denied
+* Do not throw exceptions `window.opener` existed but has already closed.
+* Do not throw exceptions when a `frame.postMessage` is denied.
 * Exceptions are no longer thrown when `publish`, `subscribe` or `unsubscribe` were invoked directly.
 
   ```javascript
