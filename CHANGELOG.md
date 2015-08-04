@@ -1,5 +1,5 @@
-unreleased
-==========
+2.0.1
+=====
 
 * Do not throw exceptions `window.opener` existed but has already closed.
 * Do not throw exceptions when a `frame.postMessage` is denied.
