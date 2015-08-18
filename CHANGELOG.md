@@ -1,3 +1,8 @@
+2.0.2
+=====
+
+* Fixes a window reference error when in strict mode and CommonJS
+
 2.0.1
 =====
 
