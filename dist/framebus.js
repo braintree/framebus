@@ -1,13 +1,13 @@
 'use strict';
 (function (root, factory) {
   if (typeof exports === 'object' && typeof module !== 'undefined') {
-    module.exports = factory(root);
+    module.exports = factory();
   } else if (typeof define === 'function' && define.amd) {
-    define([], function () { return factory(root); });
+    define([], factory);
   } else {
-    root.framebus = factory(root);
+    root.framebus = factory();
   }
-})(this, function (window) {
+})(this, function () {
   var win, framebus;
   var popups = [];
   var subscribers = {};
