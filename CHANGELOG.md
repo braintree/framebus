@@ -1,3 +1,8 @@
+UNRELEASED
+==========
+
+* Do not infinitely recurse when `window.opener === window`
+
 2.0.1
 =====
 

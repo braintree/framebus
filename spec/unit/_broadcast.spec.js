@@ -55,6 +55,17 @@ describe('_broadcast', function () {
     expect(frame.opener.top.postMessage).not.to.have.been.called;
   });
 
+  it.only('should not infinitely recurse if opener is itself', function (done) {
+    var frame = mkFrame(this);
+    frame.opener = frame;
+    frame.top = frame;
+
+    this.bus._broadcast(frame, 'payload', '*');
+
+    // don't infinitely recurse
+    done();
+  });
+
   it("should postMessage to the window.opener's child frames", function () {
     var frame = mkFrame(this);
 

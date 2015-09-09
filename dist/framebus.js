@@ -197,7 +197,7 @@
       frame.postMessage(payload, origin);
     } catch (_) { return; }
 
-    if (frame.opener && !frame.opener.closed && frame.opener !== win) {
+    if (frame.opener && frame.opener !== frame && !frame.opener.closed && frame.opener !== win) {
       _broadcast(frame.opener.top, payload, origin);
     }
 
