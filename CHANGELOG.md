@@ -1,7 +1,12 @@
-2.0.2
+2.0.3
 =====
 
 * Do not infinitely recurse when `window.opener === window`
+
+2.0.2
+=====
+
+[unpublished]
 
 2.0.1
 =====
