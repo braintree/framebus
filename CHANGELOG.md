@@ -1,3 +1,8 @@
+UNRELEASED
+==========
+
+* Avoid exceptions while broadcasting events
+
 2.0.3
 =====
 
