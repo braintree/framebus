@@ -1,5 +1,5 @@
-UNRELEASED
-==========
+2.0.4
+=====
 
 * Avoid exceptions while broadcasting events
 

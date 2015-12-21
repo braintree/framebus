@@ -81,4 +81,17 @@ describe('_broadcast', function () {
 
     expect(frame.opener.top.frames[0].postMessage).to.have.been.called;
   });
+
+  it("should not throw if window.opener has access denied", function () {
+    var self = this;
+    var frame = mkFrame(this);
+
+    Object.defineProperty(frame, 'opener', {
+      get: function () { throw new Error('Access denied'); }
+    });
+
+    expect(function () {
+      self.bus._broadcast(frame, 'payload', '*');
+    }).not.to.throw('Access denied');
+  });
 });
