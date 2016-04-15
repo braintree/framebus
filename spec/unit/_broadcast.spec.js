@@ -3,24 +3,27 @@
 describe('_broadcast', function () {
   it('should not throw exception when postMessage is denied', function () {
     var frame = mkFrame(this);
+    var self = this;
+
     frame.postMessage = function () {
       throw new Error('Invalid calling object');
-    }
+    };
 
-    var self = this;
     expect(function () {
       self.bus._broadcast(frame, 'payload', '*');
     }).not.to.throw();
   });
   it('should postMessage to current frame', function () {
     var frame = mkFrame(this);
+
     this.bus._broadcast(frame, 'payload', '*');
 
     expect(frame.postMessage).to.have.been.called;
   });
 
-  it("should postMessage to current frame's child frames", function () {
+  it('should postMessage to current frame\'s child frames', function () {
     var frame = mkFrame(this);
+
     frame.frames.push(mkFrame(this));
 
     this.bus._broadcast(frame, 'payload', '*');
@@ -30,6 +33,7 @@ describe('_broadcast', function () {
 
   it('should postMessage to window.opener if it exists', function () {
     var frame = mkFrame(this);
+
     frame.opener = {};
     frame.opener.top = {
       postMessage: this.sandbox.spy(),
@@ -43,6 +47,7 @@ describe('_broadcast', function () {
 
   it('should not postMessage to window.opener if it has closed', function () {
     var frame = mkFrame(this);
+
     frame.opener = {};
     frame.opener.closed = true;
     frame.opener.top = {
@@ -68,7 +73,7 @@ describe('_broadcast', function () {
     done();
   });
 
-  it("should postMessage to the window.opener's child frames", function () {
+  it('should postMessage to the window.opener\'s child frames', function () {
     var frame = mkFrame(this);
 
     frame.opener = {};
@@ -82,7 +87,7 @@ describe('_broadcast', function () {
     expect(frame.opener.top.frames[0].postMessage).to.have.been.called;
   });
 
-  it("should not throw if window.opener has access denied", function () {
+  it('should not throw if window.opener has access denied', function () {
     var self = this;
     var frame = mkFrame(this);
 

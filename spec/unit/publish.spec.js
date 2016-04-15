@@ -9,24 +9,24 @@ describe('publish', function () {
     var publish = this.bus.publish;
 
     expect(function () {
-       publish("event", "data");
+      publish('event', 'data');
     }).not.to.throw();
   });
 
   it('should return false if event is not a string', function () {
-    var actual = this.bus.publish({}, "");
+    var actual = this.bus.publish({}, '');
 
     expect(actual).to.be.false;
   });
 
   it('should return false if origin is not a string', function () {
-    var actual = this.bus.target({ origin: "object"}).publish("event", "");
+    var actual = this.bus.target({origin: 'object'}).publish('event', '');
 
     expect(actual).to.be.false;
   });
 
   it('should return true if origin and event are strings', function () {
-    var actual = this.bus.target("https://example.com").publish("event", "");
+    var actual = this.bus.target('https://example.com').publish('event', '');
 
     expect(actual).to.be.true;
   });

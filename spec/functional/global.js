@@ -1,6 +1,7 @@
 'use strict';
+/* eslint-disable no-console */
 
-var seleniumServer, appServers;
+var seleniumServer;
 var appServer = require('./server');
 
 global.sinon = require('sinon');
@@ -15,10 +16,12 @@ before(function () {
 });
 
 before(function (done) {
-  this.timeout(30000);
   var selenium = require('selenium-standalone');
-  var spawnOptions = { stdio: 'pipe' };
+  var spawnOptions = {stdio: 'pipe'};
   var seleniumArgs = ['-debug'];
+
+  this.timeout(30000);
+
   seleniumServer = selenium(spawnOptions, seleniumArgs);
 
   console.log('Waiting for selenium to start...');

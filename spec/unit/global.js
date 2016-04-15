@@ -1,11 +1,12 @@
 'use strict';
 
 var chai = require('chai');
+
 chai.use(require('sinon-chai'));
 
 global.sinon = require('sinon');
 global.expect = chai.expect;
-global.messagePrefix = '/*framebus*/'
+global.messagePrefix = '/*framebus*/';
 
 before(function () {
   this.sandbox = sinon.sandbox.create();
@@ -14,7 +15,7 @@ before(function () {
 
 beforeEach(function () {
   this.scope = {
-    addEventListener:    this.sandbox.spy(),
+    addEventListener: this.sandbox.spy(),
     removeEventListener: this.sandbox.spy()
   };
 });

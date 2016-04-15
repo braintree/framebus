@@ -2,13 +2,13 @@
 
 describe('_unpackPayload', function () {
   it('should return false if unparsable', function () {
-    var actual = this.bus._unpackPayload({ data: "}{" });
+    var actual = this.bus._unpackPayload({data: '}{'});
 
     expect(actual).to.be.false;
   });
 
   it('should return false if not prefixed', function () {
-    var actual = this.bus._unpackPayload({ data: JSON.stringify({}) });
+    var actual = this.bus._unpackPayload({data: JSON.stringify({})});
 
     expect(actual).to.be.false;
   });
@@ -17,7 +17,7 @@ describe('_unpackPayload', function () {
     var event = 'event name';
     var args = ['my string'];
     var actual = this.bus._unpackPayload({
-      data: messagePrefix + JSON.stringify({event: event, args: args })
+      data: messagePrefix + JSON.stringify({event: event, args: args})
     });
 
     expect(actual.event).to.equal(event);
