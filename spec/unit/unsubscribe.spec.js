@@ -14,6 +14,7 @@ describe('unsubscribe', function () {
     var origin = 'https://example.com';
     var fn = function () {};
     var s = this.bus._getSubscribers();
+
     s[origin] = {};
     s[origin][event] = [function () {}, fn];
 
@@ -28,6 +29,7 @@ describe('unsubscribe', function () {
     var origin = 'https://example.com';
     var fn = function () {};
     var s = this.bus._getSubscribers();
+
     s[origin] = {};
     s[origin][event] = [function () {}, fn];
 
@@ -37,40 +39,46 @@ describe('unsubscribe', function () {
   });
 
   it('should return true if removed', function () {
+    var actual;
     var event = 'the event';
     var origin = 'https://example.com';
     var fn = function () {};
     var s = this.bus._getSubscribers();
+
     s[origin] = {};
     s[origin][event] = [function () {}, fn];
 
-    var actual = this.bus.target(origin).unsubscribe(event, fn);
+    actual = this.bus.target(origin).unsubscribe(event, fn);
 
     expect(actual).to.be.true;
   });
 
   it('should return false if not removed for unknown event', function () {
+    var actual;
     var event = 'the event';
     var origin = 'https://example.com';
     var fn = function () {};
     var s = this.bus._getSubscribers();
+
     s[origin] = {};
     s[origin][event] = [function () {}, fn];
 
-    var actual = this.bus.target(origin).unsubscribe('another event', fn);
+    actual = this.bus.target(origin).unsubscribe('another event', fn);
 
     expect(actual).to.be.false;
   });
 
   it('should return false if not removed for unknown origin', function () {
+    var actual;
     var event = 'the event';
     var origin = 'https://example.com';
     var fn = function () {};
     var s = this.bus._getSubscribers();
+
     s[origin] = {};
     s[origin][event] = [function () {}, fn];
 
-    var actual = this.bus.target('https://another.domain').unsubscribe(event, fn);
+    actual = this.bus.target('https://another.domain').unsubscribe(event, fn);
 
     expect(actual).to.be.false;
   });

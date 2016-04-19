@@ -1,4 +1,5 @@
 'use strict';
+/* eslint-disable no-console */
 
 var servers;
 var path = require('path');
@@ -8,10 +9,10 @@ var async = require('async');
 
 var app = express();
 var ports = [
-  process.env['PORT'] || 3099,
-  process.env['PORT2'] || 4567
+  process.env.PORT || 3099,
+  process.env.PORT2 || 4567
 ];
-var domain = process.env['HOST'] || 'localhost';
+var domain = process.env.HOST || 'localhost';
 var model = {
   port1: ports[0],
   port2: ports[1],
@@ -32,14 +33,14 @@ function _routeHandler(req, res) {
 app.get('/', _routeHandler);
 app.get('/*.html', _routeHandler);
 
-app.use(express['static'](__dirname + '/public'));
+app.use(express.static(__dirname + '/public'));
 
 function _noop() {}
 
 function start(cb, logRequests) {
-  cb = cb || _noop;
-
   var asyncTasks;
+
+  cb = cb || _noop;
 
   if (logRequests) {
     app.use(morgan('combined'));
@@ -51,7 +52,7 @@ function start(cb, logRequests) {
         console.log('app running on', port);
         done(null, srv);
       });
-    }
+    };
   });
 
   async.parallel(asyncTasks, function (err, apps) {
@@ -69,7 +70,7 @@ function stop(cb) {
         console.log('server killed');
         done();
       });
-    }
+    };
   }), function () {
     cb();
   });

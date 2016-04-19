@@ -14,7 +14,8 @@
     "dist/framebus.min.js"
   ],
   "scripts": {
-    "test": "xvfb-run --server-num=99 gulp test",
+    "lint": "eslint .",
+    "test": "npm run lint && xvfb-run --server-num=99 gulp test",
     "start": "./bin/www"
   },
   "license": "MIT",
@@ -24,10 +25,11 @@
     "chai": "^1.9.1",
     "del": "^1.1.0",
     "ejs": "^1.0.0",
+    "eslint": "2.7.0",
+    "eslint-config-braintree": "1.0.0",
     "express": "^4.10.4",
     "gulp": "^3.8.0",
     "gulp-concat": "^2.4.2",
-    "gulp-eslint": "^0.5.0",
     "gulp-mocha": "^0.4.1",
     "gulp-remove-code": "^1.0.1",
     "gulp-rename": "^1.2.0",
