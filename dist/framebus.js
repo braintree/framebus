@@ -194,13 +194,22 @@
     }
   }
 
+  function _hasOpener(frame) {
+    if (frame.top !== frame) { return false; }
+    if (frame.opener == null) { return false; }
+    if (frame.opener === frame) { return false; }
+    if (frame.opener.closed === true) { return false; }
+
+    return true;
+  }
+
   function _broadcast(frame, payload, origin) {
     var i;
 
     try {
       frame.postMessage(payload, origin);
 
-      if (frame.opener && frame.opener !== frame && !frame.opener.closed && frame.opener !== win) {
+      if (_hasOpener(frame)) {
         _broadcast(frame.opener.top, payload, origin);
       }
 

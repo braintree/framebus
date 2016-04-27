@@ -1,3 +1,8 @@
+UNRELEASED
+==========
+
+* Only traverse to `opener` from the top-level frame
+
 2.0.4
 =====
 
