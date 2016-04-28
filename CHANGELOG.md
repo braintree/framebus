@@ -1,5 +1,5 @@
-UNRELEASED
-==========
+2.0.5
+=====
 
 * Only traverse to `opener` from the top-level frame
 
