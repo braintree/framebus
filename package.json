@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "lint": "eslint .",
-    "test": "npm run lint && xvfb-run --server-num=99 gulp test",
+    "test": "npm run lint && xvfb-run -a --server-num=99 gulp test",
     "start": "./bin/www"
   },
   "license": "MIT",
