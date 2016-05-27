@@ -1,6 +1,11 @@
 language: node_js
-node_js:
-  - "0.10"
+before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3 # give xvfb some time to start
 notifications:
-  email:
-    - external-ci-notifications+framebus@getbraintree.com
+  email: false
+  slack:
+    on_success: change
+    on_failure: always
+    secure: ilpZ+W2GYvCCcmZJEX/wAzYcjqAX4FXzdjDr/PfY3DnUSKh2j4tSosSomExx1I6iGhNKBTxKOaVsm7EkrftPsgCrPhO1+CnTMLYW9+cjhZINV2EF7s5Ct4bRZ9wyTpNS1+u8/lo6PgCnw51VyKyAsCFf92+h3ljSeOxlEEBPujc=
