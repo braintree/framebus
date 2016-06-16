@@ -1,3 +1,8 @@
+2.0.7
+=====
+
+* Corrects a regression introduced in 2.0.6 that prevented CommonJS runtimes from working.
+
 2.0.6
 =====
 

@@ -1,7 +1,7 @@
 'use strict';
 (function (root, factory) {
   if (typeof exports === 'object' && typeof module !== 'undefined') {
-    module.exports = factory(root);
+    module.exports = factory(typeof global === 'undefined' ? root : global);
   } else if (typeof define === 'function' && define.amd) {
     define([], function () { return factory(root); });
   } else {
