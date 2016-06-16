@@ -1,13 +1,13 @@
 'use strict';
 (function (root, factory) {
   if (typeof exports === 'object' && typeof module !== 'undefined') {
-    module.exports = factory();
+    module.exports = factory(root);
   } else if (typeof define === 'function' && define.amd) {
-    define([], factory);
+    define([], function () { return factory(root); });
   } else {
-    root.framebus = factory();
+    root.framebus = factory(root);
   }
-})(this, function () { // eslint-disable-line no-invalid-this
+})(this, function (root) { // eslint-disable-line no-invalid-this
   var win, framebus;
   var popups = [];
   var subscribers = {};
@@ -148,7 +148,7 @@
 
   function _attach(w) {
     if (win) { return; }
-    win = w || window;
+    win = w || root;
 
     if (win.addEventListener) {
       win.addEventListener('message', _onmessage, false);
