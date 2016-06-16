@@ -1,3 +1,8 @@
+2.0.6
+=====
+
+* framebus can be required (but not executed) from Node.js® environments.
+
 2.0.5
 =====
 
