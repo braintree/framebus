@@ -38,7 +38,7 @@
     "gulp-uglify": "^0.3.0",
     "morgan": "^1.5.0",
     "node-static": "^0.7.6",
-    "phantomjs": "1.9.11",
+    "phantomjs": "1.9.20",
     "selenium-standalone": "2.43.1-5",
     "sinon": "^1.10.2",
     "sinon-chai": "^2.5.0",
