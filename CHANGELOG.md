@@ -1,3 +1,8 @@
+2.0.8
+=====
+
+* Fall back to `window.self` when `window.top` is undefined in old versions of IE.
+
 2.0.7
 =====
 
