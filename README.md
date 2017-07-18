@@ -25,6 +25,23 @@ bus.on('message', function (data) {
 });
 ```
 
+## Quick Start
+
+1. Install
+
+```bash
+npm install --save framebus
+```
+
+2. Install typescript definitons for typescript projects.
+
+```bash
+npm install --save-dev @types/framebus
+```
+
+
+
+
 ## API
 
 #### `target(origin): framebus`
