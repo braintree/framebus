@@ -6,7 +6,7 @@ describe('Reply Events', function () {
   var browser;
   var wrap = wdSync.wrap({
     'with': function () { return browser; },
-    pre: function () { this.timeout(30000); }
+    pre: function () { this.timeout(60000); }
   });
 
   before(function (done) {

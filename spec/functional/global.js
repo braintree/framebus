@@ -20,7 +20,7 @@ before(function (done) {
   var spawnOptions = {stdio: 'pipe'};
   var seleniumArgs = ['-debug'];
 
-  this.timeout(30000);
+  this.timeout(60000);
 
   seleniumServer = selenium(spawnOptions, seleniumArgs);
 
