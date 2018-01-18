@@ -19,7 +19,7 @@ describe('Reply Events', function () {
   it('should only publish to targeted domains and print reply', wrap(function () {
     var rootWindowName, indexReceived, frame1Received, frame2Received, frame3ReceivedQuestion;
 
-    browser.init({browserName: 'firefox'});
+    browser.init({browserName: 'chrome'});
     browser.get('http://localhost:3099'); // pull out, variablize
 
     rootWindowName = browser.windowName();

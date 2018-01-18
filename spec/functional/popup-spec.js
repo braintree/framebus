@@ -20,7 +20,7 @@ describe('Popup Events', function () {
     var actual, rootWindowName;
     var expected = 'hello from frame3!';
 
-    browser.init({browserName: 'firefox'});
+    browser.init({browserName: 'chrome'});
     browser.get('http://localhost:3099'); // pull out, variablize
 
     rootWindowName = browser.windowName();
@@ -53,7 +53,7 @@ describe('Popup Events', function () {
     var actual, rootWindowName;
     var expected = 'hello from popup!';
 
-    browser.init({browserName: 'firefox'});
+    browser.init({browserName: 'chrome'});
     browser.get('http://localhost:3099'); // pull out, variablize
 
     rootWindowName = browser.windowName();
@@ -84,7 +84,7 @@ describe('Popup Events', function () {
     var actual, rootWindowName;
     var expected = 'hello from popup!';
 
-    browser.init({browserName: 'firefox'});
+    browser.init({browserName: 'chrome'});
     browser.get('http://localhost:3099'); // pull out, variablize
 
     rootWindowName = browser.windowName();
