@@ -10,13 +10,13 @@ describe('Reply Events', function () {
   });
 
   before(function (done) {
-    var client = wdSync.remote();
+    var client = wdSync.remote('localhost', 9222);
 
     browser = client.browser;
     done();
   });
 
-  it('should only publish to targeted domains and print reply', wrap(function () {
+  it.only('should only publish to targeted domains and print reply', wrap(function () {
     var rootWindowName, indexReceived, frame1Received, frame2Received, frame3ReceivedQuestion;
 
     browser.init({browserName: 'chrome'});
