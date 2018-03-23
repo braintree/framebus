@@ -1,3 +1,11 @@
+# unreleased
+============
+
+_BREAKING CHANGES_
+
+* Module is now CommonJS only, and must be used with npm with a build tool (Browserify, Webpack, etc)
+* Bower support dropped
+
 2.0.8
 =====
 
