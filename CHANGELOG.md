@@ -1,5 +1,5 @@
-unreleased
-==========
+3.0.1
+=====
 
 * Fix issue where broadcasts to frames would fail if parent page has overwritten the window.length variable
 
