@@ -37,4 +37,35 @@ describe('_unpackPayload', function () {
     expect(actual.args[1]).to.be.a('function');
     expect(actual.args[0]).to.equal('some data');
   });
+
+  it('the source should postMessage the payload to the origin when reply is called', function () {
+    var fakeSource = {
+      postMessage: this.sandbox.stub()
+    };
+    var reply = '123129085-4234-1231-99887877';
+    var args = ['some data'];
+    var actual = this.bus._unpackPayload({
+      source: fakeSource,
+      origin: 'origin',
+      data: messagePrefix + JSON.stringify({event: 'event name', reply: reply, args: args})
+    });
+
+    actual.reply({});
+
+    expect(fakeSource.postMessage).to.be.calledOnce;
+    expect(fakeSource.postMessage).to.be.calledWith(this.sandbox.match.string, 'origin');
+  });
+
+  it('the source should not attempt to postMessage the payload to the origin if no source available', function () {
+    var reply = '123129085-4234-1231-99887877';
+    var args = ['some data'];
+    var actual = this.bus._unpackPayload({
+      origin: 'origin',
+      data: messagePrefix + JSON.stringify({event: 'event name', reply: reply, args: args})
+    });
+
+    expect(function () {
+      actual.reply({});
+    }).to.not.throw();
+  });
 });
