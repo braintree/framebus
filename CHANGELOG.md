@@ -1,5 +1,5 @@
-unreleased
-==========
+3.0.2
+=====
 
 * Fix issue where framebus would error when trying to reply to a non-existent window/frame
 
