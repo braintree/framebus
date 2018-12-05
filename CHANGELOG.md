@@ -1,3 +1,8 @@
+unreleased
+==========
+
+* Fix issue where framebus would error when trying to reply to a non-existent window/frame
+
 3.0.1
 =====
 
