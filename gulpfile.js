@@ -50,17 +50,8 @@ gulp.task('functional:prep', ['build'], function () {
     .pipe(gulp.dest('spec/functional/public/js'));
 });
 
-gulp.task('functional', ['functional:prep'], function () {
-  return gulp.src([
-    'spec/functional/**/*.js',
-    '!spec/functional/public/**/*.js'
-  ], {read: false})
-    .pipe(mocha({reporter: 'spec'}));
-});
-
 gulp.task('watch', function () {
   gulp.watch(['spec/unit/**/*.js'], ['unit']);
-  gulp.watch(['spec/functional/**/*.js'], ['functional']);
   gulp.watch(['lib/**/*.js', 'index.js'], ['build']);
 });
 
@@ -69,5 +60,5 @@ gulp.task('watch:integration', function () {
 });
 
 gulp.task('clean', ['clean:build', 'clean:test']);
-gulp.task('test', ['unit', 'functional']);
+gulp.task('test', ['unit']);
 gulp.task('default', ['test']);

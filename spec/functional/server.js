@@ -33,7 +33,7 @@ function _routeHandler(req, res) {
 app.get('/', _routeHandler);
 app.get('/*.html', _routeHandler);
 
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(path.join(__dirname, '/public')));
 
 function _noop() {}
 

@@ -24,7 +24,7 @@ npm install
 
 ### Testing
 
-This library uses a combination of unit-style testing and functional/smoke style testing. The unit tests use [Mocha](http://mochajs.org) while the functional tests use a combination of [Selenium](http://docs.seleniumhq.org/), Mocha and [wd-sync](https://github.com/sebv/node-wd-sync). All testing dependencies will be installed upon `npm install` and the test suite executed with `npm test`.
+This library uses a combination of unit-style testing and functional/smoke style testing. The unit tests use [Mocha](http://mochajs.org) while the functional tests use a combination of [Webdriver.io](http://webdriver.io/) and Mocha. All testing dependencies will be installed upon `npm install` and the test suite executed with `npm test`.
 
 ```
 npm test
