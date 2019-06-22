@@ -1,5 +1,7 @@
 'use strict';
 
+var appServer = require('./spec/functional/server');
+
 exports.config = {
   //
   // ====================
@@ -139,7 +141,7 @@ exports.config = {
   mochaOpts: {
     ui: 'bdd',
     timeout: 60000
-  }
+  },
   //
   // =====
   // Hooks
@@ -153,8 +155,9 @@ exports.config = {
      * @param {Object} config wdio configuration object
      * @param {Array.<Object>} capabilities list of capabilities details
      */
-  // onPrepare: function (config, capabilities) {
-  // },
+  onPrepare: function () {
+    return appServer.start();
+  },
   /**
      * Gets executed just before initialising the webdriver session and test framework. It allows you
      * to manipulate configurations depending on the capability or spec.
@@ -249,8 +252,9 @@ exports.config = {
      * @param {Array.<Object>} capabilities list of capabilities details
      * @param {<Object>} results object containing test results
      */
-  // onComplete: function(exitCode, config, capabilities, results) {
-  // },
+  onComplete: function () {
+    return appServer.stop();
+  }
   /**
     * Gets executed when a refresh happens.
     * @param {String} oldSessionId session ID of the old session

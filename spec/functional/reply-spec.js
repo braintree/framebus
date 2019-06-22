@@ -7,7 +7,7 @@ describe('Reply Events', function () {
     browser.url('http://localhost:3099');
   });
 
-  it.only('should only publish to targeted domains and print reply', function () {
+  it('should only publish to targeted domains and print reply', function () {
     var indexReceived, frame1Received, frame2Received, frame3ReceivedQuestion;
 
     browser.switchToFrame(2);

@@ -77,6 +77,18 @@ function stop(cb) {
 }
 
 module.exports = {
-  start: start,
-  stop: stop
+  start: function () {
+    return new Promise(function (done) {
+      start(function () {
+        done();
+      });
+    });
+  },
+  stop: function () {
+    return new Promise(function (done) {
+      stop(function () {
+        done();
+      });
+    });
+  }
 };
