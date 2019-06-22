@@ -12,15 +12,15 @@ var del = require('del');
 var removeCode = require('gulp-remove-code');
 var browserify = require('browserify');
 
-gulp.task('clean:build', function (cb) {
-  del(['dist/*'], cb);
-});
+function cleanBuild() {
+  return del(['dist/*']);
+}
 
-gulp.task('clean:test', function (cb) {
-  del(['spec/functional/public/js/test-app.js'], cb);
-});
+function cleanTest() {
+  return del(['spec/functional/public/js/test-app.js']);
+}
 
-gulp.task('build', function () {
+function build() {
   var b = browserify({
     entries: './lib/framebus.js',
     standalone: 'framebus',
@@ -34,31 +34,45 @@ gulp.task('build', function () {
     .pipe(streamify(size({showFiles: true})))
     .pipe(uglify())
     .pipe(gulp.dest('./dist/'));
-});
+}
 
-gulp.task('unit', function () {
+function unit() {
   return gulp.src('spec/unit/**/*.js', {read: false})
     .pipe(mocha({reporter: 'spec'}));
-});
+}
 
-gulp.task('functional:prep', ['build'], function () {
-  return gulp.src([
-    'dist/framebus.min.js',
-    'spec/functional/public/js/app-support.js'
-  ])
-    .pipe(concat('test-app.js'))
-    .pipe(gulp.dest('spec/functional/public/js'));
-});
+function functionalPrep() {
+  return gulp.series(build, function () {
+    return gulp.src([
+      'dist/framebus.min.js',
+      'spec/functional/public/js/app-support.js'
+    ])
+      .pipe(concat('test-app.js'))
+      .pipe(gulp.dest('spec/functional/public/js'));
+  });
+}
 
-gulp.task('watch', function () {
-  gulp.watch(['spec/unit/**/*.js'], ['unit']);
-  gulp.watch(['lib/**/*.js', 'index.js'], ['build']);
-});
+function watch() {
+  gulp.watch(['spec/unit/**/*.js'], gulp.task(unit));
+  gulp.watch(['lib/**/*.js', 'index.js'], gulp.task(build));
+}
 
-gulp.task('watch:integration', function () {
-  gulp.watch(['lib/**/*.js', 'index.js'], ['build']);
-});
+function watchIntegration() {
+  gulp.watch(['lib/**/*.js', 'index.js'], gulp.task(build));
+}
 
-gulp.task('clean', ['clean:build', 'clean:test']);
-gulp.task('test', ['unit']);
-gulp.task('default', ['test']);
+function clean() {
+  return gulp.series(cleanBuild, cleanTest);
+}
+
+function test() {
+  return gulp.series(unit);
+}
+
+exports.test = test();
+exports.clean = clean();
+exports.functionalTestPrep = functionalPrep();
+exports.functionalTestPrep.displayName = 'functional:prep';
+exports.watchIntegration = watchIntegration;
+exports.watchIntegration.displayName = 'watch:integration';
+exports.watch = watch;
