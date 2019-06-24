@@ -1,113 +1,86 @@
 'use strict';
 
-var wdSync = require('wd-sync');
+var expect = require('chai').expect;
 
 describe('Popup Events', function () {
-  var browser;
-  var wrap = wdSync.wrap({
-    'with': function () { return browser; },
-    pre: function () { this.timeout(30000); }
+  beforeEach(function () {
+    browser.url('http://localhost:3099');
   });
 
-  before(function (done) {
-    var client = wdSync.remote();
-
-    browser = client.browser;
-    done();
-  });
-
-  it('should be able to receive events from opener frames', wrap(function () {
-    var actual, rootWindowName;
+  it('should be able to receive events from opener frames', function () {
+    var actual;
     var expected = 'hello from frame3!';
 
-    browser.init({browserName: 'firefox'});
-    browser.get('http://localhost:3099'); // pull out, variablize
+    $('#open-popup').click();
+    browser.switchWindow('popup');
+    browser.waitUntil(function () {
+      return $('body').getHTML() != null;
+    }, 1000, 'expected body to exist');
 
-    rootWindowName = browser.windowName();
+    browser.switchWindow('localhost:3099');
 
-    browser.elementById('open-popup').click();
+    browser.switchToFrame(2);
 
-    browser.window('popup');
-    browser.waitForElementByTagName('body', function (el) {
-      return el.innerHTML != null;
+    $('#popup-message').setValue(expected);
+    $('#send').click();
+
+    browser.switchWindow('popup');
+
+    browser.waitUntil(function () {
+      return $('p').getHTML !== '';
     }, 1000);
-    browser.window(rootWindowName);
-
-    browser.frame('frame3');
-    browser.elementById('popup-message').type(expected);
-    browser.elementById('send').click();
-
-    browser.window('popup');
-
-    browser.waitForElementByTagName('p', function (el) {
-      return el.innerHTML !== '';
-    }, 1000);
-    actual = browser.elementByTagName('p').text();
-
-    browser.quit();
+    actual = $('p').getText();
 
     expect(actual).to.equal(expected);
-  }));
+  });
 
-  it('should be able to send events to opener frames', wrap(function () {
-    var actual, rootWindowName;
+  it('should be able to send events to opener frames', function () {
+    var actual;
     var expected = 'hello from popup!';
 
-    browser.init({browserName: 'firefox'});
-    browser.get('http://localhost:3099'); // pull out, variablize
+    $('#open-popup').click();
 
-    rootWindowName = browser.windowName();
+    browser.switchWindow('popup');
+    browser.waitUntil(function () {
+      return $('body').getHTML() != null;
+    }, 1000, 'expected body to exist');
 
-    browser.elementById('open-popup').click();
+    $('#from-popup-message').setValue(expected);
+    $('#send').click();
 
-    browser.window('popup');
-    browser.waitForElementByTagName('body', function (el) {
-      return el.innerHTML != null;
+    browser.switchWindow('localhost:3099');
+    browser.switchToFrame(1);
+
+    browser.waitUntil(function () {
+      return $('p').getHTML !== '';
     }, 1000);
-    browser.elementById('from-popup-message').type(expected);
-    browser.elementById('send').click();
-
-    browser.window(rootWindowName);
-    browser.frame('frame2');
-
-    browser.waitForElementByTagName('p', function (el) {
-      return el.innerHTML !== '';
-    }, 1000);
-    actual = browser.elementByTagName('p').text();
-
-    browser.quit();
+    actual = $('p').getText();
 
     expect(actual).to.contain(expected);
-  }));
+  });
 
-  it('should not double-receive events in popups', wrap(function () {
-    var actual, rootWindowName;
+  it('should not double-receive events in popups', function () {
+    var actual;
     var expected = 'hello from popup!';
 
-    browser.init({browserName: 'firefox'});
-    browser.get('http://localhost:3099'); // pull out, variablize
+    $('#open-popup').click();
 
-    rootWindowName = browser.windowName();
+    browser.switchWindow('popup');
+    browser.waitUntil(function () {
+      return $('body').getHTML() != null;
+    }, 1000, 'expected body to exist');
 
-    browser.elementById('open-popup').click();
+    $('#from-popup-message').setValue(expected);
+    $('#send').click();
 
-    browser.window('popup');
-    browser.waitForElementByTagName('body', function (el) {
-      return el.innerHTML != null;
+    browser.switchWindow('localhost:3099');
+    browser.switchToFrame(1);
+
+    browser.waitUntil(function () {
+      return $('p').getHTML !== '';
     }, 1000);
-    browser.elementById('from-popup-message').type(expected);
-    browser.elementById('send').click();
-
-    browser.window(rootWindowName);
-    browser.frame('frame2');
-
-    browser.waitForElementByTagName('p', function (el) {
-      return el.innerHTML !== '';
-    }, 1000);
-    actual = browser.elementByTagName('p').text();
-
-    browser.quit();
+    actual = $('p').getText();
 
     expect(actual).not.to.contain('FAILURE');
-  }));
+  });
 });

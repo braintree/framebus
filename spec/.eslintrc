@@ -8,6 +8,10 @@
     no-invalid-this: 0
     no-useless-call: 0
   globals:
+    $$: true
+    $: true
+    browser: true
+    Promise: true
     expect: true
     mkFrame: true
     mkWindow: true

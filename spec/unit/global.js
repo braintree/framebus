@@ -9,7 +9,7 @@ global.expect = chai.expect;
 global.messagePrefix = '/*framebus*/';
 
 before(function () {
-  this.sandbox = sinon.sandbox.create();
+  this.sandbox = sinon.createSandbox();
   this.bus = require('../../lib/framebus');
 });
 
