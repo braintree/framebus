@@ -3,10 +3,12 @@ language: node_js
 addons:
   chrome: stable
 services:
-  - xvfb
+- xvfb
 notifications:
   email: false
   slack:
     on_success: change
     on_failure: always
-    secure: ilpZ+W2GYvCCcmZJEX/wAzYcjqAX4FXzdjDr/PfY3DnUSKh2j4tSosSomExx1I6iGhNKBTxKOaVsm7EkrftPsgCrPhO1+CnTMLYW9+cjhZINV2EF7s5Ct4bRZ9wyTpNS1+u8/lo6PgCnw51VyKyAsCFf92+h3ljSeOxlEEBPujc=
+    on_pull_requests: false
+    rooms:
+      - secure: wFz86YP9em1YD6903hkJESff/BJGHHtpRThkM8ixum6GN8jYfnJHYTPDHh1yxT6OgCxE6oaTCwk0CefnFlosbjpcWuLl5opRgtKhACfDc5J8JNBbOtxsQrTyx3ag97G/N3SVzazWN9cHmfG4VV3UMeL6HHv67GrhWlMTY0W4xus=
