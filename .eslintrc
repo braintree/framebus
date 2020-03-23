@@ -1,4 +1,6 @@
----
-  extends: braintree/client
-  globals:
-    define: true
+{
+  "extends": "braintree/client",
+  "globals": {
+    "define": true
+  }
+}

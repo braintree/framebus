@@ -1,19 +1,23 @@
----
-  extends: braintree/server
-  env:
-    mocha: true
-  rules: 
-    no-unused-expressions: 0
-    func-style: 0
-    no-invalid-this: 0
-    no-useless-call: 0
-  globals:
-    $$: true
-    $: true
-    browser: true
-    Promise: true
-    expect: true
-    mkFrame: true
-    mkWindow: true
-    messagePrefix: true
-    sinon: true
+{
+  "extends": "braintree/server",
+  "env": {
+    "mocha": true
+  },
+  "rules": {
+    "no-unused-expressions": 0,
+    "func-style": 0,
+    "no-invalid-this": 0,
+    "no-useless-call": 0
+  },
+  "globals": {
+    "$$": true,
+    "$": true,
+    "browser": true,
+    "Promise": true,
+    "expect": true,
+    "mkFrame": true,
+    "mkWindow": true,
+    "messagePrefix": true,
+    "sinon": true
+  }
+}
