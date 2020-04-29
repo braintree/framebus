@@ -1,7 +1,5 @@
 'use strict';
 
-var expect = require('chai').expect;
-
 describe('Reply Events', function () {
   beforeEach(function () {
     browser.url('http://localhost:3099');
@@ -44,9 +42,9 @@ describe('Reply Events', function () {
     browser.switchToFrame(2);
     frame3ReceivedQuestion = $('p').getText();
 
-    expect(indexReceived).to.equal(0);
-    expect(frame1Received).to.equal(0);
-    expect(frame2Received).to.equal(0);
-    expect(frame3ReceivedQuestion).to.equal('are you there?');
+    expect(indexReceived).toBe(0);
+    expect(frame1Received).toBe(0);
+    expect(frame2Received).toBe(0);
+    expect(frame3ReceivedQuestion).toBe('are you there?');
   });
 });

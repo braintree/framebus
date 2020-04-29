@@ -1,7 +1,5 @@
 'use strict';
 
-var expect = require('chai').expect;
-
 describe('Popup Events', function () {
   beforeEach(function () {
     browser.url('http://localhost:3099');
@@ -36,7 +34,7 @@ describe('Popup Events', function () {
     });
     actual = $('p').getText();
 
-    expect(actual).to.equal(expected);
+    expect(actual).toBe(expected);
   });
 
   it('should be able to send events to opener frames', function () {
@@ -66,7 +64,7 @@ describe('Popup Events', function () {
     });
     actual = $('p').getText();
 
-    expect(actual).to.contain(expected);
+    expect(actual).toContain(expected);
   });
 
   it('should not double-receive events in popups', function () {
@@ -96,6 +94,6 @@ describe('Popup Events', function () {
     });
     actual = $('p').getText();
 
-    expect(actual).not.to.contain('FAILURE');
+    expect(actual).not.toContain('FAILURE');
   });
 });
