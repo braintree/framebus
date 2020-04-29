@@ -23,7 +23,10 @@ describe('Reply Events', function () {
 
     browser.waitUntil(function () {
       return $('p').getText() === 'polo';
-    }, 1000, 'expected p tag to have text');
+    }, {
+      timeout: 1000,
+      timeoutMsg: 'expected p tag to have text'
+    });
 
     browser.switchToParentFrame();
     browser.switchToParentFrame();
