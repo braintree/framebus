@@ -1,7 +1,5 @@
 'use strict';
 
-var expect = require('chai').expect;
-
 describe('Popup Events', function () {
   beforeEach(function () {
     browser.url('http://localhost:3099');
@@ -15,7 +13,10 @@ describe('Popup Events', function () {
     browser.switchWindow('popup');
     browser.waitUntil(function () {
       return $('body').getHTML() != null;
-    }, 1000, 'expected body to exist');
+    }, {
+      timeout: 1000,
+      timeoutMsg: 'expected body to exist'
+    });
 
     browser.switchWindow('localhost:3099');
 
@@ -28,10 +29,12 @@ describe('Popup Events', function () {
 
     browser.waitUntil(function () {
       return $('p').getHTML !== '';
-    }, 1000);
+    }, {
+      timeout: 1000
+    });
     actual = $('p').getText();
 
-    expect(actual).to.equal(expected);
+    expect(actual).toBe(expected);
   });
 
   it('should be able to send events to opener frames', function () {
@@ -43,7 +46,10 @@ describe('Popup Events', function () {
     browser.switchWindow('popup');
     browser.waitUntil(function () {
       return $('body').getHTML() != null;
-    }, 1000, 'expected body to exist');
+    }, {
+      timeout: 1000,
+      timeoutMsg: 'expected body to exist'
+    });
 
     $('#from-popup-message').setValue(expected);
     $('#send').click();
@@ -53,10 +59,12 @@ describe('Popup Events', function () {
 
     browser.waitUntil(function () {
       return $('p').getHTML !== '';
-    }, 1000);
+    }, {
+      timeout: 1000
+    });
     actual = $('p').getText();
 
-    expect(actual).to.contain(expected);
+    expect(actual).toContain(expected);
   });
 
   it('should not double-receive events in popups', function () {
@@ -68,7 +76,10 @@ describe('Popup Events', function () {
     browser.switchWindow('popup');
     browser.waitUntil(function () {
       return $('body').getHTML() != null;
-    }, 1000, 'expected body to exist');
+    }, {
+      timeout: 1000,
+      timeoutMsg: 'expected body to exist'
+    });
 
     $('#from-popup-message').setValue(expected);
     $('#send').click();
@@ -78,9 +89,11 @@ describe('Popup Events', function () {
 
     browser.waitUntil(function () {
       return $('p').getHTML !== '';
-    }, 1000);
+    }, {
+      timeout: 1000
+    });
     actual = $('p').getText();
 
-    expect(actual).not.to.contain('FAILURE');
+    expect(actual).not.toContain('FAILURE');
   });
 });
