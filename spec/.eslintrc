@@ -1,7 +1,7 @@
 {
   "extends": "braintree/server",
   "env": {
-    "mocha": true
+    "jest": true
   },
   "rules": {
     "no-unused-expressions": 0,

@@ -1,7 +1,6 @@
 'use strict';
 
 var gulp = require('gulp');
-var mocha = require('gulp-mocha');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var uglify = require('gulp-uglify');
@@ -36,11 +35,6 @@ function build() {
     .pipe(gulp.dest('./dist/'));
 }
 
-function unit() {
-  return gulp.src('spec/unit/**/*.js', {read: false})
-    .pipe(mocha({reporter: 'spec'}));
-}
-
 function functionalPrep() {
   return gulp.series(build, function () {
     return gulp.src([
@@ -53,7 +47,6 @@ function functionalPrep() {
 }
 
 function watch() {
-  gulp.watch(['spec/unit/**/*.js'], gulp.task(unit));
   gulp.watch(['lib/**/*.js', 'index.js'], gulp.task(build));
 }
 
@@ -65,11 +58,6 @@ function clean() {
   return gulp.series(cleanBuild, cleanTest);
 }
 
-function test() {
-  return gulp.series(unit);
-}
-
-exports.test = test();
 exports.clean = clean();
 exports.functionalTestPrep = functionalPrep();
 exports.functionalTestPrep.displayName = 'functional:prep';
