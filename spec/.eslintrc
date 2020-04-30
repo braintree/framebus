@@ -1,7 +1,7 @@
 {
   "extends": "braintree/server",
   "env": {
-    "mocha": true
+    "jest": true
   },
   "rules": {
     "no-unused-expressions": 0,
@@ -14,10 +14,10 @@
     "$": true,
     "browser": true,
     "Promise": true,
-    "expect": true,
     "mkFrame": true,
     "mkWindow": true,
     "messagePrefix": true,
-    "sinon": true
+    "bus": false,
+    "scope": false
   }
 }

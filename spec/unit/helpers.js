@@ -10,11 +10,25 @@ global.mkWindow = function () {
   };
 };
 
-global.mkFrame = function (scope) {
+global.mkFrame = function () {
   return {
-    postMessage: scope.sandbox.spy(),
+    postMessage: jest.fn(),
     frames: []
   };
 };
 
 global.window = mkWindow();
+
+global.messagePrefix = '/*framebus*/';
+global.bus = require('../../lib/framebus');
+
+beforeEach(function () {
+  global.scope = {
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn()
+  };
+});
+
+afterEach(function () {
+  global.bus._detach();
+});

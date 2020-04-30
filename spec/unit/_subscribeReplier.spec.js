@@ -2,26 +2,26 @@
 
 describe('_subscribeReplier', function () {
   it('should return UUID of reply event', function () {
-    var actual = this.bus._subscribeReplier(function () {}, '*');
+    var actual = bus._subscribeReplier(function () {}, '*');
 
-    expect(actual).to.match(/^\w{8}-\w{4}-4\w{3}-\w{4}-\w{12}$/);
+    expect(actual).toMatch(/^\w{8}-\w{4}-4\w{3}-\w{4}-\w{12}$/);
   });
 
   it('should subscribe function to returned event', function () {
     var origin = 'http://example.com';
-    var event = this.bus._subscribeReplier(function () {}, origin);
+    var event = bus._subscribeReplier(function () {}, origin);
 
-    expect(this.bus._getSubscribers()[origin][event][0]).to.be.a('function');
+    expect(bus._getSubscribers()[origin][event][0]).toBeInstanceOf(Function);
   });
 
   it('should unsubscribe function when reply invoked', function () {
     var origin = 'http://example.com';
-    var event = this.bus._subscribeReplier(function () {}, origin);
+    var event = bus._subscribeReplier(function () {}, origin);
 
-    expect(this.bus._getSubscribers()[origin][event][0]).to.be.a('function');
+    expect(bus._getSubscribers()[origin][event][0]).toBeInstanceOf(Function);
 
-    this.bus._getSubscribers()[origin][event][0]();
+    bus._getSubscribers()[origin][event][0]();
 
-    expect(this.bus._getSubscribers()[origin][event][0]).not.to.exist;
+    expect(bus._getSubscribers()[origin][event][0]).not.toBeDefined();
   });
 });

@@ -2,11 +2,11 @@
 
 describe('subscribe', function () {
   it('should be directly usable', function () {
-    var subscribe = this.bus.subscribe;
+    var subscribe = bus.subscribe;
 
     expect(function () {
       subscribe('event', function () {});
-    }).not.to.throw();
+    }).not.toThrowError();
   });
 
   it('should add subscriber to given event and origin', function () {
@@ -14,17 +14,17 @@ describe('subscribe', function () {
     var origin = 'https://example.com';
     var fn = function () {};
 
-    this.bus.target(origin).subscribe(event, fn);
+    bus.target(origin).subscribe(event, fn);
 
-    expect(this.bus._getSubscribers()[origin][event]).to.contain(fn);
+    expect(bus._getSubscribers()[origin][event]).toEqual(expect.arrayContaining([fn]));
   });
 
   it('should add subscriber to given event and * origin if origin not given', function () {
     var event = 'event name';
     var fn = function () {};
 
-    this.bus.subscribe(event, fn);
+    bus.subscribe(event, fn);
 
-    expect(this.bus._getSubscribers()['*'][event]).to.contain(fn);
+    expect(bus._getSubscribers()['*'][event]).toEqual(expect.arrayContaining([fn]));
   });
 });

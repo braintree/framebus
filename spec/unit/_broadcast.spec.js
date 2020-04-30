@@ -2,84 +2,83 @@
 
 describe('_broadcast', function () {
   it('should not throw exception when postMessage is denied', function () {
-    var frame = mkFrame(this);
-    var self = this;
+    var frame = mkFrame();
 
     frame.postMessage = function () {
       throw new Error('Invalid calling object');
     };
 
     expect(function () {
-      self.bus._broadcast(frame, 'payload', '*');
-    }).not.to.throw();
+      bus._broadcast(frame, 'payload', '*');
+    }).not.toThrowError();
   });
 
   it('should postMessage to current frame', function () {
-    var frame = mkFrame(this);
+    var frame = mkFrame();
 
-    this.bus._broadcast(frame, 'payload', '*');
+    bus._broadcast(frame, 'payload', '*');
 
-    expect(frame.postMessage).to.have.been.called;
+    expect(frame.postMessage).toBeCalled();
   });
 
   it('should postMessage to current frame\'s child frames', function () {
-    var frame = mkFrame(this);
+    var frame = mkFrame();
 
-    frame.frames.push(mkFrame(this));
+    frame.frames.push(mkFrame());
 
-    this.bus._broadcast(frame, 'payload', '*');
+    bus._broadcast(frame, 'payload', '*');
 
-    expect(frame.frames[0].postMessage).to.have.been.called;
+    expect(frame.frames[0].postMessage).toBeCalled();
   });
 
   describe('to opener', function () {
     it('should postMessage to window.top.opener if it exists', function () {
-      var frame = mkFrame(this);
+      var frame = mkFrame();
 
       frame.opener = {
-        postMessage: this.sandbox.spy(),
+        postMessage: jest.fn(),
         frames: []
       };
       frame.top = frame;
       frame.opener.top = frame.opener;
 
-      this.bus._broadcast(frame, 'payload', '*');
+      bus._broadcast(frame, 'payload', '*');
 
-      expect(frame.opener.top.postMessage).to.have.been.called;
+      expect(frame.opener.top.postMessage).toBeCalled();
     });
 
     it('should not postMessage to window.opener if it has closed', function () {
-      var frame = mkFrame(this);
+      var frame = mkFrame();
 
       frame.opener = {
-        postMessage: this.sandbox.spy(),
+        postMessage: jest.fn(),
         frames: [],
         closed: true
       };
       frame.opener.top = frame.opener;
       frame.top = frame;
 
-      this.bus._broadcast(frame, 'payload', '*');
+      bus._broadcast(frame, 'payload', '*');
 
-      expect(frame.opener.top.postMessage).not.to.have.been.called;
+      expect(frame.opener.top.postMessage).not.toBeCalled();
     });
 
     it('should not infinitely recurse if opener is itself', function (done) {
-      var frame = mkFrame(this);
+      var frame = mkFrame();
 
-      this.timeout(10);
+      jest.setTimeout(10);
       frame.opener = frame;
       frame.top = frame;
 
-      this.bus._broadcast(frame, 'payload', '*');
+      bus._broadcast(frame, 'payload', '*');
 
       // don't infinitely recurse
       done();
     });
 
     it('should not infinitely recurse if opener is parent', function (done) {
-      var frame = mkFrame(this);
-      var child = mkFrame(this);
+      var frame = mkFrame();
+      var child = mkFrame();
 
       child.opener = frame;
       child.parent = frame;
@@ -88,30 +87,29 @@ describe('_broadcast', function () {
       frame.frames = [child];
       frame.top = frame;
 
-      this.bus._broadcast(frame, 'payload', '*');
+      bus._broadcast(frame, 'payload', '*');
 
       // don't infinitely recurse
       done();
     });
 
     it('should postMessage to the window.opener\'s child frames', function () {
-      var frame = mkFrame(this);
+      var frame = mkFrame();
 
       frame.opener = {
-        postMessage: this.sandbox.spy(),
-        frames: [mkFrame(this)]
+        postMessage: jest.fn(),
+        frames: [mkFrame()]
       };
       frame.opener.top = frame.opener;
       frame.top = frame;
 
-      this.bus._broadcast(frame, 'payload', '*');
+      bus._broadcast(frame, 'payload', '*');
 
-      expect(frame.opener.top.frames[0].postMessage).to.have.been.called;
+      expect(frame.opener.top.frames[0].postMessage).toBeCalled();
     });
 
     it('should not throw if window.opener has access denied', function () {
-      var self = this;
-      var frame = mkFrame(this);
+      var frame = mkFrame();
 
       frame.top = frame;
 
@@ -120,8 +118,8 @@ describe('_broadcast', function () {
       });
 
       expect(function () {
-        self.bus._broadcast(frame, 'payload', '*');
-      }).not.to.throw('Access denied');
+        bus._broadcast(frame, 'payload', '*');
+      }).not.toThrowError('Access denied');
     });
   });
 });
