@@ -14,7 +14,7 @@
   "scripts": {
     "lint": "eslint .",
     "pretest": "npm run lint",
-    "test:unit": "jest",
+    "test:unit": "jest spec/unit/",
     "pretest:functional": "gulp functional:prep",
     "test:functional": "wdio wdio.conf.js",
     "test": "npm run test:unit && npm run test:functional",
@@ -38,7 +38,7 @@
     "express": "^4.10.4",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.4.2",
-    "gulp-mocha": "^7.0.2",
+    "gulp-remove-code": "^3.0.4",
     "gulp-size": "^3.0.0",
     "gulp-streamify": "^1.0.2",
     "gulp-uglify": "^3.0.2",
@@ -47,5 +47,10 @@
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0",
     "wdio-chromedriver-service": "^6.0.2"
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "./spec/unit/helpers.js"
+    ]
   }
 }

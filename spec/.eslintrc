@@ -14,10 +14,10 @@
     "$": true,
     "browser": true,
     "Promise": true,
-    "expect": true,
     "mkFrame": true,
     "mkWindow": true,
     "messagePrefix": true,
-    "sinon": true
+    "bus": false,
+    "scope": false
   }
 }

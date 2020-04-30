@@ -4,30 +4,30 @@ describe('_packagePayload', function () {
   it('should add event to payload', function () {
     var expected = 'event name';
 
-    var result = this.bus._packagePayload.call(this.bus, expected, [], '*');
+    var result = bus._packagePayload.call(bus, expected, [], '*');
     var actual = JSON.parse(result.replace(messagePrefix, '')).event;
 
-    expect(actual).to.equal(expected);
+    expect(actual).toBe(expected);
   });
 
   it('should add data to payload', function () {
     var expected = {some: 'data'};
     var args = [expected];
 
-    var result = this.bus._packagePayload.call(this.bus, 'event', args, '*');
+    var result = bus._packagePayload.call(bus, 'event', args, '*');
     var actual = JSON.parse(result.replace(messagePrefix, ''));
 
-    expect(actual.args[0]).to.deep.equal(expected);
+    expect(actual.args[0]).toEqual(expected);
   });
 
   it('should add reply to payload if data is function', function () {
     var args = [function () {}];
 
-    var result = this.bus._packagePayload.call(this.bus, 'event', args, '*');
+    var result = bus._packagePayload.call(bus, 'event', args, '*');
     var actual = JSON.parse(result.replace(messagePrefix, ''));
 
-    expect(actual.reply).to.be.a('string');
-    expect(actual.args).to.be.empty;
+    expect(typeof actual.reply).toBe('string');
+    expect(actual.args).toHaveLength(0);
   });
 
   it('should throw error with prefix text when element cannot be stringified', function () {
@@ -41,9 +41,9 @@ describe('_packagePayload', function () {
     args = [payload];
 
     fn = function () {
-      this.bus._packagePayload('event', args, '*');
-    }.bind(this);
+      bus._packagePayload('event', args, '*');
+    };
 
-    expect(fn).to.throw('Could not stringify event: ');
+    expect(fn).toThrowError('Could not stringify event: ');
   });
 });
