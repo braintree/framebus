@@ -1,0 +1,11 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "*": [ "./*" ],
+      "src/*": ["./src/*"]
+    },
+    "types": ["node", "webdriverio", "expect-webdriverio", "@wdio/mocha-framework"]
+  }
+}

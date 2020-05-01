@@ -27,7 +27,6 @@
   "author": "braintree <code@getbraintree.com>",
   "devDependencies": {
     "@types/jest": "^25.2.1",
-    "@types/mocha": "^7.0.2",
     "@wdio/cli": "^6.1.5",
     "@wdio/local-runner": "^6.1.6",
     "@wdio/mocha-framework": "^6.1.6",
