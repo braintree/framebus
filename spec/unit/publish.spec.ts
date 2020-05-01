@@ -14,13 +14,15 @@ describe("publish", function () {
   });
 
   it("should return false if event is not a string", function () {
-    const actual = bus.publish({}, "");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const actual = bus.publish({} as any, "");
 
     expect(actual).toBe(false);
   });
 
   it("should return false if origin is not a string", function () {
-    const actual = bus.target({ origin: "object" }).publish("event", "");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const actual = bus.target({ origin: "object" } as any).publish("event", "");
 
     expect(actual).toBe(false);
   });

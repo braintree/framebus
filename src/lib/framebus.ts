@@ -5,69 +5,13 @@ declare global {
   }
 }
 
-type UnsubscribeMethod = (event: string, fn: SubscribeHandler) => boolean;
-type SubscribeMethod = (event: string, fn: SubscribeHandler) => boolean;
-type PublishMethod = (event: string, ...args: SubscriberArgs) => boolean;
-
-type Framebus = {
-  // removeIf(production)
-  _attach: () => void;
-  _broadcast: (frame: Window, payload: string, origin: string) => void;
-  _detach: () => void;
-  _dispatch: (
-    origin: string,
-    event: string,
-    args: SubscriberArgs,
-    e: MessageEvent
-  ) => void;
-  _getSubscribers: () => Subscriber;
-  _onmessage: (e: MessageEvent) => void;
-  _packagePayload: (
-    event: string,
-    args: SubscriberArgs,
-    origin: string
-  ) => string;
-  _subscribeReplier: (fn: SubscribeHandler, origin: string) => string;
-  _subscriptionArgsInvalid: (
-    event: string,
-    fn: SubscribeHandler,
-    origin: string
-  ) => boolean;
-  _unpackPayload: (e: MessageEvent) => Payload | false;
-  _uuid: () => string;
-  // endRemoveIf(production)
-  include: (popup?: Window) => boolean;
-
-  emit: PublishMethod;
-  pub: PublishMethod;
-  publish: PublishMethod;
-  trigger: PublishMethod;
-
-  target: (origin: string) => Framebus;
-
-  on: SubscribeMethod;
-  sub: SubscribeMethod;
-  subscribe: SubscribeMethod;
-
-  off: UnsubscribeMethod;
-  unsub: UnsubscribeMethod;
-  unsubscribe: UnsubscribeMethod;
-
-  _origin?: string;
-};
-
-type Payload = {
-  data?: string;
-  event: string;
-  origin: string;
-  replyEvent?: string;
-  reply?: (...args: unknown[]) => void;
-  args?: SubscriberArgs;
-};
-type SubscriberArgs = any[];
-type SubscribeHandler = (...args: SubscriberArgs) => void;
-type Subscription = Record<string, SubscribeHandler[]>;
-type Subscriber = Record<string, Subscription>;
+import type {
+  Framebus,
+  FramebusPayload,
+  SubscriberArgs,
+  SubscribeHandler,
+  Subscriber,
+} from "./types";
 
 // eslint-disable-next-line prefer-const
 let framebus: Framebus;
@@ -184,7 +128,7 @@ function _packagePayload(
   origin: string
 ): string {
   let packaged;
-  const payload: Payload = {
+  const payload: FramebusPayload = {
     event: event,
     origin: origin,
   };
@@ -287,8 +231,8 @@ function unsubscribe(event: string, fn: SubscribeHandler): boolean {
   return false;
 }
 
-function _unpackPayload(e: MessageEvent): Payload | false {
-  let payload: Payload;
+function _unpackPayload(e: MessageEvent): FramebusPayload | false {
+  let payload: FramebusPayload;
 
   if (e.data.slice(0, prefix.length) !== prefix) {
     return false;
@@ -325,12 +269,7 @@ function _unpackPayload(e: MessageEvent): Payload | false {
   return payload;
 }
 
-function _dispatch(
-  origin: string,
-  event: string,
-  args: SubscriberArgs,
-  e: MessageEvent
-): void {
+function _dispatch(origin: string, event: string, args: SubscriberArgs): void {
   if (!subscribers[origin]) {
     return;
   }
@@ -339,7 +278,7 @@ function _dispatch(
   }
 
   for (let i = 0; i < subscribers[origin][event].length; i++) {
-    subscribers[origin][event][i].apply(e, args);
+    subscribers[origin][event][i](...args);
   }
 }
 
@@ -371,8 +310,8 @@ function _onmessage(e: MessageEvent): void {
 
   const args = payload.args as SubscriberArgs;
 
-  _dispatch("*", payload.event, args, e);
-  _dispatch(e.origin, payload.event, args, e);
+  _dispatch("*", payload.event, args);
+  _dispatch(e.origin, payload.event, args);
   _broadcastPopups(e.data, payload.origin, e.source as Window);
 }
 

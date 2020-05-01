@@ -27,14 +27,16 @@ describe("_broadcast", function () {
     });
 
     expect(function () {
-      bus._broadcast(frame, "payload", "*");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      bus._broadcast(frame as any, "payload", "*");
     }).not.toThrowError();
   });
 
   it("should postMessage to current frame", function () {
     const frame = mkFrame();
 
-    bus._broadcast(frame, "payload", "*");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    bus._broadcast(frame as any, "payload", "*");
 
     expect(frame.postMessage).toBeCalled();
   });
@@ -43,7 +45,8 @@ describe("_broadcast", function () {
 
     frame.frames.push(mkFrame());
 
-    bus._broadcast(frame, "payload", "*");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    bus._broadcast(frame as any, "payload", "*");
 
     expect(frame.frames[0].postMessage).toBeCalled();
   });
@@ -56,7 +59,8 @@ describe("_broadcast", function () {
       frame.top = frame;
       frame.opener.top = frame.opener;
 
-      bus._broadcast(frame, "payload", "*");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      bus._broadcast(frame as any, "payload", "*");
 
       expect(frame.opener.top.postMessage).toBeCalled();
     });
@@ -72,7 +76,8 @@ describe("_broadcast", function () {
       frame.opener.top = frame.opener;
       frame.top = frame;
 
-      bus._broadcast(frame, "payload", "*");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      bus._broadcast(frame as any, "payload", "*");
 
       expect(frame.opener.top.postMessage).not.toBeCalled();
     });
@@ -84,7 +89,8 @@ describe("_broadcast", function () {
       frame.opener = frame;
       frame.top = frame;
 
-      bus._broadcast(frame, "payload", "*");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      bus._broadcast(frame as any, "payload", "*");
 
       // don't infinitely recurse
       done();
@@ -101,7 +107,8 @@ describe("_broadcast", function () {
       frame.frames = [child];
       frame.top = frame;
 
-      bus._broadcast(frame, "payload", "*");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      bus._broadcast(frame as any, "payload", "*");
 
       // don't infinitely recurse
       done();
@@ -117,7 +124,8 @@ describe("_broadcast", function () {
       frame.opener.top = frame.opener;
       frame.top = frame;
 
-      bus._broadcast(frame, "payload", "*");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      bus._broadcast(frame as any, "payload", "*");
 
       expect(frame.opener.top.frames[0].postMessage).toBeCalled();
     });
@@ -134,7 +142,8 @@ describe("_broadcast", function () {
       });
 
       expect(function () {
-        bus._broadcast(frame, "payload", "*");
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        bus._broadcast(frame as any, "payload", "*");
       }).not.toThrowError("Access denied");
     });
   });

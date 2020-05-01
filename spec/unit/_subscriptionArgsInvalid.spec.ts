@@ -1,35 +1,35 @@
 import bus = require("../../src/lib/framebus");
 
 describe("_subscriptionArgsInvalid", function () {
-  let args: Array<string | jest.SpyInstance | Record<string, string>>;
-
-  beforeEach(function () {
-    args = ["event", jest.fn(), "*"];
-  });
-
   it("should return false for valid types", function () {
-    const actual = bus._subscriptionArgsInvalid(...args);
+    const actual = bus._subscriptionArgsInvalid("event", jest.fn(), "*");
 
     expect(actual).toBe(false);
   });
 
   it("should return true if event is not string", function () {
-    args[0] = {};
-    const actual = bus._subscriptionArgsInvalid(...args);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const actual = bus._subscriptionArgsInvalid({} as any, jest.fn(), "*");
 
     expect(actual).toBe(true);
   });
 
   it("should return true if fn is not function", function () {
-    args[1] = "function";
-    const actual = bus._subscriptionArgsInvalid(...args);
+    const actual = bus._subscriptionArgsInvalid(
+      "event",
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      "function" as any,
+      "*"
+    );
 
     expect(actual).toBe(true);
   });
 
   it("should return true if origin is not string", function () {
-    args[2] = { event: "object" };
-    const actual = bus._subscriptionArgsInvalid(...args);
+    const actual = bus._subscriptionArgsInvalid("event", jest.fn(), {
+      event: "object",
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any);
 
     expect(actual).toBe(true);
   });
