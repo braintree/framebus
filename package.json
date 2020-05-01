@@ -7,7 +7,7 @@
   },
   "homepage": "https://github.com/braintree/framebus",
   "version": "3.0.2",
-  "main": "dist/lib/framebus.js",
+  "main": "dist/framebus.js",
   "files": [
     "dist/"
   ],
