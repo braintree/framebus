@@ -1,25 +1,36 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8">
-<title></title>
-</head>
-<body>
-  index.html
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+  </head>
+  <body>
+    index.html
     <iframe src="/html/frame1.html" name="frame1"></iframe>
     <iframe src="/html/frame2.html" name="frame2"></iframe>
-    <iframe src="http://<%= domain %>:<%= port2 %>/html/frame3.html" name="frame3"></iframe>
+    <iframe
+      src="http://<%= domain %>:<%= port2 %>/html/frame3.html"
+      name="frame3"
+    ></iframe>
     <button id="open-popup">Open popup</button>
 
-    <script>window.name = "root-frame";</script>
+    <script>
+      window.name = "root-frame";
+    </script>
     <script src="/js/test-app.js"></script>
     <script>
-    framebus.on("Marco", function () { app.printToDOM('FAIL: [index] received "Marco"'); });
+      framebus.on("Marco", function () {
+        app.printToDOM('FAIL: [index] received "Marco"');
+      });
 
-    document.querySelector('#open-popup').addEventListener('click', function () {
-      var popup = window.open("/html/popup.html", "popup");
-      framebus.include(popup);
-    }, false);
+      document.querySelector("#open-popup").addEventListener(
+        "click",
+        function () {
+          var popup = window.open("/html/popup.html", "popup");
+          framebus.include(popup);
+        },
+        false
+      );
     </script>
-</body>
+  </body>
 </html>

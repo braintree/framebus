@@ -7,11 +7,14 @@
   },
   "homepage": "https://github.com/braintree/framebus",
   "version": "3.0.2",
-  "main": "lib/framebus.js",
+  "main": "dist/lib/framebus.js",
   "files": [
     "lib/framebus.js"
   ],
   "scripts": {
+    "prepublishOnly": "npm run build",
+    "prebuild": "prettier --write .",
+    "build": "tsc --declaration",
     "lint": "eslint .",
     "pretest": "npm run lint",
     "test:unit": "jest spec/unit/",
@@ -23,6 +26,7 @@
   "license": "MIT",
   "author": "braintree <code@getbraintree.com>",
   "devDependencies": {
+    "@types/jest": "^25.2.1",
     "@wdio/cli": "^6.1.5",
     "@wdio/local-runner": "^6.1.6",
     "@wdio/mocha-framework": "^6.1.6",
@@ -34,7 +38,7 @@
     "del": "^5.1.0",
     "ejs": "^3.1.2",
     "eslint": "^6.8.0",
-    "eslint-config-braintree": "^4.0.0",
+    "eslint-config-braintree": "5.0.0-typescript-prep-rc.17",
     "express": "^4.10.4",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.4.2",
@@ -44,13 +48,19 @@
     "gulp-uglify": "^3.0.2",
     "jest": "^25.5.2",
     "morgan": "^1.10.0",
+    "prettier": "^2.0.5",
+    "ts-jest": "^25.4.0",
+    "ts-node": "^8.9.1",
+    "tsify": "^4.0.1",
+    "typescript": "^3.8.3",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0",
     "wdio-chromedriver-service": "^6.0.2"
   },
   "jest": {
+    "preset": "ts-jest",
     "setupFilesAfterEnv": [
-      "./spec/unit/helpers.js"
+      "./spec/unit/helpers.ts"
     ]
   }
 }

@@ -1,29 +1,36 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8">
-<title></title>
-</head>
-<body>
-popup.html
-<input id="from-popup-message">
-<button id="send">Send</button>
-<script src="/js/test-app.js"></script>
-<script>
-  framebus.on('message', app.printToDOM);
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+  </head>
+  <body>
+    popup.html
+    <input id="from-popup-message" />
+    <button id="send">Send</button>
+    <script src="/js/test-app.js"></script>
+    <script>
+      framebus.on("message", app.printToDOM);
 
-  document.querySelector('#send').addEventListener('click', function () {
-    framebus.emit('from-popup', document.querySelector('#from-popup-message').value);
-  }, false);
+      document.querySelector("#send").addEventListener(
+        "click",
+        function () {
+          framebus.emit(
+            "from-popup",
+            document.querySelector("#from-popup-message").value
+          );
+        },
+        false
+      );
 
-  var count = 0;
-  framebus.on('from-popup', function() {
-    count++;
+      var count = 0;
+      framebus.on("from-popup", function () {
+        count++;
 
-    if (count > 1) {
-      app.printToDOM('FAILURE received "from-popup" multiple times');
-    }
-  });
-</script>
-</body>
+        if (count > 1) {
+          app.printToDOM('FAILURE received "from-popup" multiple times');
+        }
+      });
+    </script>
+  </body>
 </html>

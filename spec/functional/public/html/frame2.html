@@ -1,16 +1,24 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8">
-<title></title>
-</head>
-<body>
-frame2.html
-<a target="about:blank" href="http://<%= domain %>:<%= port2 %>/html/frame3.html">Open popup</a>
-<script src="/js/test-app.js"></script>
-<script>
-framebus.on("Marco", function () { app.printToDOM('FAIL: [frame 2] received "Marco"'); });
-framebus.on("from-popup", function (message) { app.printToDOM('received "' + message + '" from popup'); });
-</script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+  </head>
+  <body>
+    frame2.html
+    <a
+      target="about:blank"
+      href="http://<%= domain %>:<%= port2 %>/html/frame3.html"
+      >Open popup</a
+    >
+    <script src="/js/test-app.js"></script>
+    <script>
+      framebus.on("Marco", function () {
+        app.printToDOM('FAIL: [frame 2] received "Marco"');
+      });
+      framebus.on("from-popup", function (message) {
+        app.printToDOM('received "' + message + '" from popup');
+      });
+    </script>
+  </body>
 </html>

@@ -1,17 +1,17 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8">
-<title></title>
-</head>
-<body>
-  frame1.html
-<script src="/js/test-app.js"></script>
-<script>
-  framebus.on("Marco", function () {
-    app.printToDOM('FAIL: [frame 1] received "Marco"');
-  });
-</script>
-<iframe src="/html/frame1-inner.html" name="frame1-inner"></iframe>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+  </head>
+  <body>
+    frame1.html
+    <script src="/js/test-app.js"></script>
+    <script>
+      framebus.on("Marco", function () {
+        app.printToDOM('FAIL: [frame 1] received "Marco"');
+      });
+    </script>
+    <iframe src="/html/frame1-inner.html" name="frame1-inner"></iframe>
+  </body>
 </html>

@@ -1,11 +1,10 @@
-How to contribute
-=================
+# How to contribute
 
 We welcome pull requests, issue submissions, and feature requests. Before contributing, please read these guidelines.
 
 ## Requirements
 
-This library strives to be compatible with __IE8+__, so please be aware of any ECMAScript5 usages that do not operate in all browsers. If you are contributing code features or changes, we will expect tests to be in your submission. If there are no tests but the submission is a small change we may allow it.
+This library strives to be compatible with **IE8+**, so please be aware of any ECMAScript5 usages that do not operate in all browsers. If you are contributing code features or changes, we will expect tests to be in your submission. If there are no tests but the submission is a small change we may allow it.
 
 ## Contributing documentation
 
@@ -37,6 +36,7 @@ The test suite automatically starts the servers for functional testing, but if y
 ```
 npm start
 ```
+
 The default ports are `3099` and `4567` and can be set via `PORT` and `PORT2` environment variables, respectively.
 
 ```

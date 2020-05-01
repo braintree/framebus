@@ -3,7 +3,7 @@ language: node_js
 addons:
   chrome: stable
 services:
-- xvfb
+  - xvfb
 notifications:
   email: false
   slack:
