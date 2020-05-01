@@ -9,7 +9,7 @@
   "version": "3.0.2",
   "main": "dist/lib/framebus.js",
   "files": [
-    "lib/framebus.js"
+    "dist/"
   ],
   "scripts": {
     "prepublishOnly": "npm run build",
