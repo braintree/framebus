@@ -43,7 +43,7 @@ describe("_packagePayload", function () {
     });
     const args = [payload];
 
-    const fn = function () {
+    const fn = function (): void {
       bus._packagePayload("event", args, "*");
     };
 

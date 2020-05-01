@@ -1,7 +1,7 @@
 import bus = require("../../src/lib/framebus");
 
 describe("_subscriptionArgsInvalid", function () {
-  let args: any[];
+  let args: Array<string | jest.SpyInstance | Record<string, string>>;
 
   beforeEach(function () {
     args = ["event", jest.fn(), "*"];

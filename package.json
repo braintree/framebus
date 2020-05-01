@@ -15,7 +15,7 @@
     "prepublishOnly": "npm run build",
     "prebuild": "prettier --write .",
     "build": "tsc --declaration",
-    "lint": "eslint .",
+    "lint": "eslint --ext js,ts .",
     "pretest": "npm run lint",
     "test:unit": "jest spec/unit/",
     "pretest:functional": "gulp functional:prep",

@@ -5,33 +5,54 @@ declare global {
   }
 }
 
+type UnsubscribeMethod = (event: string, fn: SubscribeHandler) => boolean;
+type SubscribeMethod = (event: string, fn: SubscribeHandler) => boolean;
+type PublishMethod = (event: string, ...args: SubscriberArgs) => boolean;
+
 type Framebus = {
-  // TODO use actual shape of functions
-  target: Function;
   // removeIf(production)
-  _packagePayload: Function;
-  _unpackPayload: Function;
-  _attach: Function;
-  _detach: Function;
-  _dispatch: Function;
-  _broadcast: Function;
-  _subscribeReplier: Function;
-  _subscriptionArgsInvalid: Function;
-  _onmessage: Function;
-  _uuid: Function;
-  _getSubscribers: Function;
+  _attach: () => void;
+  _broadcast: (frame: Window, payload: string, origin: string) => void;
+  _detach: () => void;
+  _dispatch: (
+    origin: string,
+    event: string,
+    args: SubscriberArgs,
+    e: MessageEvent
+  ) => void;
+  _getSubscribers: () => Subscriber;
+  _onmessage: (e: MessageEvent) => void;
+  _packagePayload: (
+    event: string,
+    args: SubscriberArgs,
+    origin: string
+  ) => string;
+  _subscribeReplier: (fn: SubscribeHandler, origin: string) => string;
+  _subscriptionArgsInvalid: (
+    event: string,
+    fn: SubscribeHandler,
+    origin: string
+  ) => boolean;
+  _unpackPayload: (e: MessageEvent) => Payload | false;
+  _uuid: () => string;
   // endRemoveIf(production)
-  include: Function;
-  publish: Function;
-  pub: Function;
-  trigger: Function;
-  emit: Function;
-  subscribe: Function;
-  sub: Function;
-  on: Function;
-  unsubscribe: Function;
-  unsub: Function;
-  off: Function;
+  include: (popup?: Window) => boolean;
+
+  emit: PublishMethod;
+  pub: PublishMethod;
+  publish: PublishMethod;
+  trigger: PublishMethod;
+
+  target: (origin: string) => Framebus;
+
+  on: SubscribeMethod;
+  sub: SubscribeMethod;
+  subscribe: SubscribeMethod;
+
+  off: UnsubscribeMethod;
+  unsub: UnsubscribeMethod;
+  unsubscribe: UnsubscribeMethod;
+
   _origin?: string;
 };
 
@@ -40,16 +61,9 @@ type Payload = {
   event: string;
   origin: string;
   replyEvent?: string;
-  reply?: Function;
+  reply?: (...args: unknown[]) => void;
   args?: SubscriberArgs;
 };
-type PackedPayload = {
-  data: string;
-  origin: string;
-  source: Window;
-  reply: Function;
-};
-type UnpackedPayload = {};
 type SubscriberArgs = any[];
 type SubscribeHandler = (...args: SubscriberArgs) => void;
 type Subscription = Record<string, SubscribeHandler[]>;
@@ -98,7 +112,7 @@ function target(origin = "*"): Framebus {
   return targetedFramebus;
 }
 
-function _hasOpener(frame: Window) {
+function _hasOpener(frame: Window): boolean {
   if (frame.top !== frame) {
     return false;
   }
@@ -115,7 +129,7 @@ function _hasOpener(frame: Window) {
   return true;
 }
 
-function _broadcast(frame: Window, payload: string, origin: string) {
+function _broadcast(frame: Window, payload: string, origin: string): void {
   let i = 0;
   let frameToBroadcastTo;
 
@@ -143,18 +157,18 @@ function _broadcast(frame: Window, payload: string, origin: string) {
   }
 }
 
-function _getOrigin(scope: Framebus) {
+function _getOrigin(scope: Framebus): string {
   return (scope && scope._origin) || "*";
 }
 
-function _isntString(str: string) {
+function _isntString(str: string): boolean {
   return typeof str !== "string";
 }
 
 function _subscribeReplier(fn: SubscribeHandler, origin: string): string {
   const uuid = _uuid();
 
-  function replier(d: any, o: SubscribeHandler) {
+  function replier(d: unknown, o: SubscribeHandler): void {
     fn(d, o);
     framebus.target(origin).unsubscribe(uuid, replier);
   }
@@ -192,7 +206,7 @@ function _packagePayload(
   return packaged;
 }
 
-function publish(event: string, ...args: SubscriberArgs) {
+function publish(event: string, ...args: SubscriberArgs): boolean {
   // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
   // @ts-ignore
   const origin = _getOrigin(this); // eslint-disable-line no-invalid-this
@@ -218,7 +232,7 @@ function _subscriptionArgsInvalid(
   event: string,
   fn: SubscribeHandler,
   origin: string
-) {
+): boolean {
   if (_isntString(event)) {
     return true;
   }
@@ -290,8 +304,9 @@ function _unpackPayload(e: MessageEvent): Payload | false {
     const replyOrigin = e.origin;
     const replySource = e.source as Window;
     const replyEvent = payload.replyEvent;
+    const args = payload.args as SubscriberArgs;
 
-    payload.reply = function reply(data: any) {
+    payload.reply = function reply(data: unknown): void {
       if (!replySource) {
         return;
       }
@@ -305,9 +320,8 @@ function _unpackPayload(e: MessageEvent): Payload | false {
       replySource.postMessage(replyPayload, replyOrigin);
     };
 
-    payload.args!.push(payload.reply);
+    args.push(payload.reply);
   }
-
   return payload;
 }
 
@@ -316,7 +330,7 @@ function _dispatch(
   event: string,
   args: SubscriberArgs,
   e: MessageEvent
-) {
+): void {
   if (!subscribers[origin]) {
     return;
   }
@@ -329,7 +343,11 @@ function _dispatch(
   }
 }
 
-function _broadcastPopups(payload: string, origin: string, source: Window) {
+function _broadcastPopups(
+  payload: string,
+  origin: string,
+  source: Window
+): void {
   for (let i = popups.length - 1; i >= 0; i--) {
     const popup = popups[i];
 
@@ -392,7 +410,7 @@ framebus = {
   _subscriptionArgsInvalid: _subscriptionArgsInvalid,
   _onmessage: _onmessage,
   _uuid: _uuid,
-  _getSubscribers: function () {
+  _getSubscribers: function (): Subscriber {
     return subscribers;
   },
   // endRemoveIf(production)
