@@ -4,7 +4,6 @@ describe("Popup Events", function () {
   });
 
   it("should be able to receive events from opener frames", function () {
-    let actual;
     const expected = "hello from frame3!";
 
     $("#open-popup").click();
@@ -36,13 +35,12 @@ describe("Popup Events", function () {
         timeout: 1000,
       }
     );
-    actual = $("p").getText();
+    const actual = $("p").getText();
 
     expect(actual).toBe(expected);
   });
 
   it("should be able to send events to opener frames", function () {
-    let actual;
     const expected = "hello from popup!";
 
     $("#open-popup").click();
@@ -72,13 +70,12 @@ describe("Popup Events", function () {
         timeout: 1000,
       }
     );
-    actual = $("p").getText();
+    const actual = $("p").getText();
 
     expect(actual).toContain(expected);
   });
 
   it("should not double-receive events in popups", function () {
-    let actual;
     const expected = "hello from popup!";
 
     $("#open-popup").click();
@@ -108,7 +105,7 @@ describe("Popup Events", function () {
         timeout: 1000,
       }
     );
-    actual = $("p").getText();
+    const actual = $("p").getText();
 
     expect(actual).not.toContain("FAILURE");
   });

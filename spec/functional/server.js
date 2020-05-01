@@ -1,16 +1,18 @@
-"use strict";
 /* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-var servers;
-var path = require("path");
-var express = require("express");
-var morgan = require("morgan");
-var async = require("async");
+let servers;
+const path = require("path");
+const express = require("express");
+const morgan = require("morgan");
+const async = require("async");
 
-var app = express();
-var ports = [process.env.PORT || 3099, process.env.PORT2 || 4567];
-var domain = process.env.HOST || "localhost";
-var model = {
+const app = express();
+const ports = [process.env.PORT || 3099, process.env.PORT2 || 4567];
+const domain = process.env.HOST || "localhost";
+const model = {
   port1: ports[0],
   port2: ports[1],
   domain: domain,
@@ -21,8 +23,8 @@ app.set("view engine", "html");
 app.engine("html", require("ejs").renderFile);
 
 function _routeHandler(req, res) {
-  var _path = req.path;
-  var template =
+  const _path = req.path;
+  const template =
     _path === "/" ? "index" : _path.replace(/^\/(.*)\.html$/, "$1");
 
   res.render(template, model);
@@ -33,20 +35,20 @@ app.get("/*.html", _routeHandler);
 
 app.use(express.static(path.join(__dirname, "/public")));
 
-function _noop() {}
+function _noop() {
+  // noop
+}
 
 function start(cb, logRequests) {
-  var asyncTasks;
-
   cb = cb || _noop;
 
   if (logRequests) {
     app.use(morgan("combined"));
   }
 
-  asyncTasks = ports.map(function (port) {
+  const asyncTasks = ports.map(function (port) {
     return function (done) {
-      var srv = app.listen(port, function () {
+      const srv = app.listen(port, function () {
         console.log("app running on", port);
         done(null, srv);
       });

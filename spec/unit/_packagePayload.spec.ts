@@ -23,7 +23,7 @@ describe("_packagePayload", function () {
   });
 
   it("should add reply to payload if data is function", function () {
-    const args = [function () {}];
+    const args = [jest.fn()];
 
     const result = bus._packagePayload.call(bus, "event", args, "*");
     const actual = JSON.parse(result.replace(messagePrefix, ""));

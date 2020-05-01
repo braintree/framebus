@@ -4,8 +4,6 @@ describe("Reply Events", function () {
   });
 
   it("should only publish to targeted domains and print reply", function () {
-    let indexReceived, frame1Received, frame2Received, frame3ReceivedQuestion;
-
     browser.switchToFrame(2);
 
     $("#polo-text").setValue("polo");
@@ -30,18 +28,18 @@ describe("Reply Events", function () {
     browser.switchToParentFrame();
     browser.switchToParentFrame();
 
-    indexReceived = $$("p").length;
+    const indexReceived = $$("p").length;
 
     browser.switchToFrame(0);
-    frame1Received = $$("p").length;
+    const frame1Received = $$("p").length;
     browser.switchToParentFrame();
 
     browser.switchToFrame(1);
-    frame2Received = $$("p").length;
+    const frame2Received = $$("p").length;
     browser.switchToParentFrame();
 
     browser.switchToFrame(2);
-    frame3ReceivedQuestion = $("p").getText();
+    const frame3ReceivedQuestion = $("p").getText();
 
     expect(indexReceived).toBe(0);
     expect(frame1Received).toBe(0);

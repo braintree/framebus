@@ -1,16 +1,16 @@
-"use strict";
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-var gulp = require("gulp");
-var source = require("vinyl-source-stream");
-var buffer = require("vinyl-buffer");
-var uglify = require("gulp-uglify");
-var streamify = require("gulp-streamify");
-var size = require("gulp-size");
-var concat = require("gulp-concat");
-var del = require("del");
-var removeCode = require("gulp-remove-code");
-var browserify = require("browserify");
-var tsify = require("tsify");
+const gulp = require("gulp");
+const source = require("vinyl-source-stream");
+const buffer = require("vinyl-buffer");
+const uglify = require("gulp-uglify");
+const streamify = require("gulp-streamify");
+const size = require("gulp-size");
+const concat = require("gulp-concat");
+const del = require("del");
+const removeCode = require("gulp-remove-code");
+const browserify = require("browserify");
 
 function cleanBuild() {
   return del(["dist-app/*"]);
@@ -21,7 +21,7 @@ function cleanTest() {
 }
 
 function build() {
-  var b = browserify({
+  const b = browserify({
     entries: "./src/lib/framebus.ts",
     standalone: "framebus",
     debug: true,
