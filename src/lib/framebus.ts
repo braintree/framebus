@@ -1,5 +1,3 @@
-"use strict";
-
 declare global {
   // for some reason, the Window constructor does not exist on the window object :/
   interface Window {
@@ -81,7 +79,7 @@ function include(popup?: Window): boolean {
   return true;
 }
 
-function target(origin: string = "*"): Framebus {
+function target(origin = "*"): Framebus {
   const targetedFramebus: Framebus = Object.assign({}, framebus, {
     _origin: origin,
   });
@@ -165,11 +163,11 @@ function _packagePayload(
   origin: string
 ): string {
   let packaged;
-  let payload: Payload = {
+  const payload: Payload = {
     event: event,
     origin: origin,
   };
-  var reply = args[args.length - 1];
+  const reply = args[args.length - 1];
 
   if (typeof reply === "function") {
     payload.replyEvent = _subscribeReplier(reply, origin);
@@ -210,7 +208,7 @@ function _unpackPayload(e: MessageEvent): Payload | false {
 
     payload.reply = function reply(data: any) {
       // eslint-disable-line consistent-return
-      var replyPayload;
+      let replyPayload;
 
       if (!replySource) {
         return;
@@ -253,8 +251,8 @@ function _detach(): void {
 /* eslint-disable no-mixed-operators */
 function _uuid(): string {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
-    var r = (Math.random() * 16) | 0;
-    var v = c === "x" ? r : (r & 0x3) | 0x8;
+    const r = (Math.random() * 16) | 0;
+    const v = c === "x" ? r : (r & 0x3) | 0x8;
 
     return v.toString(16);
   });
@@ -343,7 +341,7 @@ function _broadcast(frame: Window, payload: string, origin: string) {
 
 function _broadcastPopups(payload: string, origin: string, source: Window) {
   for (let i = popups.length - 1; i >= 0; i--) {
-    let popup = popups[i];
+    const popup = popups[i];
 
     if (popup.closed === true) {
       popups = popups.slice(i, 1);

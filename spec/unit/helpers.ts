@@ -1,5 +1,3 @@
-"use strict";
-
 import bus = require("../../src/lib/framebus");
 
 afterEach(function () {

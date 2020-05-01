@@ -1,13 +1,11 @@
-"use strict";
-
 describe("Popup Events", function () {
   beforeEach(function () {
     browser.url("http://localhost:3099");
   });
 
   it("should be able to receive events from opener frames", function () {
-    var actual;
-    var expected = "hello from frame3!";
+    let actual;
+    const expected = "hello from frame3!";
 
     $("#open-popup").click();
     browser.switchWindow("popup");
@@ -44,8 +42,8 @@ describe("Popup Events", function () {
   });
 
   it("should be able to send events to opener frames", function () {
-    var actual;
-    var expected = "hello from popup!";
+    let actual;
+    const expected = "hello from popup!";
 
     $("#open-popup").click();
 
@@ -80,8 +78,8 @@ describe("Popup Events", function () {
   });
 
   it("should not double-receive events in popups", function () {
-    var actual;
-    var expected = "hello from popup!";
+    let actual;
+    const expected = "hello from popup!";
 
     $("#open-popup").click();
 

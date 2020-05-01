@@ -1,5 +1,3 @@
-"use strict";
-
 import bus = require("../../src/lib/framebus");
 
 type FakeFrame = {
@@ -94,7 +92,7 @@ describe("_broadcast", function () {
 
     it("should not infinitely recurse if opener is parent", function (done) {
       const frame = mkFrame();
-      var child = mkFrame();
+      const child = mkFrame();
 
       child.opener = frame;
       child.parent = frame;
