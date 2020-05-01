@@ -51,6 +51,7 @@
     "prettier": "^2.0.5",
     "ts-jest": "^25.4.0",
     "ts-node": "^8.9.1",
+    "tsconfig-paths": "^3.9.0",
     "tsify": "^4.0.1",
     "typescript": "^3.8.3",
     "vinyl-buffer": "^1.0.1",
