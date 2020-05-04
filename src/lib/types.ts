@@ -1,6 +1,7 @@
 type UnsubscribeMethod = (event: string, fn: SubscribeHandler) => boolean;
 type SubscribeMethod = (event: string, fn: SubscribeHandler) => boolean;
 type PublishMethod = (event: string, ...args: SubscriberArgs) => boolean;
+type ReplyFunction = (...args: unknown[]) => void;
 
 export type Framebus = {
   // removeIf(production)
@@ -57,8 +58,7 @@ export type FramebusPayload = {
   data?: string;
   event: string;
   origin: string;
-  replyEvent?: string;
-  reply?: (...args: unknown[]) => void;
+  reply?: string | ReplyFunction;
   args?: SubscriberArgs;
 };
 export type SubscriberArgs = any[];

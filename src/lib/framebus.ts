@@ -136,7 +136,7 @@ function _packagePayload(
   const reply = args[args.length - 1];
 
   if (typeof reply === "function") {
-    payload.replyEvent = _subscribeReplier(reply, origin);
+    payload.reply = _subscribeReplier(reply, origin);
     args = args.slice(0, -1);
   }
 
@@ -245,11 +245,10 @@ function _unpackPayload(e: MessageEvent): FramebusPayload | false {
     return false;
   }
 
-  console.log(payload);
-  if (payload.replyEvent) {
+  if (payload.reply) {
     const replyOrigin = e.origin;
     const replySource = e.source as Window;
-    const replyEvent = payload.replyEvent;
+    const replyEvent = payload.reply as string;
     const args = payload.args as SubscriberArgs;
 
     payload.reply = function reply(data: unknown): void {

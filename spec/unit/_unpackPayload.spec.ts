@@ -49,8 +49,7 @@ describe("_unpackPayload", function () {
     const actual = bus._unpackPayload(
       makeEvent({
         data:
-          messagePrefix +
-          JSON.stringify({ event: event, replyEvent: reply, args: args }),
+          messagePrefix + JSON.stringify({ event: event, reply, args: args }),
       })
     ) as FramebusPayload;
     const actualArgs = actual.args as SubscriberArgs;
@@ -74,7 +73,7 @@ describe("_unpackPayload", function () {
           messagePrefix +
           JSON.stringify({
             event: "event name",
-            replyEvent: reply,
+            reply,
             args: args,
           }),
       })
@@ -96,7 +95,7 @@ describe("_unpackPayload", function () {
           messagePrefix +
           JSON.stringify({
             event: "event name",
-            replyEvent: reply,
+            reply,
             args: args,
           }),
       })

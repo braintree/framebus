@@ -28,7 +28,7 @@ describe("_packagePayload", function () {
     const result = bus._packagePayload.call(bus, "event", args, "*");
     const actual = JSON.parse(result.replace(messagePrefix, ""));
 
-    expect(typeof actual.replyEvent).toBe("string");
+    expect(typeof actual.reply).toBe("string");
     expect(actual.args).toHaveLength(0);
   });
 
