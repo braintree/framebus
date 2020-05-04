@@ -1,5 +1,4 @@
 import bus = require("../../src/lib/framebus");
-import type { SubscribeHandler } from "../../src/lib/types";
 
 describe("publish", function () {
   beforeEach(function () {
@@ -22,8 +21,8 @@ describe("publish", function () {
   });
 
   it("should return false if origin is not a string", function () {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const actual = bus
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .target({ origin: "object" } as any)
       .publish("event", { data: "data" });
 

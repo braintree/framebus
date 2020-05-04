@@ -168,7 +168,7 @@ function publish(
 
   if (typeof data === "function") {
     reply = data;
-    data = undefined;
+    data = undefined; // eslint-disable-line no-undefined
   }
 
   const payload = _packagePayload(event, origin, data, reply);
