@@ -283,6 +283,7 @@ function _dispatch(
   origin: string,
   event: string,
   data: SubscriberArg,
+  reply?: SubscribeHandler,
   e?: MessageEvent
 ): void {
   if (!subscribers[origin]) {
@@ -293,7 +294,7 @@ function _dispatch(
   }
 
   for (let i = 0; i < subscribers[origin][event].length; i++) {
-    subscribers[origin][event][i].call(e, data);
+    subscribers[origin][event][i].apply(e, [data, reply]);
   }
 }
 
@@ -324,9 +325,10 @@ function _onmessage(e: MessageEvent): void {
   }
 
   const data = payload.eventData as SubscriberArg;
+  const reply = payload.reply as SubscribeHandler;
 
-  _dispatch("*", payload.event, data, e);
-  _dispatch(e.origin, payload.event, data, e);
+  _dispatch("*", payload.event, data, reply, e);
+  _dispatch(e.origin, payload.event, data, reply, e);
   _broadcastPopups(e.data, payload.origin, e.source as Window);
 }
 

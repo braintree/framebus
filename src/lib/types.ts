@@ -15,7 +15,8 @@ export type Framebus = {
   _dispatch: (
     origin: string,
     event: string,
-    args: SubscriberArg,
+    data: SubscriberArg,
+    reply?: SubscribeHandler,
     e?: MessageEvent
   ) => void;
   _getSubscribers: () => Subscriber;
