@@ -17,7 +17,7 @@ import type {
 let framebus: Framebus;
 
 let isAttached = false;
-let popups: Window[] = [];
+let childWindows: Window[] = [];
 let subscribers: Subscriber = {};
 const prefix = "/*framebus*/";
 
@@ -32,18 +32,18 @@ function _uuid(): string {
 }
 /* eslint-enable no-mixed-operators */
 
-function include(popup: Window): boolean {
-  if (popup == null) {
+function include(childWindow: Window): boolean {
+  if (childWindow == null) {
     return false;
   }
-  if (popup.Window == null) {
+  if (childWindow.Window == null) {
     return false;
   }
-  if (popup.constructor !== popup.Window) {
+  if (childWindow.constructor !== childWindow.Window) {
     return false;
   }
 
-  popups.push(popup);
+  childWindows.push(childWindow);
 
   return true;
 }
@@ -298,18 +298,18 @@ function _dispatch(
   }
 }
 
-function _broadcastPopups(
+function _broadcastToChildWindows(
   payload: string,
   origin: string,
   source: Window
 ): void {
-  for (let i = popups.length - 1; i >= 0; i--) {
-    const popup = popups[i];
+  for (let i = childWindows.length - 1; i >= 0; i--) {
+    const childWindow = childWindows[i];
 
-    if (popup.closed === true) {
-      popups = popups.slice(i, 1);
-    } else if (source !== popup) {
-      _broadcast(popup.top, payload, origin);
+    if (childWindow.closed === true) {
+      childWindows = childWindows.slice(i, 1);
+    } else if (source !== childWindow) {
+      _broadcast(childWindow.top, payload, origin);
     }
   }
 }
@@ -329,7 +329,7 @@ function _onmessage(e: MessageEvent): void {
 
   _dispatch("*", payload.event, data, reply, e);
   _dispatch(e.origin, payload.event, data, reply, e);
-  _broadcastPopups(e.data, payload.origin, e.source as Window);
+  _broadcastToChildWindows(e.data, payload.origin, e.source as Window);
 }
 
 function _attach(): void {
@@ -346,7 +346,7 @@ function _detach(): void {
   isAttached = false;
   window.removeEventListener("message", _onmessage, false);
 
-  popups = [];
+  childWindows = [];
   subscribers = {};
 }
 // endRemoveIf(production)
