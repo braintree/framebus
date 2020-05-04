@@ -270,7 +270,12 @@ function _unpackPayload(e: MessageEvent): FramebusPayload | false {
   return payload;
 }
 
-function _dispatch(origin: string, event: string, args: SubscriberArgs): void {
+function _dispatch(
+  origin: string,
+  event: string,
+  args: SubscriberArgs,
+  e?: MessageEvent
+): void {
   if (!subscribers[origin]) {
     return;
   }
@@ -279,7 +284,7 @@ function _dispatch(origin: string, event: string, args: SubscriberArgs): void {
   }
 
   for (let i = 0; i < subscribers[origin][event].length; i++) {
-    subscribers[origin][event][i](...args);
+    subscribers[origin][event][i].apply(e, args);
   }
 }
 
@@ -311,8 +316,8 @@ function _onmessage(e: MessageEvent): void {
 
   const args = payload.args as SubscriberArgs;
 
-  _dispatch("*", payload.event, args);
-  _dispatch(e.origin, payload.event, args);
+  _dispatch("*", payload.event, args, e);
+  _dispatch(e.origin, payload.event, args, e);
   _broadcastPopups(e.data, payload.origin, e.source as Window);
 }
 

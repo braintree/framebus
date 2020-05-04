@@ -7,7 +7,12 @@ export type Framebus = {
   _attach: () => void;
   _broadcast: (frame: Window, payload: string, origin: string) => void;
   _detach: () => void;
-  _dispatch: (origin: string, event: string, args: SubscriberArgs) => void;
+  _dispatch: (
+    origin: string,
+    event: string,
+    args: SubscriberArgs,
+    e?: MessageEvent
+  ) => void;
   _getSubscribers: () => Subscriber;
   _onmessage: (e: MessageEvent) => void;
   _packagePayload: (
