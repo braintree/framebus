@@ -1,7 +1,7 @@
 import bus = require("../../src/lib/framebus");
 import type {
   FramebusPayload,
-  SubscriberArgs,
+  SubscriberArg,
   SubscribeHandler,
 } from "../../src/lib/types";
 
@@ -29,34 +29,34 @@ describe("_unpackPayload", function () {
 
   it("should return event and args in payload", function () {
     const event = "event name";
-    const args = ["my string"];
+    const data = { data: "some data" };
     const actual = bus._unpackPayload(
       makeEvent({
-        data: messagePrefix + JSON.stringify({ event, args }),
+        data: messagePrefix + JSON.stringify({ event, eventData: data }),
       })
     ) as FramebusPayload;
-    const actualArgs = actual.args as SubscriberArgs;
+    const eventData = actual.eventData as SubscriberArg;
 
     expect(actual.event).toBe(event);
-    expect(actualArgs.length).toBe(1);
-    expect(actualArgs).toEqual(expect.arrayContaining(["my string"]));
+    expect(eventData).toEqual(data);
   });
 
   it("should return event and args and reply in payload", function () {
     const event = "event name";
     const reply = "123129085-4234-1231-99887877";
-    const args = ["some data"];
+    const data = { data: "some data" };
     const actual = bus._unpackPayload(
       makeEvent({
         data:
-          messagePrefix + JSON.stringify({ event: event, reply, args: args }),
+          messagePrefix +
+          JSON.stringify({ event: event, reply, eventData: data }),
       })
     ) as FramebusPayload;
-    const actualArgs = actual.args as SubscriberArgs;
+    const eventData = actual.eventData as SubscriberArg;
 
     expect(actual.event).toBe(event);
-    expect(actualArgs[1]).toBeInstanceOf(Function);
-    expect(actualArgs[0]).toBe("some data");
+    expect(actual.reply).toBeInstanceOf(Function);
+    expect(eventData.data).toBe("some data");
   });
 
   it("the source should postMessage the payload to the origin when reply is called", function () {
@@ -64,7 +64,7 @@ describe("_unpackPayload", function () {
       postMessage: jest.fn(),
     };
     const reply = "123129085-4234-1231-99887877";
-    const args = ["some data"];
+    const data = { data: "some data" };
     const actual = bus._unpackPayload(
       makeEvent({
         source: fakeSource,
@@ -74,12 +74,13 @@ describe("_unpackPayload", function () {
           JSON.stringify({
             event: "event name",
             reply,
-            args: args,
+            eventData: data,
           }),
       })
     ) as FramebusPayload;
+    const handler = actual.reply as SubscribeHandler;
 
-    (actual.reply as SubscribeHandler)({});
+    handler({});
 
     expect(fakeSource.postMessage).toBeCalledTimes(1);
     expect(fakeSource.postMessage).toBeCalledWith(expect.any(String), "origin");
@@ -87,7 +88,7 @@ describe("_unpackPayload", function () {
 
   it("the source should not attempt to postMessage the payload to the origin if no source available", function () {
     const reply = "123129085-4234-1231-99887877";
-    const args = ["some data"];
+    const data = { data: "some data" };
     const actual = bus._unpackPayload(
       makeEvent({
         origin: "origin",
@@ -96,13 +97,14 @@ describe("_unpackPayload", function () {
           JSON.stringify({
             event: "event name",
             reply,
-            args: args,
+            eventData: data,
           }),
       })
     ) as FramebusPayload;
+    const handler = actual.reply as SubscribeHandler;
 
     expect(function () {
-      (actual.reply as SubscribeHandler)({});
+      handler({});
     }).not.toThrowError();
   });
 });

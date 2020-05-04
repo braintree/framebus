@@ -6,7 +6,7 @@ describe("_packagePayload", function () {
   it("should add event to payload", function () {
     const expected = "event name";
 
-    const result = bus._packagePayload.call(bus, expected, [], "*");
+    const result = bus._packagePayload.call(bus, expected, "*", {});
     const actual = JSON.parse(result.replace(messagePrefix, "")).event;
 
     expect(actual).toBe(expected);
@@ -14,22 +14,19 @@ describe("_packagePayload", function () {
 
   it("should add data to payload", function () {
     const expected = { some: "data" };
-    const args = [expected];
 
-    const result = bus._packagePayload.call(bus, "event", args, "*");
+    const result = bus._packagePayload.call(bus, "event", "*", expected);
     const actual = JSON.parse(result.replace(messagePrefix, ""));
 
-    expect(actual.args[0]).toEqual(expected);
+    expect(actual.eventData).toEqual(expected);
   });
 
-  it("should add reply to payload if data is function", function () {
-    const args = [jest.fn()];
-
-    const result = bus._packagePayload.call(bus, "event", args, "*");
+  it("should add reply to payload if provided", function () {
+    const result = bus._packagePayload.call(bus, "event", "*", {}, jest.fn());
     const actual = JSON.parse(result.replace(messagePrefix, ""));
 
     expect(typeof actual.reply).toBe("string");
-    expect(actual.args).toHaveLength(0);
+    expect(actual.eventData).toEqual({});
   });
 
   it("should throw error with prefix text when element cannot be stringified", function () {
@@ -41,10 +38,9 @@ describe("_packagePayload", function () {
       },
       enumerable: true,
     });
-    const args = [payload];
 
     const fn = function (): void {
-      bus._packagePayload("event", args, "*");
+      bus._packagePayload("event", "*", payload);
     };
 
     expect(fn).toThrowError("Could not stringify event: ");

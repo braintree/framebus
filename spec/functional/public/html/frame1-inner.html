@@ -13,11 +13,15 @@
       var button = document.getElementById("marco-button");
 
       button.onclick = function () {
-        framebus
-          .target(remoteOrigin)
-          .emit("Marco", "are you there?", function (reply) {
-            app.printToDOM(reply);
-          });
+        framebus.target(remoteOrigin).emit(
+          "Marco",
+          {
+            message: "are you there?",
+          },
+          function (reply) {
+            app.printToDOM(reply.message);
+          }
+        );
       };
     </script>
   </body>

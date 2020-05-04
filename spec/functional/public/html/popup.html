@@ -10,15 +10,16 @@
     <button id="send">Send</button>
     <script src="/js/test-app.js"></script>
     <script>
-      framebus.on("message", app.printToDOM);
+      framebus.on("message", function (data) {
+        app.printToDOM(data.message);
+      });
 
       document.querySelector("#send").addEventListener(
         "click",
         function () {
-          framebus.emit(
-            "from-popup",
-            document.querySelector("#from-popup-message").value
-          );
+          framebus.emit("from-popup", {
+            message: document.querySelector("#from-popup-message").value,
+          });
         },
         false
       );

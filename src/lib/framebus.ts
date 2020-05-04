@@ -8,7 +8,7 @@ declare global {
 import type {
   Framebus,
   FramebusPayload,
-  SubscriberArgs,
+  SubscriberArg,
   SubscribeHandler,
   Subscriber,
 } from "./types";
@@ -113,34 +113,33 @@ function _isntString(str: string): boolean {
 function _subscribeReplier(fn: SubscribeHandler, origin: string): string {
   const uuid = _uuid();
 
-  function replier(d: unknown, o: SubscribeHandler): void {
+  function replier(d: SubscriberArg, o: SubscribeHandler): void {
     fn(d, o);
-    framebus.target(origin).unsubscribe(uuid, replier);
+    framebus.target(origin).unsubscribe(uuid, replier as SubscribeHandler);
   }
 
-  framebus.target(origin).subscribe(uuid, replier);
+  framebus.target(origin).subscribe(uuid, replier as SubscribeHandler);
 
   return uuid;
 }
 
 function _packagePayload(
   event: string,
-  args: SubscriberArgs,
-  origin: string
+  origin: string,
+  data?: SubscriberArg,
+  reply?: SubscribeHandler
 ): string {
   let packaged;
   const payload: FramebusPayload = {
     event: event,
     origin: origin,
   };
-  const reply = args[args.length - 1];
 
   if (typeof reply === "function") {
     payload.reply = _subscribeReplier(reply, origin);
-    args = args.slice(0, -1);
   }
 
-  payload.args = args;
+  payload.eventData = data;
 
   try {
     packaged = prefix + JSON.stringify(payload);
@@ -151,7 +150,11 @@ function _packagePayload(
   return packaged;
 }
 
-function publish(event: string, ...args: SubscriberArgs): boolean {
+function publish(
+  event: string,
+  data?: SubscriberArg | SubscribeHandler,
+  reply?: SubscribeHandler
+): boolean {
   // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
   // @ts-ignore
   const origin = _getOrigin(this); // eslint-disable-line no-invalid-this
@@ -163,7 +166,12 @@ function publish(event: string, ...args: SubscriberArgs): boolean {
     return false;
   }
 
-  const payload = _packagePayload(event, args, origin);
+  if (typeof data === "function") {
+    reply = data;
+    data = undefined;
+  }
+
+  const payload = _packagePayload(event, origin, data, reply);
   if (!payload) {
     return false;
   }
@@ -249,14 +257,17 @@ function _unpackPayload(e: MessageEvent): FramebusPayload | false {
     const replyOrigin = e.origin;
     const replySource = e.source as Window;
     const replyEvent = payload.reply as string;
-    const args = payload.args as SubscriberArgs;
 
-    payload.reply = function reply(data: unknown): void {
+    payload.reply = function reply(replyData: unknown): void {
       if (!replySource) {
         return;
       }
 
-      const replyPayload = _packagePayload(replyEvent, [data], replyOrigin);
+      const replyPayload = _packagePayload(
+        replyEvent,
+        replyOrigin,
+        replyData as SubscriberArg
+      );
 
       if (!replyPayload) {
         return;
@@ -264,8 +275,6 @@ function _unpackPayload(e: MessageEvent): FramebusPayload | false {
 
       replySource.postMessage(replyPayload, replyOrigin);
     };
-
-    args.push(payload.reply);
   }
   return payload;
 }
@@ -273,7 +282,7 @@ function _unpackPayload(e: MessageEvent): FramebusPayload | false {
 function _dispatch(
   origin: string,
   event: string,
-  args: SubscriberArgs,
+  data: SubscriberArg,
   e?: MessageEvent
 ): void {
   if (!subscribers[origin]) {
@@ -284,7 +293,7 @@ function _dispatch(
   }
 
   for (let i = 0; i < subscribers[origin][event].length; i++) {
-    subscribers[origin][event][i].apply(e, args);
+    subscribers[origin][event][i].call(e, data);
   }
 }
 
@@ -314,10 +323,10 @@ function _onmessage(e: MessageEvent): void {
     return;
   }
 
-  const args = payload.args as SubscriberArgs;
+  const data = payload.eventData as SubscriberArg;
 
-  _dispatch("*", payload.event, args, e);
-  _dispatch(e.origin, payload.event, args, e);
+  _dispatch("*", payload.event, data, e);
+  _dispatch(e.origin, payload.event, data, e);
   _broadcastPopups(e.data, payload.origin, e.source as Window);
 }
 

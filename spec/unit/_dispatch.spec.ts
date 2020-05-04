@@ -7,7 +7,7 @@ describe("_dispatch", function () {
 
     bus.target(origin).subscribe("test event", subscriber);
 
-    bus._dispatch(origin, "test event", ["data"]);
+    bus._dispatch(origin, "test event", { data: "data" });
 
     expect(subscriber).toBeCalled();
   });
@@ -18,7 +18,7 @@ describe("_dispatch", function () {
 
     bus.target(origin).subscribe("test event", subscriber);
 
-    bus._dispatch(origin, "different event", ["data"]);
+    bus._dispatch(origin, "different event", { data: "data" });
 
     expect(subscriber).not.toBeCalled();
   });
@@ -29,7 +29,7 @@ describe("_dispatch", function () {
 
     bus.target(origin).subscribe("test event", subscriber);
 
-    bus._dispatch("https://domain.com", "test event", ["data"]);
+    bus._dispatch("https://domain.com", "test event", { data: "data" });
 
     expect(subscriber).not.toBeCalled();
   });

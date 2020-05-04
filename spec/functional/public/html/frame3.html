@@ -14,16 +14,17 @@
     <script src="/js/test-app.js"></script>
     <script>
       document.querySelector("#send").addEventListener("click", function () {
-        framebus.emit(
-          "message",
-          document.querySelector("#popup-message").value
-        );
+        framebus.emit("message", {
+          message: document.querySelector("#popup-message").value,
+        });
       });
 
-      framebus.on("Marco", function (question, reply) {
+      framebus.on("Marco", function (data, reply) {
         var polo = document.getElementById("polo-text").value;
-        app.printToDOM(question);
-        reply(polo);
+        app.printToDOM(data.message);
+        reply({
+          message: polo,
+        });
       });
     </script>
   </body>

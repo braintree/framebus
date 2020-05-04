@@ -40,7 +40,7 @@ framebus.target("https://example.com").on("my cool event", function () {});
 | -------- | ------ | ---------------------------------------------------- |
 | `origin` | String | (default: `'*'`) only target frames with this origin |
 
-#### `publish('event' [, arg...] [, callback]): boolean`
+#### `publish('event', data? , callback?): boolean`
 
 **aliases**: `pub`, `trigger`, `emit`
 
@@ -49,7 +49,7 @@ framebus.target("https://example.com").on("my cool event", function () {});
 | Argument         | Type     | Description                                          |
 | ---------------- | -------- | ---------------------------------------------------- |
 | `event`          | String   | The name of the event                                |
-| `arg`            | any      | The data to give to subscribers                      |
+| `data`           | Object   | The data to give to subscribers                      |
 | `callback(data)` | Function | Give subscribers a function for easy, direct replies |
 
 #### `subscribe('event', fn): boolean`
@@ -61,11 +61,11 @@ framebus.target("https://example.com").on("my cool event", function () {});
 Unless already bound to a scope, the listener will be executed with `this` set
 to the `MessageEvent` received over postMessage.
 
-| Argument                    | Type     | Description                                                 |
-| --------------------------- | -------- | ----------------------------------------------------------- |
-| `event`                     | String   | The name of the event                                       |
-| `fn([arg...] [, callback])` | Function | Event handler. Arguments are from the `publish` invocation  |
-| ↳ `this`                    | scope    | The `MessageEvent` object from the underlying `postMessage` |
+| Argument               | Type     | Description                                                 |
+| ---------------------- | -------- | ----------------------------------------------------------- |
+| `event`                | String   | The name of the event                                       |
+| `fn(data?, callback?)` | Function | Event handler. Arguments are from the `publish` invocation  |
+| ↳ `this`               | scope    | The `MessageEvent` object from the underlying `postMessage` |
 
 #### `unsubscribe('event', fn): boolean`
 

@@ -1,6 +1,10 @@
 type UnsubscribeMethod = (event: string, fn: SubscribeHandler) => boolean;
 type SubscribeMethod = (event: string, fn: SubscribeHandler) => boolean;
-type PublishMethod = (event: string, ...args: SubscriberArgs) => boolean;
+type PublishMethod = (
+  event: string,
+  data?: SubscriberArg | SubscribeHandler,
+  reply?: SubscribeHandler
+) => boolean;
 type ReplyFunction = (...args: unknown[]) => void;
 
 export type Framebus = {
@@ -11,15 +15,16 @@ export type Framebus = {
   _dispatch: (
     origin: string,
     event: string,
-    args: SubscriberArgs,
+    args: SubscriberArg,
     e?: MessageEvent
   ) => void;
   _getSubscribers: () => Subscriber;
   _onmessage: (e: MessageEvent) => void;
   _packagePayload: (
     event: string,
-    args: SubscriberArgs,
-    origin: string
+    origin: string,
+    data?: SubscriberArg,
+    reply?: SubscribeHandler
   ) => string;
   _subscribeReplier: (fn: SubscribeHandler, origin: string) => string;
   _subscriptionArgsInvalid: (
@@ -59,9 +64,12 @@ export type FramebusPayload = {
   event: string;
   origin: string;
   reply?: string | ReplyFunction;
-  args?: SubscriberArgs;
+  eventData?: SubscriberArg;
 };
-export type SubscriberArgs = any[];
-export type SubscribeHandler = (...args: SubscriberArgs) => void;
+export type SubscriberArg = Record<string, unknown>;
+export type SubscribeHandler = (
+  data?: SubscriberArg,
+  reply?: SubscribeHandler
+) => void;
 type Subscription = Record<string, SubscribeHandler[]>;
 export type Subscriber = Record<string, Subscription>;

@@ -16,8 +16,8 @@
       framebus.on("Marco", function () {
         app.printToDOM('FAIL: [frame 2] received "Marco"');
       });
-      framebus.on("from-popup", function (message) {
-        app.printToDOM('received "' + message + '" from popup');
+      framebus.on("from-popup", function (data) {
+        app.printToDOM('received "' + data.message + '" from popup');
       });
     </script>
   </body>
