@@ -32,7 +32,7 @@ function _uuid(): string {
 }
 /* eslint-enable no-mixed-operators */
 
-function include(popup?: Window): boolean {
+function include(popup: Window): boolean {
   if (popup == null) {
     return false;
   }

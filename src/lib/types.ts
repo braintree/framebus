@@ -36,7 +36,7 @@ export type Framebus = {
   _unpackPayload: (e: MessageEvent) => FramebusPayload | false;
   _uuid: () => string;
   // endRemoveIf(production)
-  include: (popup?: Window) => boolean;
+  include: (popup: Window) => boolean;
 
   emit: PublishMethod;
   pub: PublishMethod;
