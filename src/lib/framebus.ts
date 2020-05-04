@@ -245,6 +245,7 @@ function _unpackPayload(e: MessageEvent): FramebusPayload | false {
     return false;
   }
 
+  console.log(payload);
   if (payload.replyEvent) {
     const replyOrigin = e.origin;
     const replySource = e.source as Window;
