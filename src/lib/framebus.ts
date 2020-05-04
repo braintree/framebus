@@ -49,9 +49,10 @@ function include(popup?: Window): boolean {
 }
 
 function target(origin = "*"): Framebus {
-  const targetedFramebus: Framebus = Object.assign({}, framebus, {
+  const targetedFramebus: Framebus = {
+    ...framebus,
     _origin: origin,
-  });
+  };
 
   return targetedFramebus;
 }
