@@ -22,7 +22,7 @@ function cleanTest() {
 
 function build() {
   const b = browserify({
-    entries: "./src/lib/framebus.ts",
+    entries: "./src/index.ts",
     standalone: "framebus",
     debug: true,
   });
