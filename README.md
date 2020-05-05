@@ -60,7 +60,7 @@ to the `MessageEvent` received over postMessage.
 | Argument               | Type     | Description                                                 |
 | ---------------------- | -------- | ----------------------------------------------------------- |
 | `event`                | String   | The name of the event                                       |
-| `fn(data?, callback?)` | Function | Event handler. Arguments are from the `emit` invocation  |
+| `fn(data?, callback?)` | Function | Event handler. Arguments are from the `emit` invocation     |
 | ↳ `this`               | scope    | The `MessageEvent` object from the underlying `postMessage` |
 
 #### `off('event', fn): boolean`
