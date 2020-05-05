@@ -29,7 +29,7 @@ bus.on("message", function (data) {
 
 **returns**: a chainable instance of framebus that operates on the chosen origin.
 
-This method is used in conjuction with `publish`, `subscribe`, and `unsubscribe` to restrict their results to the given origin. By default, an origin of `'*'` is used.
+This method is used in conjuction with `emit`, `on`, and `off` to restrict their results to the given origin. By default, an origin of `'*'` is used.
 
 ```javascript
 framebus.target("https://example.com").on("my cool event", function () {});
@@ -40,9 +40,7 @@ framebus.target("https://example.com").on("my cool event", function () {});
 | -------- | ------ | ---------------------------------------------------- |
 | `origin` | String | (default: `'*'`) only target frames with this origin |
 
-#### `publish('event', data? , callback?): boolean`
-
-**aliases**: `pub`, `trigger`, `emit`
+#### `emit('event', data? , callback?): boolean`
 
 **returns**: `true` if the event was successfully published, `false` otherwise
 
@@ -52,9 +50,7 @@ framebus.target("https://example.com").on("my cool event", function () {});
 | `data`           | Object   | The data to give to subscribers                      |
 | `callback(data)` | Function | Give subscribers a function for easy, direct replies |
 
-#### `subscribe('event', fn): boolean`
-
-**alises**: `sub`, `on`
+#### `on('event', fn): boolean`
 
 **returns**: `true` if the subscriber was successfully added, `false` otherwise
 
@@ -64,12 +60,10 @@ to the `MessageEvent` received over postMessage.
 | Argument               | Type     | Description                                                 |
 | ---------------------- | -------- | ----------------------------------------------------------- |
 | `event`                | String   | The name of the event                                       |
-| `fn(data?, callback?)` | Function | Event handler. Arguments are from the `publish` invocation  |
+| `fn(data?, callback?)` | Function | Event handler. Arguments are from the `emit` invocation  |
 | ↳ `this`               | scope    | The `MessageEvent` object from the underlying `postMessage` |
 
-#### `unsubscribe('event', fn): boolean`
-
-**aliases**: `unsub`, `off`
+#### `off('event', fn): boolean`
 
 **returns**: `true` if the subscriber was successfully removed, `false` otherwise
 
@@ -122,7 +116,7 @@ loop (MDN)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/EventL
 
 ### Published callback functions are an abstraction
 
-When you specify a `callback` while using `publish`, the function is not actually
+When you specify a `callback` while using `emit`, the function is not actually
 given to the subscriber. The subscriber receives a one-time-use function that is
 generated locally by the subscriber's **framebus**. This one-time-use callback function
 is pre-configured to publish an event back to the event origin's domain using a
@@ -136,7 +130,7 @@ as follows:
      console.log("Got back %s as a reply!", data);
    };
 
-   framebus.publish("Marco!", callback, "http://listener.example.com");
+   framebus.emit("Marco!", callback, "http://listener.example.com");
    ```
 
 1. The **framebus** on `http://emitter.example.com` generates a UUID as an event name

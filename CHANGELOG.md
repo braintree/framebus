@@ -3,6 +3,10 @@
 _Breaking Changes_
 
 - Drop support for IE < 9
+- Drop support for using methods standalone without using the bus
+- Drop `publish`, `pub`, and `trigger` methods. Use `emit`
+- Drop `subscribe` and `sub` methods. Use `on`
+- Drop `unsubscribe` and `unsub` methods. Use `off`
 
 # 3.0.2
 

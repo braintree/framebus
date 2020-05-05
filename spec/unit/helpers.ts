@@ -1,6 +1,6 @@
-import bus = require("../../src/lib/framebus");
+import { detach } from "../../src/lib/attach";
 
 afterEach(function () {
   jest.restoreAllMocks();
-  bus._detach();
+  detach();
 });

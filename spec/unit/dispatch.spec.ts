@@ -1,13 +1,14 @@
-import bus = require("../../src/lib/framebus");
+import bus = require("../../src/");
+import dispatch from "../../src/lib/dispatch";
 
-describe("_dispatch", function () {
+describe("dispatch", function () {
   it("should execute subscribers for the given event and origin", function () {
     const subscriber = jest.fn();
     const origin = "https://example.com";
 
-    bus.target(origin).subscribe("test event", subscriber);
+    bus.target(origin).on("test event", subscriber);
 
-    bus._dispatch(origin, "test event", { data: "data" });
+    dispatch(origin, "test event", { data: "data" });
 
     expect(subscriber).toBeCalled();
     // eslint-disable-next-line no-undefined
@@ -18,9 +19,9 @@ describe("_dispatch", function () {
     const subscriber = jest.fn();
     const origin = "https://example.com";
 
-    bus.target(origin).subscribe("test event", subscriber);
+    bus.target(origin).on("test event", subscriber);
 
-    bus._dispatch(origin, "different event", { data: "data" });
+    dispatch(origin, "different event", { data: "data" });
 
     expect(subscriber).not.toBeCalled();
   });
@@ -29,9 +30,9 @@ describe("_dispatch", function () {
     const subscriber = jest.fn();
     const origin = "https://example.com";
 
-    bus.target(origin).subscribe("test event", subscriber);
+    bus.target(origin).on("test event", subscriber);
 
-    bus._dispatch("https://domain.com", "test event", { data: "data" });
+    dispatch("https://domain.com", "test event", { data: "data" });
 
     expect(subscriber).not.toBeCalled();
   });
@@ -41,9 +42,9 @@ describe("_dispatch", function () {
     const reply = jest.fn();
     const origin = "https://example.com";
 
-    bus.target(origin).subscribe("test event", subscriber);
+    bus.target(origin).on("test event", subscriber);
 
-    bus._dispatch(origin, "test event", { data: "data" }, reply);
+    dispatch(origin, "test event", { data: "data" }, reply);
 
     expect(subscriber).toBeCalled();
     expect(subscriber).toBeCalledWith({ data: "data" }, reply);

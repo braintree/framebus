@@ -1,4 +1,4 @@
-import bus = require("../../src/lib/framebus");
+import unpackPayload from "../../src/lib/unpack-payload";
 import type {
   FramebusPayload,
   SubscriberArg,
@@ -15,14 +15,14 @@ function makeEvent(options: any): MessageEvent {
 describe("_unpackPayload", function () {
   it("should return false if unparsable", function () {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const actual = bus._unpackPayload({ data: "}{" } as any);
+    const actual = unpackPayload({ data: "}{" } as any);
 
     expect(actual).toBe(false);
   });
 
   it("should return false if not prefixed", function () {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const actual = bus._unpackPayload({ data: JSON.stringify({}) } as any);
+    const actual = unpackPayload({ data: JSON.stringify({}) } as any);
 
     expect(actual).toBe(false);
   });
@@ -30,7 +30,7 @@ describe("_unpackPayload", function () {
   it("should return event and args in payload", function () {
     const event = "event name";
     const data = { data: "some data" };
-    const actual = bus._unpackPayload(
+    const actual = unpackPayload(
       makeEvent({
         data: messagePrefix + JSON.stringify({ event, eventData: data }),
       })
@@ -45,7 +45,7 @@ describe("_unpackPayload", function () {
     const event = "event name";
     const reply = "123129085-4234-1231-99887877";
     const data = { data: "some data" };
-    const actual = bus._unpackPayload(
+    const actual = unpackPayload(
       makeEvent({
         data:
           messagePrefix +
@@ -65,7 +65,7 @@ describe("_unpackPayload", function () {
     };
     const reply = "123129085-4234-1231-99887877";
     const data = { data: "some data" };
-    const actual = bus._unpackPayload(
+    const actual = unpackPayload(
       makeEvent({
         source: fakeSource,
         origin: "origin",
@@ -89,7 +89,7 @@ describe("_unpackPayload", function () {
   it("the source should not attempt to postMessage the payload to the origin if no source available", function () {
     const reply = "123129085-4234-1231-99887877";
     const data = { data: "some data" };
-    const actual = bus._unpackPayload(
+    const actual = unpackPayload(
       makeEvent({
         origin: "origin",
         data:

@@ -1,4 +1,4 @@
-import bus = require("../../src/lib/framebus");
+import broadcast from "../../src/lib/broadcast";
 
 type FakeFrame = {
   postMessage: jest.SpyInstance;
@@ -18,7 +18,7 @@ function mkFrame(): FakeFrame {
   };
 }
 
-describe("_broadcast", function () {
+describe("broadcast", function () {
   it("should not throw exception when postMessage is denied", function () {
     const frame = mkFrame();
 
@@ -28,7 +28,7 @@ describe("_broadcast", function () {
 
     expect(function () {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      bus._broadcast(frame as any, "payload", "*");
+      broadcast(frame as any, "payload", "*");
     }).not.toThrowError();
   });
 
@@ -36,7 +36,7 @@ describe("_broadcast", function () {
     const frame = mkFrame();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    bus._broadcast(frame as any, "payload", "*");
+    broadcast(frame as any, "payload", "*");
 
     expect(frame.postMessage).toBeCalled();
   });
@@ -46,7 +46,7 @@ describe("_broadcast", function () {
     frame.frames.push(mkFrame());
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    bus._broadcast(frame as any, "payload", "*");
+    broadcast(frame as any, "payload", "*");
 
     expect(frame.frames[0].postMessage).toBeCalled();
   });
@@ -60,7 +60,7 @@ describe("_broadcast", function () {
       frame.opener.top = frame.opener;
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      bus._broadcast(frame as any, "payload", "*");
+      broadcast(frame as any, "payload", "*");
 
       expect(frame.opener.top.postMessage).toBeCalled();
     });
@@ -77,7 +77,7 @@ describe("_broadcast", function () {
       frame.top = frame;
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      bus._broadcast(frame as any, "payload", "*");
+      broadcast(frame as any, "payload", "*");
 
       expect(frame.opener.top.postMessage).not.toBeCalled();
     });
@@ -90,7 +90,7 @@ describe("_broadcast", function () {
       frame.top = frame;
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      bus._broadcast(frame as any, "payload", "*");
+      broadcast(frame as any, "payload", "*");
 
       // don't infinitely recurse
       done();
@@ -108,7 +108,7 @@ describe("_broadcast", function () {
       frame.top = frame;
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      bus._broadcast(frame as any, "payload", "*");
+      broadcast(frame as any, "payload", "*");
 
       // don't infinitely recurse
       done();
@@ -125,7 +125,7 @@ describe("_broadcast", function () {
       frame.top = frame;
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      bus._broadcast(frame as any, "payload", "*");
+      broadcast(frame as any, "payload", "*");
 
       expect(frame.opener.top.frames[0].postMessage).toBeCalled();
     });
@@ -143,7 +143,7 @@ describe("_broadcast", function () {
 
       expect(function () {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        bus._broadcast(frame as any, "payload", "*");
+        broadcast(frame as any, "payload", "*");
       }).not.toThrowError("Access denied");
     });
   });
