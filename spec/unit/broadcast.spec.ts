@@ -1,5 +1,6 @@
 import broadcast from "../../src/lib/broadcast";
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function mkFrame() {
   return {
     ...(window as Window),

@@ -56,6 +56,7 @@ describe("dispatch", function () {
 
     bus.target(origin).on("test event", subscriber);
 
+    // eslint-disable-next-line no-undefined
     dispatch(origin, "test event", undefined, reply);
 
     expect(subscriber).toBeCalled();
