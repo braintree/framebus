@@ -27,7 +27,7 @@ export type FramebusPayload = {
 };
 export type SubscriberArg = Record<string, unknown>;
 export type SubscribeHandler = (
-  data?: SubscriberArg,
+  data?: SubscriberArg | SubscribeHandler,
   reply?: SubscribeHandler
 ) => void;
 type Subscription = Record<string, SubscribeHandler[]>;

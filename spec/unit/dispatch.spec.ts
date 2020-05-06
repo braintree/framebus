@@ -11,8 +11,7 @@ describe("dispatch", function () {
     dispatch(origin, "test event", { data: "data" });
 
     expect(subscriber).toBeCalled();
-    // eslint-disable-next-line no-undefined
-    expect(subscriber).toBeCalledWith({ data: "data" }, undefined);
+    expect(subscriber).toBeCalledWith({ data: "data" });
   });
 
   it("should not execute subscribers for a different event", function () {
@@ -48,5 +47,18 @@ describe("dispatch", function () {
 
     expect(subscriber).toBeCalled();
     expect(subscriber).toBeCalledWith({ data: "data" }, reply);
+  });
+
+  it("can pass a reply handler wthout data", function () {
+    const subscriber = jest.fn();
+    const reply = jest.fn();
+    const origin = "https://example.com";
+
+    bus.target(origin).on("test event", subscriber);
+
+    dispatch(origin, "test event", undefined, reply);
+
+    expect(subscriber).toBeCalled();
+    expect(subscriber).toBeCalledWith(reply);
   });
 });
