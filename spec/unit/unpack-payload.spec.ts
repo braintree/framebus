@@ -7,8 +7,7 @@ import type {
 
 const messagePrefix = "/*framebus*/";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function makeEvent(options: any): MessageEvent {
+function makeEvent(options: MessageEventInit): MessageEvent {
   return new MessageEvent("foo", options);
 }
 
@@ -61,6 +60,7 @@ describe("_unpackPayload", function () {
 
   it("the source should postMessage the payload to the origin when reply is called", function () {
     const fakeSource = {
+      ...(window as Window),
       postMessage: jest.fn(),
     };
     const reply = "123129085-4234-1231-99887877";
