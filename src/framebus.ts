@@ -3,7 +3,12 @@ import subscriptionArgsInvalid from "./lib/subscription-args-invalid";
 import broadcast from "./lib/broadcast";
 import packagePayload from "./lib/package-payload";
 
-import type { SubscriberArg, SubscribeHandler } from "./lib/types";
+import type {
+  FramebusSubscriberArg,
+  FramebusSubscribeHandler,
+  FramebusOnHandler,
+  FramebusReplyHandler,
+} from "./lib/types";
 
 import { childWindows, subscribers } from "./lib/constants";
 
@@ -36,8 +41,8 @@ export default class Framebus {
 
   emit(
     event: string,
-    data?: SubscriberArg | SubscribeHandler,
-    reply?: SubscribeHandler
+    data?: FramebusSubscriberArg | FramebusReplyHandler,
+    reply?: FramebusReplyHandler
   ): boolean {
     const origin = this.origin;
 
@@ -64,7 +69,7 @@ export default class Framebus {
     return true;
   }
 
-  on(event: string, fn: SubscribeHandler): boolean {
+  on(event: string, fn: FramebusOnHandler): boolean {
     const origin = this.origin;
 
     if (subscriptionArgsInvalid(event, fn, origin)) {
@@ -73,12 +78,12 @@ export default class Framebus {
 
     subscribers[origin] = subscribers[origin] || {};
     subscribers[origin][event] = subscribers[origin][event] || [];
-    subscribers[origin][event].push(fn);
+    subscribers[origin][event].push(fn as FramebusSubscribeHandler);
 
     return true;
   }
 
-  off(event: string, fn: SubscribeHandler): boolean {
+  off(event: string, fn: FramebusOnHandler): boolean {
     const origin = this.origin;
 
     if (subscriptionArgsInvalid(event, fn, origin)) {

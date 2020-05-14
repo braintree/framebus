@@ -1,12 +1,12 @@
 import { subscribers } from "./constants";
 
-import type { SubscriberArg, SubscribeHandler } from "./types";
+import type { FramebusSubscriberArg, FramebusSubscribeHandler } from "./types";
 
 export default function dispatch(
   origin: string,
   event: string,
-  data?: SubscriberArg,
-  reply?: SubscribeHandler,
+  data?: FramebusSubscriberArg,
+  reply?: FramebusSubscribeHandler,
   e?: MessageEvent
 ): void {
   if (!subscribers[origin]) {
@@ -16,14 +16,17 @@ export default function dispatch(
     return;
   }
 
-  const args: [(SubscriberArg | SubscribeHandler)?, SubscribeHandler?] = [];
+  const args: [
+    (FramebusSubscriberArg | FramebusSubscribeHandler)?,
+    FramebusSubscribeHandler?
+  ] = [];
 
   if (data) {
-    args.push(data as SubscriberArg);
+    args.push(data as FramebusSubscriberArg);
   }
 
   if (reply) {
-    args.push(reply as SubscribeHandler);
+    args.push(reply as FramebusSubscribeHandler);
   }
 
   for (let i = 0; i < subscribers[origin][event].length; i++) {

@@ -1,4 +1,4 @@
-import type { SubscriberArg, SubscribeHandler } from "./types";
+import type { FramebusSubscriberArg, FramebusSubscribeHandler } from "./types";
 
 import isntString from "./is-not-string";
 import unpackPayload from "./unpack-payload";
@@ -15,8 +15,8 @@ export default function onmessage(e: MessageEvent): void {
     return;
   }
 
-  const data = payload.eventData as SubscriberArg;
-  const reply = payload.reply as SubscribeHandler;
+  const data = payload.eventData as FramebusSubscriberArg;
+  const reply = payload.reply as FramebusSubscribeHandler;
 
   dispatch("*", payload.event, data, reply, e);
   dispatch(e.origin, payload.event, data, reply, e);

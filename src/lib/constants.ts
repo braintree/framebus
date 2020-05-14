@@ -1,5 +1,5 @@
-import type { Subscriber } from "./types";
+import type { FramebusSubscriber } from "./types";
 
 export const prefix = "/*framebus*/";
 export const childWindows: Window[] = [];
-export const subscribers: Subscriber = {};
+export const subscribers: FramebusSubscriber = {};

@@ -1,7 +1,7 @@
 import { prefix } from "./constants";
 import packagePayload from "./package-payload";
 
-import type { FramebusPayload, SubscriberArg } from "./types";
+import type { FramebusPayload, FramebusSubscriberArg } from "./types";
 
 export default function unpackPayload(
   e: MessageEvent
@@ -31,7 +31,7 @@ export default function unpackPayload(
       const replyPayload = packagePayload(
         replyEvent,
         replyOrigin,
-        replyData as SubscriberArg
+        replyData as FramebusSubscriberArg
       );
 
       if (!replyPayload) {

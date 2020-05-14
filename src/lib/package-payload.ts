@@ -1,13 +1,17 @@
 import subscribeReplier from "./subscribe-replier";
 import { prefix } from "./constants";
 
-import type { FramebusPayload, SubscriberArg, SubscribeHandler } from "./types";
+import type {
+  FramebusPayload,
+  FramebusSubscriberArg,
+  FramebusSubscribeHandler,
+} from "./types";
 
 export default function packagePayload(
   event: string,
   origin: string,
-  data?: SubscriberArg,
-  reply?: SubscribeHandler
+  data?: FramebusSubscriberArg,
+  reply?: FramebusSubscribeHandler
 ): string {
   let packaged;
   const payload: FramebusPayload = {

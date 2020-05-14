@@ -1,10 +1,10 @@
 import isntString from "./is-not-string";
 
-import type { SubscribeHandler } from "./types";
+import type { FramebusOnHandler } from "./types";
 
 export default function subscriptionArgsInvalid(
   event: string,
-  fn: SubscribeHandler,
+  fn: FramebusOnHandler,
   origin: string
 ): boolean {
   if (isntString(event)) {

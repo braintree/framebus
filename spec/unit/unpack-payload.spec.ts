@@ -1,8 +1,8 @@
 import unpackPayload from "../../src/lib/unpack-payload";
 import type {
   FramebusPayload,
-  SubscriberArg,
-  SubscribeHandler,
+  FramebusSubscriberArg,
+  FramebusSubscribeHandler,
 } from "../../src/lib/types";
 
 const messagePrefix = "/*framebus*/";
@@ -34,7 +34,7 @@ describe("_unpackPayload", function () {
         data: messagePrefix + JSON.stringify({ event, eventData: data }),
       })
     ) as FramebusPayload;
-    const eventData = actual.eventData as SubscriberArg;
+    const eventData = actual.eventData as FramebusSubscriberArg;
 
     expect(actual.event).toBe(event);
     expect(eventData).toEqual(data);
@@ -51,7 +51,7 @@ describe("_unpackPayload", function () {
           JSON.stringify({ event: event, reply, eventData: data }),
       })
     ) as FramebusPayload;
-    const eventData = actual.eventData as SubscriberArg;
+    const eventData = actual.eventData as FramebusSubscriberArg;
 
     expect(actual.event).toBe(event);
     expect(actual.reply).toBeInstanceOf(Function);
@@ -78,7 +78,7 @@ describe("_unpackPayload", function () {
           }),
       })
     ) as FramebusPayload;
-    const handler = actual.reply as SubscribeHandler;
+    const handler = actual.reply as FramebusSubscribeHandler;
 
     handler({});
 
@@ -101,7 +101,7 @@ describe("_unpackPayload", function () {
           }),
       })
     ) as FramebusPayload;
-    const handler = actual.reply as SubscribeHandler;
+    const handler = actual.reply as FramebusSubscribeHandler;
 
     expect(function () {
       handler({});

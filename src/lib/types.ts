@@ -12,12 +12,18 @@ export type FramebusPayload = {
   event: string;
   origin: string;
   reply?: string | ReplyFunction;
-  eventData?: SubscriberArg;
+  eventData?: FramebusSubscriberArg;
 };
-export type SubscriberArg = Record<string, unknown>;
-export type SubscribeHandler = (
-  data?: SubscriberArg | SubscribeHandler,
-  reply?: SubscribeHandler
+export type FramebusSubscriberArg = Record<string, unknown>;
+export type FramebusSubscribeHandler = (
+  data?: FramebusSubscriberArg | FramebusSubscribeHandler,
+  reply?: FramebusSubscribeHandler
 ) => void;
-type Subscription = Record<string, SubscribeHandler[]>;
-export type Subscriber = Record<string, Subscription>;
+type FramebusSubscription = Record<string, FramebusSubscribeHandler[]>;
+export type FramebusSubscriber = Record<string, FramebusSubscription>;
+
+export type FramebusReplyHandler = (data: unknown) => void;
+export type FramebusOnHandler = (
+  data: FramebusSubscriberArg,
+  reply: FramebusReplyHandler
+) => void;
