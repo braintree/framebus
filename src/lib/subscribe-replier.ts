@@ -9,8 +9,11 @@ export default function subscribeReplier(
 ): string {
   const uuid = generateUUID();
 
-  function replier(d: SubscriberArg, o: SubscribeHandler): void {
-    fn(d, o);
+  function replier(
+    data: SubscriberArg,
+    replyOriginHandler: SubscribeHandler
+  ): void {
+    fn(data, replyOriginHandler);
     new Framebus().target(origin).off(uuid, replier as SubscribeHandler);
   }
 
