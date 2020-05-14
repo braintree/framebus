@@ -9,7 +9,7 @@ export default function broadcastToChildWindows(
   for (let i = childWindows.length - 1; i >= 0; i--) {
     const childWindow = childWindows[i];
 
-    if (childWindow.closed === true) {
+    if (childWindow.closed) {
       childWindows.splice(i, 1);
     } else if (source !== childWindow) {
       broadcast(childWindow.top, payload, origin);
