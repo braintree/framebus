@@ -5,18 +5,7 @@ declare global {
   }
 }
 
-type UnsubscribeMethod = (event: string, fn: SubscribeHandler) => boolean;
-type SubscribeMethod = (event: string, fn: SubscribeHandler) => boolean;
-type PublishMethod = (
-  event: string,
-  data?: SubscriberArg | SubscribeHandler,
-  reply?: SubscribeHandler
-) => boolean;
 type ReplyFunction = (...args: unknown[]) => void;
-
-export type FramebusEvent = {
-  data: string;
-};
 
 export type FramebusPayload = {
   data?: string;
