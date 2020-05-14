@@ -4,7 +4,7 @@ We welcome pull requests, issue submissions, and feature requests. Before contri
 
 ## Requirements
 
-This library strives to be compatible with **IE8+**, so please be aware of any ECMAScript5 usages that do not operate in all browsers. If you are contributing code features or changes, we will expect tests to be in your submission. If there are no tests but the submission is a small change we may allow it.
+This library strives to be compatible with **IE9+**, so please be aware of any ECMAScript5 usages that do not operate in all browsers. If you are contributing code features or changes, we will expect tests to be in your submission. If there are no tests but the submission is a small change we may allow it.
 
 ## Contributing documentation
 
