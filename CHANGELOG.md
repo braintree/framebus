@@ -7,6 +7,7 @@ _Breaking Changes_
 - Drop `publish`, `pub`, and `trigger` methods. Use `emit`
 - Drop `subscribe` and `sub` methods. Use `on`
 - Drop `unsubscribe` and `unsub` methods. Use `off`
+- Drop support for passing multiple arguments to `emit`, not it only supports passing `data` and `reply`
 
 # 3.0.2
 
