@@ -1,22 +1,28 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8">
-<title></title>
-</head>
-<body>
-<button id="marco-button">Marco</button>
-frame1-inner.html
-<script src="/js/test-app.js"></script>
-<script>
-  var remoteOrigin = 'http://<%= domain %>:<%= port2 %>';
-  var button = document.getElementById('marco-button')
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+  </head>
+  <body>
+    <button id="marco-button">Marco</button>
+    frame1-inner.html
+    <script src="/js/test-app.js"></script>
+    <script>
+      var remoteOrigin = "http://<%= domain %>:<%= port2 %>";
+      var button = document.getElementById("marco-button");
 
-  button.onclick = function () {
-    framebus.target(remoteOrigin).emit("Marco", "are you there?", function (reply){
-      app.printToDOM(reply);
-    });
-  };
-</script>
-</body>
+      button.onclick = function () {
+        framebus.target(remoteOrigin).emit(
+          "Marco",
+          {
+            message: "are you there?",
+          },
+          function (reply) {
+            app.printToDOM(reply.message);
+          }
+        );
+      };
+    </script>
+  </body>
 </html>
