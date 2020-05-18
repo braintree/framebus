@@ -1,4 +1,4 @@
-# unreleased
+# v4.0.0
 
 _Breaking Changes_
 
