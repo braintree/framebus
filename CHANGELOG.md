@@ -1,3 +1,6 @@
+# unreleased
+* Fix issue where framebus could not be used with server side rendering
+
 # v4.0.0
 
 _Breaking Changes_
