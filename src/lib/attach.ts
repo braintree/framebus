@@ -3,7 +3,7 @@ import onmessage from "./message";
 let isAttached = false;
 
 export function attach(): void {
-  if (isAttached) {
+  if (isAttached || typeof window === "undefined") {
     return;
   }
 
