@@ -1,9 +1,9 @@
-import Framebus from "../framebus";
-import generateUUID from "./uuid";
+import Framebus = require("../framebus");
+import { uuid as generateUUID } from "./uuid";
 
 import type { FramebusSubscriberArg, FramebusSubscribeHandler } from "./types";
 
-export default function subscribeReplier(
+export function subscribeReplier(
   fn: FramebusSubscribeHandler,
   origin: string
 ): string {

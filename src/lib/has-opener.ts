@@ -1,4 +1,4 @@
-export default function hasOpener(frame: Window): boolean {
+export function hasOpener(frame: Window): boolean {
   if (frame.top !== frame) {
     return false;
   }

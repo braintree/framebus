@@ -1,11 +1,9 @@
 import { prefix } from "./constants";
-import packagePayload from "./package-payload";
+import { packagePayload } from "./package-payload";
 
 import type { FramebusPayload, FramebusSubscriberArg } from "./types";
 
-export default function unpackPayload(
-  e: MessageEvent
-): FramebusPayload | false {
+export function unpackPayload(e: MessageEvent): FramebusPayload | false {
   let payload: FramebusPayload;
 
   if (e.data.slice(0, prefix.length) !== prefix) {

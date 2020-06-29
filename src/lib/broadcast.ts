@@ -1,6 +1,6 @@
-import hasOpener from "./has-opener";
+import { hasOpener } from "./has-opener";
 
-export default function broadcast(
+export function broadcast(
   frame: Window,
   payload: string,
   origin: string

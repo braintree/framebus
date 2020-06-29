@@ -2,7 +2,7 @@ import { subscribers } from "./constants";
 
 import type { FramebusSubscriberArg, FramebusSubscribeHandler } from "./types";
 
-export default function dispatch(
+export function dispatch(
   origin: string,
   event: string,
   data?: FramebusSubscriberArg,
