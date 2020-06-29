@@ -1,7 +1,7 @@
-import isntString from "./lib/is-not-string";
-import subscriptionArgsInvalid from "./lib/subscription-args-invalid";
-import broadcast from "./lib/broadcast";
-import packagePayload from "./lib/package-payload";
+import { isntString } from "./lib/is-not-string";
+import { subscriptionArgsInvalid } from "./lib/subscription-args-invalid";
+import { broadcast } from "./lib/broadcast";
+import { packagePayload } from "./lib/package-payload";
 
 import type {
   FramebusSubscriberArg,
@@ -12,7 +12,7 @@ import type {
 
 import { childWindows, subscribers } from "./lib/constants";
 
-export default class Framebus {
+export = class Framebus {
   origin: string;
 
   constructor(origin = "*") {
@@ -105,4 +105,4 @@ export default class Framebus {
 
     return false;
   }
-}
+};

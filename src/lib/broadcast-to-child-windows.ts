@@ -1,7 +1,7 @@
-import broadcast from "./broadcast";
+import { broadcast } from "./broadcast";
 import { childWindows } from "./constants";
 
-export default function broadcastToChildWindows(
+export function broadcastToChildWindows(
   payload: string,
   origin: string,
   source: Window

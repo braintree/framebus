@@ -1,11 +1,11 @@
 import type { FramebusSubscriberArg, FramebusSubscribeHandler } from "./types";
 
-import isntString from "./is-not-string";
-import unpackPayload from "./unpack-payload";
-import dispatch from "./dispatch";
-import broadcastToChildWindows from "./broadcast-to-child-windows";
+import { isntString } from "./is-not-string";
+import { unpackPayload } from "./unpack-payload";
+import { dispatch } from "./dispatch";
+import { broadcastToChildWindows } from "./broadcast-to-child-windows";
 
-export default function onmessage(e: MessageEvent): void {
+export function onmessage(e: MessageEvent): void {
   if (isntString(e.data)) {
     return;
   }

@@ -1,3 +1,7 @@
+# unreleased
+
+- Fix issue where rollup bundlers could not import framebus (see [braintree-web#504](https://github.com/braintree/braintree-web/issues/504))
+
 # v4.0.1
 
 - Fix issue where framebus could not be used with server side rendering

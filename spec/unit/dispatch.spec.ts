@@ -1,5 +1,5 @@
 import bus = require("../../src/");
-import dispatch from "../../src/lib/dispatch";
+import { dispatch } from "../../src/lib/dispatch";
 
 describe("dispatch", function () {
   it("should execute subscribers for the given event and origin", function () {

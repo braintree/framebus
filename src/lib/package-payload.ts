@@ -1,4 +1,4 @@
-import subscribeReplier from "./subscribe-replier";
+import { subscribeReplier } from "./subscribe-replier";
 import { prefix } from "./constants";
 
 import type {
@@ -7,7 +7,7 @@ import type {
   FramebusSubscribeHandler,
 } from "./types";
 
-export default function packagePayload(
+export function packagePayload(
   event: string,
   origin: string,
   data?: FramebusSubscriberArg,

@@ -1,8 +1,8 @@
-import isntString from "./is-not-string";
+import { isntString } from "./is-not-string";
 
 import type { FramebusOnHandler } from "./types";
 
-export default function subscriptionArgsInvalid(
+export function subscriptionArgsInvalid(
   event: string,
   fn: FramebusOnHandler,
   origin: string

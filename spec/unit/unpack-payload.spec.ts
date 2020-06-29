@@ -1,4 +1,4 @@
-import unpackPayload from "../../src/lib/unpack-payload";
+import { unpackPayload } from "../../src/lib/unpack-payload";
 import type {
   FramebusPayload,
   FramebusSubscriberArg,
