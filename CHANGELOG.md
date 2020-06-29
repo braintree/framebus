@@ -1,4 +1,4 @@
-# unreleased
+# v4.0.2
 
 - Fix issue where rollup bundlers could not import framebus (see [braintree-web#504](https://github.com/braintree/braintree-web/issues/504))
 
