@@ -19,6 +19,10 @@ export = class Framebus {
     this.origin = origin;
   }
 
+  static target(origin = "*"): Framebus {
+    return new Framebus(origin);
+  }
+
   include(childWindow: Window): boolean {
     if (childWindow == null) {
       return false;
@@ -35,8 +39,8 @@ export = class Framebus {
     return true;
   }
 
-  target(origin = "*"): Framebus {
-    return new Framebus(origin);
+  target(origin: string): Framebus {
+    return Framebus.target(origin);
   }
 
   emit(
