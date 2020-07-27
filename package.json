@@ -25,6 +25,9 @@
   },
   "license": "MIT",
   "author": "braintree <code@getbraintree.com>",
+  "dependencies": {
+    "@braintree/uuid": "^0.1.0"
+  },
   "devDependencies": {
     "@types/jest": "^26.0.5",
     "@wdio/cli": "^6.3.4",
