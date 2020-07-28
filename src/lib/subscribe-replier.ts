@@ -1,5 +1,5 @@
 import Framebus = require("../framebus");
-import { uuid as generateUUID } from "./uuid";
+import generateUUID from "@braintree/uuid";
 
 import type { FramebusSubscriberArg, FramebusSubscribeHandler } from "./types";
 
