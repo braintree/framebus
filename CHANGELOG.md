@@ -1,4 +1,4 @@
-# v4.0.3
+# v4.0.3 and v4.0.4
 
 - Use `@braintree/uuid` package for uuid generation
 - Update typescript to v4
