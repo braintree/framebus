@@ -1,4 +1,4 @@
-# unreleased
+# v4.0.3
 
 - Use `@braintree/uuid` package for uuid generation
 
