@@ -12,7 +12,7 @@ import type {
 
 import { childWindows, subscribers } from "./lib/constants";
 
-export = class Framebus {
+export default class Framebus {
   origin: string;
 
   constructor(origin = "*") {
@@ -109,4 +109,4 @@ export = class Framebus {
 
     return false;
   }
-};
+}
