@@ -1,6 +1,7 @@
 # unreleased
 
 - Use `@braintree/uuid` package for uuid generation
+- Update typescript to v4
 
 # v4.0.2
 

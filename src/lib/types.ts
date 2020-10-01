@@ -1,5 +1,6 @@
 declare global {
   // for some reason, the Window constructor does not exist on the window object :/
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface Window {
     Window: () => Window;
   }
