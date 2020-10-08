@@ -12,7 +12,7 @@ import type {
 
 import { childWindows, subscribers } from "./lib/constants";
 
-export default class Framebus {
+export class Framebus {
   origin: string;
 
   constructor(origin = "*") {

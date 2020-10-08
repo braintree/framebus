@@ -1,3 +1,7 @@
+# unreleased
+
+- Fixup Framebus typing
+
 # v4.0.3 and v4.0.4
 
 - Use `@braintree/uuid` package for uuid generation
