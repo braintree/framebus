@@ -1,6 +1,6 @@
-# unreleased
+# 4.0.5
 
-- Fixup Framebus typing
+- Fixup Framebus typing for Typescript integrations
 
 # v4.0.3 and v4.0.4
 
