@@ -1,5 +1,5 @@
 import { attach } from "./lib/attach";
-import Framebus = require("./framebus");
+import { Framebus } from "./framebus";
 
 const bus = new Framebus();
 
