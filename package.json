@@ -61,6 +61,8 @@
   },
   "jest": {
     "preset": "ts-jest",
+    "restoreMocks": true,
+    "resetMocks": true,
     "setupFilesAfterEnv": [
       "./spec/unit/helpers.ts"
     ]
