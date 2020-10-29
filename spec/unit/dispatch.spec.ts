@@ -1,8 +1,8 @@
 import bus = require("../../src/");
 import { dispatch } from "../../src/lib/dispatch";
 
-describe("dispatch", function () {
-  it("should execute subscribers for the given event and origin", function () {
+describe("dispatch", () => {
+  it("should execute subscribers for the given event and origin", () => {
     const subscriber = jest.fn();
     const origin = "https://example.com";
 
@@ -14,7 +14,7 @@ describe("dispatch", function () {
     expect(subscriber).toBeCalledWith({ data: "data" });
   });
 
-  it("should not execute subscribers for a different event", function () {
+  it("should not execute subscribers for a different event", () => {
     const subscriber = jest.fn();
     const origin = "https://example.com";
 
@@ -25,7 +25,7 @@ describe("dispatch", function () {
     expect(subscriber).not.toBeCalled();
   });
 
-  it("should not execute subscribers for a different domain", function () {
+  it("should not execute subscribers for a different domain", () => {
     const subscriber = jest.fn();
     const origin = "https://example.com";
 
@@ -36,7 +36,7 @@ describe("dispatch", function () {
     expect(subscriber).not.toBeCalled();
   });
 
-  it("can pass a reply handler", function () {
+  it("can pass a reply handler", () => {
     const subscriber = jest.fn();
     const reply = jest.fn();
     const origin = "https://example.com";
@@ -49,7 +49,7 @@ describe("dispatch", function () {
     expect(subscriber).toBeCalledWith({ data: "data" }, reply);
   });
 
-  it("can pass a reply handler wthout data", function () {
+  it("can pass a reply handler wthout data", () => {
     const subscriber = jest.fn();
     const reply = jest.fn();
     const origin = "https://example.com";

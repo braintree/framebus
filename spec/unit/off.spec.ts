@@ -1,8 +1,8 @@
 import { subscribers } from "../../src/lib/constants";
 import bus = require("../../src/");
 
-describe("off", function () {
-  it("should remove subscriber given event and origin", function () {
+describe("off", () => {
+  it("should remove subscriber given event and origin", () => {
     const event = "the event";
     const origin = "https://example.com";
     const fn = jest.fn();
@@ -16,7 +16,7 @@ describe("off", function () {
     expect(subscribers[origin][event].length).toBe(1);
   });
 
-  it("should correctly update the array", function () {
+  it("should correctly update the array", () => {
     const event = "the event";
     const origin = "https://example.com";
     const fn = jest.fn();
@@ -29,7 +29,7 @@ describe("off", function () {
     expect(subscribers[origin][event].length).toBe(1);
   });
 
-  it("should return true if removed", function () {
+  it("should return true if removed", () => {
     const event = "the event";
     const origin = "https://example.com";
     const fn = jest.fn();
@@ -42,7 +42,7 @@ describe("off", function () {
     expect(actual).toBe(true);
   });
 
-  it("should return false if not removed for unknown event", function () {
+  it("should return false if not removed for unknown event", () => {
     const event = "the event";
     const origin = "https://example.com";
     const fn = jest.fn();
@@ -55,7 +55,7 @@ describe("off", function () {
     expect(actual).toBe(false);
   });
 
-  it("should return false if not removed for unknown origin", function () {
+  it("should return false if not removed for unknown origin", () => {
     const event = "the event";
     const origin = "https://example.com";
     const fn = jest.fn();

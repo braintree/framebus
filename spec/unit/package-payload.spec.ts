@@ -2,8 +2,8 @@ import { packagePayload } from "../../src/lib/package-payload";
 
 const messagePrefix = "/*framebus*/";
 
-describe("packagePayload", function () {
-  it("should add event to payload", function () {
+describe("packagePayload", () => {
+  it("should add event to payload", () => {
     const expected = "event name";
 
     const result = packagePayload(expected, "*", {});
@@ -12,7 +12,7 @@ describe("packagePayload", function () {
     expect(actual).toBe(expected);
   });
 
-  it("should add data to payload", function () {
+  it("should add data to payload", () => {
     const expected = { some: "data" };
 
     const result = packagePayload("event", "*", expected);
@@ -21,7 +21,7 @@ describe("packagePayload", function () {
     expect(actual.eventData).toEqual(expected);
   });
 
-  it("should add reply to payload if provided", function () {
+  it("should add reply to payload if provided", () => {
     const result = packagePayload("event", "*", {}, jest.fn());
     const actual = JSON.parse(result.replace(messagePrefix, ""));
 
@@ -29,11 +29,11 @@ describe("packagePayload", function () {
     expect(actual.eventData).toEqual({});
   });
 
-  it("should throw error with prefix text when element cannot be stringified", function () {
+  it("should throw error with prefix text when element cannot be stringified", () => {
     const payload = {};
 
     Object.defineProperty(payload, "prop", {
-      get: function () {
+      get() {
         throw new Error("Cross-origin denied");
       },
       enumerable: true,

@@ -11,22 +11,22 @@ function makeEvent(options: MessageEventInit): MessageEvent {
   return new MessageEvent("foo", options);
 }
 
-describe("_unpackPayload", function () {
-  it("should return false if unparsable", function () {
+describe("_unpackPayload", () => {
+  it("should return false if unparsable", () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const actual = unpackPayload({ data: "}{" } as any);
 
     expect(actual).toBe(false);
   });
 
-  it("should return false if not prefixed", function () {
+  it("should return false if not prefixed", () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const actual = unpackPayload({ data: JSON.stringify({}) } as any);
 
     expect(actual).toBe(false);
   });
 
-  it("should return event and args in payload", function () {
+  it("should return event and args in payload", () => {
     const event = "event name";
     const data = { data: "some data" };
     const actual = unpackPayload(
@@ -40,7 +40,7 @@ describe("_unpackPayload", function () {
     expect(eventData).toEqual(data);
   });
 
-  it("should return event and args and reply in payload", function () {
+  it("should return event and args and reply in payload", () => {
     const event = "event name";
     const reply = "123129085-4234-1231-99887877";
     const data = { data: "some data" };
@@ -58,7 +58,7 @@ describe("_unpackPayload", function () {
     expect(eventData.data).toBe("some data");
   });
 
-  it("the source should postMessage the payload to the origin when reply is called", function () {
+  it("the source should postMessage the payload to the origin when reply is called", () => {
     const fakeSource = {
       ...(window as Window),
       postMessage: jest.fn(),
@@ -86,7 +86,7 @@ describe("_unpackPayload", function () {
     expect(fakeSource.postMessage).toBeCalledWith(expect.any(String), "origin");
   });
 
-  it("the source should not attempt to postMessage the payload to the origin if no source available", function () {
+  it("the source should not attempt to postMessage the payload to the origin if no source available", () => {
     const reply = "123129085-4234-1231-99887877";
     const data = { data: "some data" };
     const actual = unpackPayload(
@@ -103,7 +103,7 @@ describe("_unpackPayload", function () {
     ) as FramebusPayload;
     const handler = actual.reply as FramebusSubscribeHandler;
 
-    expect(function () {
+    expect(() => {
       handler({});
     }).not.toThrowError();
   });

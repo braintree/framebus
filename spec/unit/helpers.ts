@@ -1,6 +1,6 @@
 import { detach } from "../../src/lib/attach";
 
-afterEach(function () {
+afterEach(() => {
   jest.restoreAllMocks();
   detach();
 });
