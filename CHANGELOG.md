@@ -4,18 +4,18 @@
 
   ```js
   var bus = new Framebus({
-    channel: 'some-unique-identifier-used-on-both-the-parent-and-child-pages'
+    channel: "some-unique-identifier-used-on-both-the-parent-and-child-pages",
   });
   ```
 
 - Add `parentUrl` and `verifyDomain` config to scope messages to specific domains
   ```js
   var bus = new Framebus({
-    parentUrl: 'https://parent-url.example.com',
+    parentUrl: "https://parent-url.example.com",
     verifyDomain: function (url) {
       // only listens for events emitted from `https://parent-url.example.com` and `https://my-domain.example.com`
-      return url.indexOf('https://my-domain.example.com')
-    }
+      return url.indexOf("https://my-domain.example.com");
+    },
   });
   ```
 - Add `teardown` method for easy cleanup
@@ -47,10 +47,10 @@ _Breaking Changes_
   // v5
   var Framebus = require("framebus");
   var bus = Framebus.target({
-    origin: "example.com"
+    origin: "example.com",
   });
   var anotherBus = bus.target({
-    origin: "example.com"
+    origin: "example.com",
   });
   ```
 

@@ -29,11 +29,11 @@ The Framebus class takes a configuration object, where all the params are option
 
 ```js
 type FramebusOptions = {
-  origin?: string; // default: "*"
-  channel?: string; // no default
-  parentUrl?: string; // no default
-  verifyDomain?: (url: string) => boolean; // no default
-}
+  origin?: string, // default: "*"
+  channel?: string, // no default
+  parentUrl?: string, // no default
+  verifyDomain?: (url: string) => boolean, // no default
+};
 ```
 
 The `origin` sets the framebus instance to only operate on the chosen origin.
@@ -48,7 +48,7 @@ var bus = new Framebus({
   verifyDomain: function (url) {
     // only return true if the domain of the url matches exactly
     url.indexOf("https://my-domain") === 0;
-  }
+  },
 });
 ```
 
@@ -61,14 +61,16 @@ var bus = new Framebus({
 This method is used in conjuction with `emit`, `on`, and `off` to restrict their results to the given origin. By default, an origin of `'*'` is used.
 
 ```javascript
-framebus.target({
-  origin: "https://example.com"
-}).on("my cool event", function () {});
+framebus
+  .target({
+    origin: "https://example.com",
+  })
+  .on("my cool event", function () {});
 // will ignore all incoming 'my cool event' NOT from 'https://example.com'
 ```
 
 | Argument  | Type            | Description                        |
-|-----------|-----------------|------------------------------------|
+| --------- | --------------- | ---------------------------------- |
 | `options` | FramebusOptions | See above section for more details |
 
 #### `emit('event', data? , callback?): boolean`
