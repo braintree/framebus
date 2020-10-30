@@ -13,7 +13,9 @@
       var button = document.getElementById("marco-button");
 
       button.onclick = function () {
-        framebus.target(remoteOrigin).emit(
+        Framebus.target({
+          origin: remoteOrigin
+        }).emit(
           "Marco",
           {
             message: "are you there?",

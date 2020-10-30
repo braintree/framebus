@@ -10,14 +10,16 @@
     <button id="send">Send</button>
     <script src="/js/test-app.js"></script>
     <script>
-      framebus.on("message", function (data) {
+      var bus = new Framebus();
+
+      bus.on("message", function (data) {
         app.printToDOM(data.message);
       });
 
       document.querySelector("#send").addEventListener(
         "click",
         function () {
-          framebus.emit("from-popup", {
+          bus.emit("from-popup", {
             message: document.querySelector("#from-popup-message").value,
           });
         },
@@ -25,7 +27,7 @@
       );
 
       var count = 0;
-      framebus.on("from-popup", function () {
+      bus.on("from-popup", function () {
         count++;
 
         if (count > 1) {

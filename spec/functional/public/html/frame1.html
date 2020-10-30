@@ -8,7 +8,8 @@
     frame1.html
     <script src="/js/test-app.js"></script>
     <script>
-      framebus.on("Marco", function () {
+      var bus = new Framebus();
+      bus.on("Marco", function () {
         app.printToDOM('FAIL: [frame 1] received "Marco"');
       });
     </script>

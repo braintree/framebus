@@ -13,10 +13,11 @@
     >
     <script src="/js/test-app.js"></script>
     <script>
-      framebus.on("Marco", function () {
+      var bus = new Framebus();
+      bus.on("Marco", function () {
         app.printToDOM('FAIL: [frame 2] received "Marco"');
       });
-      framebus.on("from-popup", function (data) {
+      bus.on("from-popup", function (data) {
         app.printToDOM('received "' + data.message + '" from popup');
       });
     </script>
