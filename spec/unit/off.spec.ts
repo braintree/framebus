@@ -1,5 +1,5 @@
 import { subscribers } from "../../src/lib/constants";
-import bus = require("../../src/");
+import Framebus = require("../../src/");
 
 describe("off", () => {
   it("should remove subscriber given event and origin", () => {
@@ -10,7 +10,9 @@ describe("off", () => {
     subscribers[origin] = {};
     subscribers[origin][event] = [jest.fn(), fn];
 
-    bus.target(origin).off(event, fn);
+    Framebus.target({
+      origin,
+    }).off(event, fn);
 
     expect(subscribers[origin][event]).not.toContain(fn);
     expect(subscribers[origin][event].length).toBe(1);
@@ -24,7 +26,9 @@ describe("off", () => {
     subscribers[origin] = {};
     subscribers[origin][event] = [jest.fn(), fn];
 
-    bus.target(origin).off(event, fn);
+    Framebus.target({
+      origin,
+    }).off(event, fn);
 
     expect(subscribers[origin][event].length).toBe(1);
   });
@@ -37,7 +41,9 @@ describe("off", () => {
     subscribers[origin] = {};
     subscribers[origin][event] = [jest.fn(), fn];
 
-    const actual = bus.target(origin).off(event, fn);
+    const actual = Framebus.target({
+      origin,
+    }).off(event, fn);
 
     expect(actual).toBe(true);
   });
@@ -50,7 +56,9 @@ describe("off", () => {
     subscribers[origin] = {};
     subscribers[origin][event] = [jest.fn(), fn];
 
-    const actual = bus.target(origin).off("another event", fn);
+    const actual = Framebus.target({
+      origin,
+    }).off("another event", fn);
 
     expect(actual).toBe(false);
   });
@@ -63,7 +71,9 @@ describe("off", () => {
     subscribers[origin] = {};
     subscribers[origin][event] = [jest.fn(), fn];
 
-    const actual = bus.target("https://another.domain").off(event, fn);
+    const actual = Framebus.target({
+      origin: "https://another.domain",
+    }).off(event, fn);
 
     expect(actual).toBe(false);
   });

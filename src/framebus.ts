@@ -3,24 +3,48 @@ import { subscriptionArgsInvalid } from "./lib/subscription-args-invalid";
 import { broadcast } from "./lib/broadcast";
 import { packagePayload } from "./lib/package-payload";
 
+import { childWindows, subscribers } from "./lib/constants";
+
 import type {
   FramebusSubscriberArg,
   FramebusSubscribeHandler,
   FramebusOnHandler,
   FramebusReplyHandler,
 } from "./lib/types";
-
-import { childWindows, subscribers } from "./lib/constants";
+type Listener = {
+  eventName: string;
+  handler: FramebusOnHandler;
+  originalHandler: FramebusOnHandler;
+};
+type VerifyDomainMethod = (domain: string) => boolean;
+type FramebusOptions = {
+  channel?: string;
+  origin?: string;
+  parentUrl?: string;
+  verifyDomain?: VerifyDomainMethod;
+};
 
 export class Framebus {
   origin: string;
+  channel: string;
+  parentUrl: string;
 
-  constructor(origin = "*") {
-    this.origin = origin;
+  private verifyDomain?: VerifyDomainMethod;
+  private isDestroyed: boolean;
+  private listeners: Listener[];
+
+  constructor(options: FramebusOptions = {}) {
+    this.origin = options.origin || "*";
+    this.channel = options.channel || "";
+    this.parentUrl = options.parentUrl || "";
+    this.verifyDomain = options.verifyDomain;
+
+    this.isDestroyed = false;
+    this.listeners = [];
   }
 
-  static target(origin = "*"): Framebus {
-    return new Framebus(origin);
+  static target(options?: FramebusOptions): Framebus {
+    return new Framebus(options);
   }
 
   include(childWindow: Window): boolean {
@@ -39,18 +63,23 @@ export class Framebus {
     return true;
   }
 
-  target(origin: string): Framebus {
-    return Framebus.target(origin);
+  target(options?: FramebusOptions): Framebus {
+    return Framebus.target(options);
   }
 
   emit(
-    event: string,
+    eventName: string,
     data?: FramebusSubscriberArg | FramebusReplyHandler,
     reply?: FramebusReplyHandler
   ): boolean {
-    const origin = this.origin;
+    if (this.isDestroyed) {
+      return false;
+    }
 
-    if (isntString(event)) {
+    const origin = this.origin;
+    eventName = this.namespaceEvent(eventName);
+
+    if (isntString(eventName)) {
       return false;
     }
 
@@ -63,7 +92,7 @@ export class Framebus {
       data = undefined; // eslint-disable-line no-undefined
     }
 
-    const payload = packagePayload(event, origin, data, reply);
+    const payload = packagePayload(eventName, origin, data, reply);
     if (!payload) {
       return false;
     }
@@ -73,34 +102,78 @@ export class Framebus {
     return true;
   }
 
-  on(event: string, fn: FramebusOnHandler): boolean {
-    const origin = this.origin;
-
-    if (subscriptionArgsInvalid(event, fn, origin)) {
+  on(eventName: string, originalHandler: FramebusOnHandler): boolean {
+    if (this.isDestroyed) {
       return false;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const self = this;
+    const origin = this.origin;
+    let handler = originalHandler;
+
+    eventName = this.namespaceEvent(eventName);
+
+    if (subscriptionArgsInvalid(eventName, handler, origin)) {
+      return false;
+    }
+
+    if (this.parentUrl) {
+      /* eslint-disable no-invalid-this, @typescript-eslint/ban-ts-comment */
+      handler = function (...args) {
+        // @ts-ignore
+        if (self.checkOrigin(this && this.origin)) {
+          originalHandler(...args);
+        }
+      };
+      /* eslint-enable no-invalid-this, @typescript-eslint/ban-ts-comment */
+    }
+
+    this.listeners.push({
+      eventName,
+      handler,
+      originalHandler,
+    });
+
     subscribers[origin] = subscribers[origin] || {};
-    subscribers[origin][event] = subscribers[origin][event] || [];
-    subscribers[origin][event].push(fn as FramebusSubscribeHandler);
+    subscribers[origin][eventName] = subscribers[origin][eventName] || [];
+    subscribers[origin][eventName].push(handler as FramebusSubscribeHandler);
 
     return true;
   }
 
-  off(event: string, fn: FramebusOnHandler): boolean {
-    const origin = this.origin;
+  off(eventName: string, originalHandler: FramebusOnHandler): boolean {
+    let handler = originalHandler;
 
-    if (subscriptionArgsInvalid(event, fn, origin)) {
+    if (this.isDestroyed) {
       return false;
     }
 
-    const subscriberList = subscribers[origin] && subscribers[origin][event];
+    if (this.parentUrl) {
+      for (let i = 0; i < this.listeners.length; i++) {
+        const listener = this.listeners[i];
+
+        if (listener.originalHandler === originalHandler) {
+          handler = listener.handler;
+        }
+      }
+    }
+
+    eventName = this.namespaceEvent(eventName);
+    const origin = this.origin;
+
+    if (subscriptionArgsInvalid(eventName, handler, origin)) {
+      return false;
+    }
+
+    const subscriberList =
+      subscribers[origin] && subscribers[origin][eventName];
     if (!subscriberList) {
       return false;
     }
 
     for (let i = 0; i < subscriberList.length; i++) {
-      if (subscriberList[i] === fn) {
+      if (subscriberList[i] === handler) {
         subscriberList.splice(i, 1);
 
         return true;
@@ -108,5 +181,55 @@ export class Framebus {
     }
 
     return false;
+  }
+
+  teardown(): void {
+    if (this.isDestroyed) {
+      return;
+    }
+
+    this.isDestroyed = true;
+
+    for (let i = 0; i < this.listeners.length; i++) {
+      const listener = this.listeners[i];
+      this.off(listener.eventName, listener.handler);
+    }
+
+    this.listeners.length = 0;
+  }
+
+  private checkOrigin(postMessageOrigin: string) {
+    let merchantHost;
+    const a = document.createElement("a");
+
+    a.href = this.parentUrl;
+
+    if (a.protocol === "https:") {
+      merchantHost = a.host.replace(/:443$/, "");
+    } else if (a.protocol === "http:") {
+      merchantHost = a.host.replace(/:80$/, "");
+    } else {
+      merchantHost = a.host;
+    }
+
+    const merchantOrigin = a.protocol + "//" + merchantHost;
+
+    if (merchantOrigin === postMessageOrigin) {
+      return true;
+    }
+
+    if (this.verifyDomain) {
+      return this.verifyDomain(postMessageOrigin);
+    }
+
+    return true;
+  }
+
+  private namespaceEvent(eventName: string): string {
+    if (!this.channel) {
+      return eventName;
+    }
+
+    return `${this.channel}:${eventName}`;
   }
 }

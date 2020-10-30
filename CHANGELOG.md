@@ -1,3 +1,59 @@
+# unreleased
+
+- Allow scoping to a specific channel for events
+
+  ```js
+  var bus = new Framebus({
+    channel: 'some-unique-identifier-used-on-both-the-parent-and-child-pages'
+  });
+  ```
+
+- Add `parentUrl` and `verifyDomain` config to scope messages to specific domains
+  ```js
+  var bus = new Framebus({
+    parentUrl: 'https://parent-url.example.com',
+    verifyDomain: function (url) {
+      // only listens for events emitted from `https://parent-url.example.com` and `https://my-domain.example.com`
+      return url.indexOf('https://my-domain.example.com')
+    }
+  });
+  ```
+- Add `teardown` method for easy cleanup
+
+_Breaking Changes_
+
+- Instantiate new instances of framebus
+
+  ```js
+  // v4
+  var bus = require("framebus");
+  bus.on(/* args */);
+  bus.emit(/* args */);
+
+  // v5
+  var Framebus = require("framebus");
+  var bus = new Framebus();
+  bus.on(/* args */);
+  bus.emit(/* args */);
+  ```
+
+- Instantiating a framebus with `target` method with an `origin` param now requires an options object (same object that is used to instantiate the instance)
+
+  ```js
+  // v4
+  var bus = require("framebus");
+  var anotherBus = bus.target("example.com");
+
+  // v5
+  var Framebus = require("framebus");
+  var bus = Framebus.target({
+    origin: "example.com"
+  });
+  var anotherBus = bus.target({
+    origin: "example.com"
+  });
+  ```
+
 # 4.0.5
 
 - Fixup Framebus typing for Typescript integrations
