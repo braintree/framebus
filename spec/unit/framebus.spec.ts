@@ -9,10 +9,21 @@ import { subscribers } from "../../src/lib/constants";
 
 describe("Framebus", () => {
   let bus: Framebus;
+  const { location } = window;
 
   beforeEach(() => {
     bus = new Framebus();
     attach();
+    // @ts-ignore
+    delete window.location;
+    // @ts-ignore
+    window.location = {
+      href: "",
+    };
+  });
+
+  afterAll(() => {
+    window.location = location;
   });
 
   afterEach(() => {
@@ -32,12 +43,10 @@ describe("Framebus", () => {
       const instance = Framebus.target({
         channel: "unique-channel",
         origin: "unique-origin",
-        parentUrl: "https://example.com",
       });
 
       expect(instance.channel).toBe("unique-channel");
       expect(instance.origin).toBe("unique-origin");
-      expect(instance.parentUrl).toBe("https://example.com");
     });
 
     it("uses static version when called on instance", () => {
@@ -48,14 +57,12 @@ describe("Framebus", () => {
       instance.target({
         channel: "unique-channel",
         origin: "unique-origin",
-        parentUrl: "https://example.com",
       });
 
       expect(Framebus.target).toBeCalledTimes(1);
       expect(Framebus.target).toBeCalledWith({
         channel: "unique-channel",
         origin: "unique-origin",
-        parentUrl: "https://example.com",
       });
     });
   });
@@ -258,9 +265,9 @@ describe("Framebus", () => {
       expect(subscribers["*"]["unique-channel:event-name"][0]).toBe(handler);
     });
 
-    it("modifies handler if parent url is used", () => {
+    it("modifies handler if verifyDomain is used", () => {
       bus = new Framebus({
-        parentUrl: "https://example.com",
+        verifyDomain: jest.fn().mockReturnValue(true),
       });
       const handler = jest.fn();
       bus.on("event-name", handler);
@@ -284,7 +291,6 @@ describe("Framebus", () => {
 
     it("does not call original handler when a verification domain method is passed and the check fails", () => {
       bus = new Framebus({
-        parentUrl: "https://example.com",
         verifyDomain() {
           return false;
         },
@@ -310,7 +316,6 @@ describe("Framebus", () => {
 
     it("does call original handler when a verification domain method is passed and the check passes", () => {
       bus = new Framebus({
-        parentUrl: "https://example.com",
         verifyDomain(url) {
           return url === "https://not-example.com/allowed";
         },
@@ -350,9 +355,9 @@ describe("Framebus", () => {
       expect(handler).toBeCalledWith({ data: "allowed" }, cb);
     });
 
-    it("does call original handler when a verification domain method fails, but post message origin matches parentUrl", () => {
+    it("does call original handler when a verification domain method fails, but post message origin matches location.href", () => {
+      window.location.href = "https://example.com";
       bus = new Framebus({
-        parentUrl: "https://example.com",
         verifyDomain() {
           return false;
         },
@@ -380,9 +385,9 @@ describe("Framebus", () => {
       expect(handler).toBeCalledWith({ data: "allowed" }, cb);
     });
 
-    it("does call original handler when a verification domain method fails, but post message origin matches parentUrl (ignoringg ssl port)", () => {
+    it("does call original handler when a verification domain method fails, but post message origin matches location.href (ignoringg ssl port)", () => {
+      window.location.href = "https://example.com:443";
       bus = new Framebus({
-        parentUrl: "https://example.com:443",
         verifyDomain() {
           return false;
         },
@@ -410,9 +415,9 @@ describe("Framebus", () => {
       expect(handler).toBeCalledWith({ data: "allowed" }, cb);
     });
 
-    it("does call original handler when a verification domain method fails, but post message origin matches parentUrl (ignoringg http port)", () => {
+    it("does call original handler when a verification domain method fails, but post message origin matches location.href (ignoringg http port)", () => {
+      window.location.href = "http://example.com:80";
       bus = new Framebus({
-        parentUrl: "http://example.com:80",
         verifyDomain() {
           return false;
         },
@@ -441,8 +446,8 @@ describe("Framebus", () => {
     });
 
     it("does not call original handler when a verification domain method fails and parent url matches but non-standard port is used", () => {
+      window.location.href = "https://example.com:123";
       bus = new Framebus({
-        parentUrl: "https://example.com:123",
         verifyDomain() {
           return false;
         },
@@ -469,9 +474,9 @@ describe("Framebus", () => {
       expect(handler).toBeCalledTimes(0);
     });
 
-    it("does not call original handler when a verification domain method fails and parent url matches but protocol does not", () => {
+    it("does not call original handler when a verification domain method fails and location.href domain matches but protocol does not", () => {
+      window.location.href = "https://example.com";
       bus = new Framebus({
-        parentUrl: "https://example.com",
         verifyDomain() {
           return false;
         },
@@ -575,20 +580,6 @@ describe("Framebus", () => {
       busWithChannel.off("event-name", handler);
       expect(subscribers["*"]["event-name"].length).toBe(1);
       expect(subscribers["*"]["unique-id:event-name"].length).toBe(0);
-    });
-
-    it("handles parentUrl", () => {
-      const busWithParentUrl = new Framebus({
-        parentUrl: "https://example.com",
-      });
-
-      const handler = jest.fn();
-      busWithParentUrl.on("event-name", handler);
-
-      expect(subscribers["*"]["event-name"].length).toBe(1);
-
-      busWithParentUrl.off("event-name", handler);
-      expect(subscribers["*"]["event-name"].length).toBe(0);
     });
   });
 

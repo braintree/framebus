@@ -8,10 +8,9 @@
   });
   ```
 
-- Add `parentUrl` and `verifyDomain` config to scope messages to specific domains
+- Add `verifyDomain` config to scope messages to specific domains
   ```js
   var bus = new Framebus({
-    parentUrl: "https://parent-url.example.com",
     verifyDomain: function (url) {
       // only listens for events emitted from `https://parent-url.example.com` and `https://my-domain.example.com`
       return url.indexOf("https://my-domain.example.com");

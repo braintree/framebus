@@ -20,14 +20,12 @@ type VerifyDomainMethod = (domain: string) => boolean;
 type FramebusOptions = {
   channel?: string;
   origin?: string;
-  parentUrl?: string;
   verifyDomain?: VerifyDomainMethod;
 };
 
 export class Framebus {
   origin: string;
   channel: string;
-  parentUrl: string;
 
   private verifyDomain?: VerifyDomainMethod;
   private isDestroyed: boolean;
@@ -36,7 +34,6 @@ export class Framebus {
   constructor(options: FramebusOptions = {}) {
     this.origin = options.origin || "*";
     this.channel = options.channel || "";
-    this.parentUrl = options.parentUrl || "";
     this.verifyDomain = options.verifyDomain;
 
     this.isDestroyed = false;
@@ -118,7 +115,7 @@ export class Framebus {
       return false;
     }
 
-    if (this.parentUrl) {
+    if (this.verifyDomain) {
       /* eslint-disable no-invalid-this, @typescript-eslint/ban-ts-comment */
       handler = function (...args) {
         // @ts-ignore
@@ -149,7 +146,7 @@ export class Framebus {
       return false;
     }
 
-    if (this.parentUrl) {
+    if (this.verifyDomain) {
       for (let i = 0; i < this.listeners.length; i++) {
         const listener = this.listeners[i];
 
@@ -202,7 +199,7 @@ export class Framebus {
     let merchantHost;
     const a = document.createElement("a");
 
-    a.href = this.parentUrl;
+    a.href = location.href;
 
     if (a.protocol === "https:") {
       merchantHost = a.host.replace(/:443$/, "");

@@ -31,7 +31,6 @@ The Framebus class takes a configuration object, where all the params are option
 type FramebusOptions = {
   origin?: string, // default: "*"
   channel?: string, // no default
-  parentUrl?: string, // no default
   verifyDomain?: (url: string) => boolean, // no default
 };
 ```
@@ -40,11 +39,10 @@ The `origin` sets the framebus instance to only operate on the chosen origin.
 
 The `channel` namespaces the events called with `on` and `emit` so you can have multiple bus instances on the page and have them only communicate with busses with the same channel value.
 
-The `parentUrl` and `verifyDomain` are used in conjunction. If a `parentUrl` is passed, then the `on` listener will only fire if the domain of the origin of the post message matches the `parentUrl`'s domain or the function passed for `verifyDomain` returns `true`.
+If a `verifyDomain` is passed, then the `on` listener will only fire if the domain of the origin of the post message matches the `location.href` value of page or the function passed for `verifyDomain` returns `true`.
 
 ```js
 var bus = new Framebus({
-  parentUrl: "https://example.com/sub-page",
   verifyDomain: function (url) {
     // only return true if the domain of the url matches exactly
     url.indexOf("https://my-domain") === 0;
