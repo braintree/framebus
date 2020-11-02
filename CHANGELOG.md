@@ -1,4 +1,4 @@
-# unreleased
+# 5.0.0
 
 - Allow scoping to a specific channel for events
 
