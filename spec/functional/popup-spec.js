@@ -1,15 +1,15 @@
-describe("Popup Events", function () {
-  beforeEach(function () {
+describe("Popup Events", () => {
+  beforeEach(() => {
     browser.url("http://localhost:3099");
   });
 
-  it("should be able to receive events from opener frames", function () {
+  it("should be able to receive events from opener frames", () => {
     const expected = "hello from frame3!";
 
     $("#open-popup").click();
     browser.switchWindow("popup");
     browser.waitUntil(
-      function () {
+      () => {
         return $("body").getHTML() != null;
       },
       {
@@ -28,7 +28,7 @@ describe("Popup Events", function () {
     browser.switchWindow("popup");
 
     browser.waitUntil(
-      function () {
+      () => {
         return $("p").getHTML !== "";
       },
       {
@@ -40,14 +40,14 @@ describe("Popup Events", function () {
     expect(actual).toBe(expected);
   });
 
-  it("should be able to send events to opener frames", function () {
+  it("should be able to send events to opener frames", () => {
     const expected = "hello from popup!";
 
     $("#open-popup").click();
 
     browser.switchWindow("popup");
     browser.waitUntil(
-      function () {
+      () => {
         return $("body").getHTML() != null;
       },
       {
@@ -63,7 +63,7 @@ describe("Popup Events", function () {
     browser.switchToFrame(1);
 
     browser.waitUntil(
-      function () {
+      () => {
         return $("p").getHTML !== "";
       },
       {
@@ -75,14 +75,14 @@ describe("Popup Events", function () {
     expect(actual).toContain(expected);
   });
 
-  it("should not double-receive events in popups", function () {
+  it("should not double-receive events in popups", () => {
     const expected = "hello from popup!";
 
     $("#open-popup").click();
 
     browser.switchWindow("popup");
     browser.waitUntil(
-      function () {
+      () => {
         return $("body").getHTML() != null;
       },
       {
@@ -98,7 +98,7 @@ describe("Popup Events", function () {
     browser.switchToFrame(1);
 
     browser.waitUntil(
-      function () {
+      () => {
         return $("p").getHTML !== "";
       },
       {

@@ -13,13 +13,15 @@
 
     <script src="/js/test-app.js"></script>
     <script>
+      var bus = new Framebus();
+
       document.querySelector("#send").addEventListener("click", function () {
-        framebus.emit("message", {
+        bus.emit("message", {
           message: document.querySelector("#popup-message").value,
         });
       });
 
-      framebus.on("Marco", function (data, reply) {
+      bus.on("Marco", function (data, reply) {
         var polo = document.getElementById("polo-text").value;
         app.printToDOM(data.message);
         reply({

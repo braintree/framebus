@@ -9,19 +9,19 @@ function mkFrame() {
   };
 }
 
-describe("broadcast", function () {
-  it("should not throw exception when postMessage is denied", function () {
+describe("broadcast", () => {
+  it("should not throw exception when postMessage is denied", () => {
     const frame = mkFrame();
     frame.postMessage.mockImplementation(() => {
       throw new Error("Invalid calling object");
     });
 
-    expect(function () {
+    expect(() => {
       broadcast(frame, "payload", "*");
     }).not.toThrowError();
   });
 
-  it("should postMessage to current frame", function () {
+  it("should postMessage to current frame", () => {
     const frame = mkFrame();
 
     broadcast(frame, "payload", "*");
@@ -29,7 +29,7 @@ describe("broadcast", function () {
     expect(frame.postMessage).toBeCalled();
   });
 
-  it("should postMessage to current frame's child frames", function () {
+  it("should postMessage to current frame's child frames", () => {
     const frame = mkFrame();
     frame.frames[0] = mkFrame();
 
@@ -38,8 +38,8 @@ describe("broadcast", function () {
     expect(frame.frames[0].postMessage).toBeCalled();
   });
 
-  describe("to opener", function () {
-    it("should postMessage to window.top.opener if it exists", function () {
+  describe("to opener", () => {
+    it("should postMessage to window.top.opener if it exists", () => {
       const frame = mkFrame();
 
       frame.opener = mkFrame();
@@ -51,7 +51,7 @@ describe("broadcast", function () {
       expect(frame.opener.top.postMessage).toBeCalled();
     });
 
-    it("should not postMessage to window.opener if it has closed", function () {
+    it("should not postMessage to window.opener if it has closed", () => {
       const frame = mkFrame();
 
       frame.opener = {
@@ -97,7 +97,7 @@ describe("broadcast", function () {
       done();
     });
 
-    it("should postMessage to the window.opener's child frames", function () {
+    it("should postMessage to the window.opener's child frames", () => {
       const frame = mkFrame();
       const openerFrame = mkFrame();
 
@@ -112,18 +112,18 @@ describe("broadcast", function () {
       expect(frame.opener.top.frames[0].postMessage).toBeCalled();
     });
 
-    it("should not throw if window.opener has access denied", function () {
+    it("should not throw if window.opener has access denied", () => {
       const frame = mkFrame();
 
       frame.top = frame;
 
       Object.defineProperty(frame, "opener", {
-        get: function () {
+        get() {
           throw new Error("Access denied");
         },
       });
 
-      expect(function () {
+      expect(() => {
         broadcast(frame, "payload", "*");
       }).not.toThrowError("Access denied");
     });

@@ -5,7 +5,8 @@ Framebus allows you to easily send messages across frames (and iframes) with a s
 In one frame:
 
 ```js
-var bus = require("framebus");
+var Framebus = require("framebus");
+var bus = new Framebus();
 
 bus.emit("message", {
   from: "Ron",
@@ -16,29 +17,59 @@ bus.emit("message", {
 In another frame:
 
 ```js
-var bus = require("framebus");
+var Framebus = require("framebus");
+var bus = new Framebus();
 
 bus.on("message", function (data) {
   console.log(data.from + " said: " + data.contents);
 });
 ```
 
+The Framebus class takes a configuration object, where all the params are optional.
+
+```js
+type FramebusOptions = {
+  origin?: string, // default: "*"
+  channel?: string, // no default
+  verifyDomain?: (url: string) => boolean, // no default
+};
+```
+
+The `origin` sets the framebus instance to only operate on the chosen origin.
+
+The `channel` namespaces the events called with `on` and `emit` so you can have multiple bus instances on the page and have them only communicate with busses with the same channel value.
+
+If a `verifyDomain` is passed, then the `on` listener will only fire if the domain of the origin of the post message matches the `location.href` value of page or the function passed for `verifyDomain` returns `true`.
+
+```js
+var bus = new Framebus({
+  verifyDomain: function (url) {
+    // only return true if the domain of the url matches exactly
+    url.indexOf("https://my-domain") === 0;
+  },
+});
+```
+
 ## API
 
-#### `target(origin): framebus`
+#### `target(options: FramebusOptions): framebus`
 
 **returns**: a chainable instance of framebus that operates on the chosen origin.
 
 This method is used in conjuction with `emit`, `on`, and `off` to restrict their results to the given origin. By default, an origin of `'*'` is used.
 
 ```javascript
-framebus.target("https://example.com").on("my cool event", function () {});
+framebus
+  .target({
+    origin: "https://example.com",
+  })
+  .on("my cool event", function () {});
 // will ignore all incoming 'my cool event' NOT from 'https://example.com'
 ```
 
-| Argument | Type   | Description                                          |
-| -------- | ------ | ---------------------------------------------------- |
-| `origin` | String | (default: `'*'`) only target frames with this origin |
+| Argument  | Type            | Description                        |
+| --------- | --------------- | ---------------------------------- |
+| `options` | FramebusOptions | See above section for more details |
 
 #### `emit('event', data? , callback?): boolean`
 
@@ -86,6 +117,22 @@ framebus.emit("hello popup and friends!");
 | Argument | Type   | Description                                  |
 | -------- | ------ | -------------------------------------------- |
 | `popup`  | Window | The popup refrence returned by `window.open` |
+
+#### `teardown(): void`
+
+Calls `off` on all listeners used for this bus instance and makes subsequent calls to all methods `noop`.
+
+```javascript
+bus.on("event-name", handler);
+
+// event-name listener is torn down
+bus.teardown();
+
+// these now do nothing
+bus.on("event-name", handler);
+bus.emit("event-name", data);
+bus.off("event-name", handler);
+```
 
 ## Pitfalls
 

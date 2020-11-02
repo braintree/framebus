@@ -1,9 +1,9 @@
-describe("Reply Events", function () {
-  beforeEach(function () {
+describe("Reply Events", () => {
+  beforeEach(() => {
     browser.url("http://localhost:3099");
   });
 
-  it("should only publish to targeted domains and print reply", function () {
+  it("should only publish to targeted domains and print reply", () => {
     browser.switchToFrame(2);
 
     $("#polo-text").setValue("polo");
@@ -16,7 +16,7 @@ describe("Reply Events", function () {
     $("#marco-button").click();
 
     browser.waitUntil(
-      function () {
+      () => {
         return $("p").getText() === "polo";
       },
       {

@@ -48,7 +48,7 @@ function start(cb, logRequests) {
 
   const asyncTasks = ports.map(function (port) {
     return function (done) {
-      const srv = app.listen(port, function () {
+      const srv = app.listen(port, () => {
         console.log("app running on", port);
         done(null, srv);
       });
@@ -67,29 +67,29 @@ function stop(cb) {
   async.parallel(
     servers.map(function (server) {
       return function (done) {
-        server.close(function () {
+        server.close(() => {
           console.log("server killed");
           done();
         });
       };
     }),
-    function () {
+    () => {
       cb();
     }
   );
 }
 
 module.exports = {
-  start: function () {
+  start() {
     return new Promise(function (done) {
-      start(function () {
+      start(() => {
         done();
       });
     });
   },
-  stop: function () {
+  stop() {
     return new Promise(function (done) {
-      stop(function () {
+      stop(() => {
         done();
       });
     });

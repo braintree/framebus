@@ -19,7 +19,9 @@
     </script>
     <script src="/js/test-app.js"></script>
     <script>
-      framebus.on("Marco", function () {
+      var bus = new Framebus();
+
+      bus.on("Marco", function () {
         app.printToDOM('FAIL: [index] received "Marco"');
       });
 
@@ -27,7 +29,7 @@
         "click",
         function () {
           var popup = window.open("/html/popup.html", "popup");
-          framebus.include(popup);
+          bus.include(popup);
         },
         false
       );

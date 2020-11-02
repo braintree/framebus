@@ -14,10 +14,14 @@ export function subscribeReplier(
     replyOriginHandler: FramebusSubscribeHandler
   ): void {
     fn(data, replyOriginHandler);
-    Framebus.target(origin).off(uuid, replier);
+    Framebus.target({
+      origin,
+    }).off(uuid, replier);
   }
 
-  Framebus.target(origin).on(uuid, replier);
+  Framebus.target({
+    origin,
+  }).on(uuid, replier);
 
   return uuid;
 }
