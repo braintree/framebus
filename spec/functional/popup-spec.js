@@ -37,6 +37,7 @@ describe("Popup Events", () => {
     );
     const actual = $("p").getText();
 
+    expect($$("p").length).toBe(1);
     expect(actual).toBe(expected);
   });
 
@@ -72,6 +73,7 @@ describe("Popup Events", () => {
     );
     const actual = $("p").getText();
 
+    expect($$("p").length).toBe(1);
     expect(actual).toContain(expected);
   });
 
@@ -107,6 +109,41 @@ describe("Popup Events", () => {
     );
     const actual = $("p").getText();
 
+    expect($$("p").length).toBe(1);
+    expect(actual).not.toContain("FAILURE");
+  });
+
+  it("should be able to receive messages from opener window", () => {
+    const expected = "hello from opener!";
+
+    $("#open-popup").click();
+    browser.switchWindow("popup");
+    browser.waitUntil(
+      () => {
+        return $("body").getHTML() != null;
+      },
+      {
+        timeout: 1000,
+        timeoutMsg: "expected body to exist",
+      }
+    );
+
+    browser.switchWindow("localhost:3099");
+    $("#from-top-message").setValue(expected);
+    $("#send-from-top").click();
+
+    browser.switchWindow("popup");
+    browser.waitUntil(
+      () => {
+        return $("p").getHTML !== "";
+      },
+      {
+        timeout: 1000,
+      }
+    );
+    const actual = $("p").getText();
+
+    expect($$("p").length).toBe(1);
     expect(actual).not.toContain("FAILURE");
   });
 });

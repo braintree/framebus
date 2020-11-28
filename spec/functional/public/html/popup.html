@@ -34,6 +34,17 @@
           app.printToDOM('FAILURE received "from-popup" multiple times');
         }
       });
+
+      var countFromTop = 0;
+      bus.on("from-top", function (data) {
+        countFromTop++;
+
+        if (countFromTop > 1) {
+          app.printToDOM('FAILURE received "from-top" multiple times');
+        } else {
+          app.printToDOM(data.message);
+        }
+      });
     </script>
   </body>
 </html>

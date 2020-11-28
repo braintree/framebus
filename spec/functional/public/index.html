@@ -12,7 +12,9 @@
       src="http://<%= domain %>:<%= port2 %>/html/frame3.html"
       name="frame3"
     ></iframe>
+    <input id="from-top-message" />
     <button id="open-popup">Open popup</button>
+    <button id="send-from-top">Send from top</button>
 
     <script>
       window.name = "root-frame";
@@ -24,6 +26,16 @@
       bus.on("Marco", function () {
         app.printToDOM('FAIL: [index] received "Marco"');
       });
+
+      document.querySelector("#send-from-top").addEventListener(
+        "click",
+        function () {
+          bus.emit("from-top", {
+            message: document.querySelector("#from-top-message").value,
+          });
+        },
+        false
+      );
 
       document.querySelector("#open-popup").addEventListener(
         "click",

@@ -11,7 +11,7 @@ export function broadcast(
   try {
     frame.postMessage(payload, origin);
 
-    if (hasOpener(frame)) {
+    if (hasOpener(frame) && frame.opener.top !== window.top) {
       broadcast(frame.opener.top, payload, origin);
     }
 
