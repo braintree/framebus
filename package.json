@@ -21,6 +21,7 @@
     "pretest:functional": "gulp functional:prep",
     "test:functional": "wdio wdio.conf.js",
     "test": "npm run test:unit && npm run test:functional",
+    "prestart": "npm run pretest:functional",
     "start": "./bin/www"
   },
   "license": "MIT",
