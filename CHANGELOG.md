@@ -1,3 +1,7 @@
+# unreleased
+
+- Fix issue where emitting to new window could cause an infinite loop (closes #41, thanks @blutorange)
+
 # 5.0.0
 
 - Allow scoping to a specific channel for events

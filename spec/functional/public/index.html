@@ -12,9 +12,14 @@
       src="http://<%= domain %>:<%= port2 %>/html/frame3.html"
       name="frame3"
     ></iframe>
-    <input id="from-top-message" />
     <button id="open-popup">Open popup</button>
-    <button id="send-from-top">Send from top</button>
+
+    <div>
+      <input style="display: none" id="from-top-message" />
+      <button style="display: none" id="send-from-top">
+        Send Message to Popup from Parent Page
+      </button>
+    </div>
 
     <script>
       window.name = "root-frame";
@@ -40,6 +45,9 @@
       document.querySelector("#open-popup").addEventListener(
         "click",
         function () {
+          document.querySelector("#from-top-message").style.display = "block";
+          document.querySelector("#send-from-top").style.display = "block";
+
           var popup = window.open("/html/popup.html", "popup");
           bus.include(popup);
         },
