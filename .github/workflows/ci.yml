@@ -14,8 +14,9 @@ jobs:
       with:
         node-version: '12.x'
     - run: npm install
+    - run: sudo apt-get install xvfb
     - run: npm run lint
     - run: npm run test:unit
-    - run: npm run test:functional
+    - run: xvfb-run --auto-servernum npm run test:functional
       env:
         CI: true
