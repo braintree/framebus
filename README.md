@@ -1,4 +1,4 @@
-# Framebus [![Build Status](https://travis-ci.org/braintree/framebus.svg)](https://travis-ci.org/braintree/framebus) [![npm version](https://badge.fury.io/js/framebus.svg)](http://badge.fury.io/js/framebus)
+# Framebus [![Build Status](https://github.com/braintree/framebus/workflows/Functional%20Tests/badge.svg)](https://github.com/braintree/framebus/actions?query=workflow%3A%22Functional+Tests%22) [![npm version](https://badge.fury.io/js/framebus.svg)](http://badge.fury.io/js/framebus)
 
 Framebus allows you to easily send messages across frames (and iframes) with a simple bus.
 
