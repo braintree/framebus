@@ -67,6 +67,18 @@ describe("Framebus", () => {
     });
   });
 
+  describe("setPromise", () => {
+    it("sets a custom Promise object", () => {
+      const FakePromise = {} as typeof Framebus["Promise"];
+
+      Framebus.setPromise(FakePromise);
+
+      expect(Framebus.Promise).toBe(FakePromise);
+
+      Framebus.setPromise(Promise);
+    });
+  });
+
   describe("include", () => {
     it("returns false if no widow is passed", () => {
       // @ts-ignore
@@ -203,6 +215,64 @@ describe("Framebus", () => {
         window.top,
         expect.stringContaining('"event-name"'),
         "*"
+      );
+    });
+  });
+
+  describe("emitAsPromise", () => {
+    it("rejects when emit does not attach", async () => {
+      expect.assertions(1);
+
+      jest.spyOn(bus, "emit").mockReturnValue(false);
+
+      try {
+        await bus.emitAsPromise("event-name");
+      } catch (err) {
+        expect(err.message).toBe('Listener not added for "event-name"');
+      }
+    });
+
+    it("resolves when emit's callback is called", async () => {
+      const payload = { data: "yay" };
+
+      jest.spyOn(bus, "emit").mockImplementation((eventName, data, cb) => {
+        if (cb) {
+          cb(payload);
+        }
+
+        return true;
+      });
+
+      const result = await bus.emitAsPromise("event-name");
+
+      expect(bus.emit).toBeCalledTimes(1);
+      expect(bus.emit).toBeCalledWith(
+        "event-name",
+        // eslint-disable-next-line no-undefined
+        undefined,
+        expect.any(Function)
+      );
+      expect(result).toBe(payload);
+    });
+
+    it("can pass data to emit", async () => {
+      const payload = { data: "yay" };
+
+      jest.spyOn(bus, "emit").mockImplementation((eventName, data, cb) => {
+        if (cb) {
+          cb(payload);
+        }
+
+        return true;
+      });
+
+      await bus.emitAsPromise("event-name", { foo: "bar" });
+
+      expect(bus.emit).toBeCalledTimes(1);
+      expect(bus.emit).toBeCalledWith(
+        "event-name",
+        { foo: "bar" },
+        expect.any(Function)
       );
     });
   });
