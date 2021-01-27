@@ -86,7 +86,7 @@ framebus
 **returns**: A promise that resolves when the emitted event is responded to the first time. It will reject if the event could not be succesfully published.
 
 | Argument | Type   | Description                     |
-|----------|--------|---------------------------------|
+| -------- | ------ | ------------------------------- |
 | `event`  | String | The name of the event           |
 | `data`   | Object | The data to give to subscribers |
 
