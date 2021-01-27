@@ -40,6 +40,12 @@ export class Framebus {
     this.listeners = [];
   }
 
+  static Promise = Promise;
+
+  static setPromise(PromiseGlobal: typeof Framebus["Promise"]): void {
+    Framebus.Promise = PromiseGlobal;
+  }
+
   static target(options?: FramebusOptions): Framebus {
     return new Framebus(options);
   }
@@ -97,6 +103,21 @@ export class Framebus {
     broadcast(window.top || window.self, payload, origin);
 
     return true;
+  }
+
+  emitAsPromise<T = void>(
+    eventName: string,
+    data?: FramebusSubscriberArg
+  ): Promise<T> {
+    return new Framebus.Promise((resolve, reject) => {
+      const didAttachListener = this.emit(eventName, data, (payload) => {
+        resolve(payload as T);
+      });
+
+      if (!didAttachListener) {
+        reject(new Error(`Listener not added for "${eventName}"`));
+      }
+    });
   }
 
   on(eventName: string, originalHandler: FramebusOnHandler): boolean {

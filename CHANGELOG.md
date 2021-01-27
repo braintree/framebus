@@ -1,6 +1,8 @@
 # unreleased
 
 - Fix issue where emitting to new window could cause an infinite loop (closes #41, thanks @blutorange)
+- Add `emitAsPromise` as convenience method when waiting for replies from `emit` calls
+- Add `setPromise` static method for easy polyfilling environments that do not support promises
 
 # 5.0.0
 

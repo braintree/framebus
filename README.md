@@ -71,7 +71,7 @@ framebus
 | --------- | --------------- | ---------------------------------- |
 | `options` | FramebusOptions | See above section for more details |
 
-#### `emit('event', data? , callback?): boolean`
+#### `emit('event', data?, callback?): boolean`
 
 **returns**: `true` if the event was successfully published, `false` otherwise
 
@@ -80,6 +80,24 @@ framebus
 | `event`          | String   | The name of the event                                |
 | `data`           | Object   | The data to give to subscribers                      |
 | `callback(data)` | Function | Give subscribers a function for easy, direct replies |
+
+#### `emitAsPromise('event', data?): Promise`
+
+**returns**: A promise that resolves when the emitted event is responded to the first time. It will reject if the event could not be succesfully published.
+
+| Argument | Type   | Description                     |
+|----------|--------|---------------------------------|
+| `event`  | String | The name of the event           |
+| `data`   | Object | The data to give to subscribers |
+
+Using this method assumes the browser context you are using supports Promises. If it does not, set a polyfill for the Framebus class with `setPromise`
+
+```js
+// or however you want to polyfill the promise
+const PolyfilledPromise = require("promise-polyfill");
+
+Framebus.setPromise(PolyfilledPromise);
+```
 
 #### `on('event', fn): boolean`
 
