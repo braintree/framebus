@@ -8,14 +8,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: '14.x'
-    - run: npm install
-    - run: sudo apt-get install xvfb
-    # there's a weird typescript incompatibility with jest types and mocha types
-    # for whatever reason, just removing the mocha types module fixes the issue
-    - run: rm -rf node_modules/@types/mocha
-    - run: xvfb-run --auto-servernum npm run test:functional
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+      - run: npm install
+      - run: sudo apt-get install xvfb
+      # there's a weird typescript incompatibility with jest types and mocha types
+      # for whatever reason, just removing the mocha types module fixes the issue
+      - run: rm -rf node_modules/@types/mocha
+      - run: xvfb-run --auto-servernum npm run test:functional
