@@ -1,4 +1,4 @@
-# unreleased
+# 5.1.0
 
 - Fix issue where emitting to new window could cause an infinite loop (closes #41, thanks @blutorange)
 - Add `emitAsPromise` as convenience method when waiting for replies from `emit` calls
