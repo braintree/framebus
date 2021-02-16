@@ -40,7 +40,7 @@ export class Framebus {
     this.listeners = [];
   }
 
-  static Promise = Promise;
+  static Promise = window.Promise;
 
   static setPromise(PromiseGlobal: typeof Framebus["Promise"]): void {
     Framebus.Promise = PromiseGlobal;
