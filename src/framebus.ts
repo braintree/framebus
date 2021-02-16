@@ -23,6 +23,9 @@ type FramebusOptions = {
   verifyDomain?: VerifyDomainMethod;
 };
 
+const DefaultPromise = (typeof window != null &&
+  window.Promise) as typeof Promise;
+
 export class Framebus {
   origin: string;
   channel: string;
@@ -40,7 +43,7 @@ export class Framebus {
     this.listeners = [];
   }
 
-  static Promise = window.Promise;
+  static Promise = DefaultPromise;
 
   static setPromise(PromiseGlobal: typeof Framebus["Promise"]): void {
     Framebus.Promise = PromiseGlobal;
