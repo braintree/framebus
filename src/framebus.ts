@@ -23,7 +23,7 @@ type FramebusOptions = {
   verifyDomain?: VerifyDomainMethod;
 };
 
-const DefaultPromise = (typeof window != null &&
+const DefaultPromise = (typeof window !== "undefined" &&
   window.Promise) as typeof Promise;
 
 export class Framebus {

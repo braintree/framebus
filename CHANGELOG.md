@@ -1,3 +1,7 @@
+# 5.1.2
+
+- Fix issue where framebus could not be used with server side rendering
+
 # 5.1.1
 
 - Fix issue where Internet Explorer would error because Promise is not defined
