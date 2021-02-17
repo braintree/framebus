@@ -1,4 +1,4 @@
-# unreleased
+# 5.1.1
 
 - Fix issue where Internet Explorer would error because Promise is not defined
 
