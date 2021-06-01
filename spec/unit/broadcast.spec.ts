@@ -44,6 +44,8 @@ describe("broadcast", () => {
 
       frame.opener = mkFrame();
       frame.top = frame;
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       frame.opener.top = frame.opener;
 
       broadcast(frame, "payload", "*");
@@ -53,18 +55,23 @@ describe("broadcast", () => {
 
     it("should not postMessage to window.opener if it has closed", () => {
       const frame = mkFrame();
+      const spy = jest.fn();
 
       frame.opener = {
-        postMessage: jest.fn(),
+        postMessage: spy,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         frames: [],
         closed: true,
       };
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       frame.opener.top = frame.opener;
       frame.top = frame;
 
       broadcast(frame, "payload", "*");
 
-      expect(frame.opener.top.postMessage).not.toBeCalled();
+      expect(spy).not.toBeCalled();
     });
 
     it("should not infinitely recurse if opener is itself", function (done) {
@@ -104,6 +111,8 @@ describe("broadcast", () => {
       openerFrame.frames[0] = mkFrame();
 
       frame.opener = openerFrame;
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       frame.opener.top = frame.opener;
       frame.top = frame;
 
