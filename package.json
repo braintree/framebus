@@ -43,7 +43,7 @@
     "del": "^6.0.0",
     "ejs": "^3.1.6",
     "eslint": "^8.1.0",
-    "eslint-config-braintree": "6.0.0-typescript-prep-rc.1",
+    "eslint-config-braintree": "6.0.0-typescript-prep-rc.2",
     "eslint-plugin-prettier": "^4.0.0",
     "express": "^4.10.4",
     "gulp": "^4.0.2",
