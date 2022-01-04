@@ -45,7 +45,7 @@ If a `verifyDomain` is passed, then the `on` listener will only fire if the doma
 var bus = new Framebus({
   verifyDomain: function (url) {
     // only return true if the domain of the url matches exactly
-    url.indexOf("https://my-domain") === 0;
+    url.indexOf("https://my-domain/") === 0;
   },
 });
 ```
