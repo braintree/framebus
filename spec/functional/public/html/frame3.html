@@ -13,7 +13,7 @@
 
     <script src="/js/test-app.js"></script>
     <script>
-      var bus = new Framebus();
+      var bus = new Braintree.Framebus();
 
       document.querySelector("#send").addEventListener("click", function () {
         bus.emit("message", {

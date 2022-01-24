@@ -10,7 +10,7 @@
     <button id="send">Send</button>
     <script src="/js/test-app.js"></script>
     <script>
-      var bus = new Framebus();
+      var bus = new Braintree.Framebus();
 
       bus.on("message", function (data) {
         app.printToDOM(data.message);

@@ -13,7 +13,7 @@
       var button = document.getElementById("marco-button");
 
       button.onclick = function () {
-        Framebus.target({
+        Braintree.Framebus.target({
           origin: remoteOrigin,
         }).emit(
           "Marco",
