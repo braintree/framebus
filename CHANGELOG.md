@@ -1,4 +1,4 @@
-# 6.0.0
+# unreleased
 
 - Changed export strategy from commonJs to ESM style.
 
