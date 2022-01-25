@@ -7,36 +7,30 @@ import { broadcast } from "../lib/broadcast";
 export function emit(
   config: FramebusConfig,
   eventName: string,
-  data?: FramebusSubscriberArg | FramebusReplyHandler,
-  reply?: FramebusReplyHandler
-): boolean {
+  data?: FramebusSubscriberArg
+): Promise<unknown> {
   const { isDestroyed, origin } = config;
 
   if (isDestroyed) {
-    return false;
+    return Promise.reject(new Error("TODO"));
   }
 
   eventName = config.namespaceEvent(eventName);
 
   if (isntString(eventName)) {
-    return false;
+    return Promise.reject(new Error("TODO"));
   }
 
   if (isntString(origin)) {
-    return false;
+    return Promise.reject(new Error("TODO"));
   }
 
-  if (typeof data === "function") {
-    reply = data;
-    data = undefined; // eslint-disable-line no-undefined
-  }
+  return new Promise((resolve, reject) => {
+    const payload = packagePayload(eventName, origin, data, resolve);
+    if (!payload) {
+      reject(new Error("TODO"));
+    }
 
-  const payload = packagePayload(eventName, origin, data, reply);
-  if (!payload) {
-    return false;
-  }
-
-  broadcast(window.top || window.self, payload, origin);
-
-  return true;
+    broadcast(window.top || window.self, payload, origin);
+  });
 }
