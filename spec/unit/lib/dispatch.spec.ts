@@ -1,14 +1,19 @@
-import { Framebus } from "../../src/";
-import { dispatch } from "../../src/lib/dispatch";
+import { FramebusConfig } from "../../../src";
+import { dispatch } from "../../../src/lib/dispatch";
+import { on } from "../../../src/methods";
 
 describe("dispatch", () => {
   it("should execute subscribers for the given event and origin", () => {
     const subscriber = jest.fn();
     const origin = "https://example.com";
 
-    Framebus.target({
-      origin,
-    }).on("test event", subscriber);
+    on(
+      new FramebusConfig({
+        origin,
+      }),
+      "test event",
+      subscriber
+    );
 
     dispatch(origin, "test event", { data: "data" });
 
@@ -20,9 +25,13 @@ describe("dispatch", () => {
     const subscriber = jest.fn();
     const origin = "https://example.com";
 
-    Framebus.target({
-      origin,
-    }).on("test event", subscriber);
+    on(
+      new FramebusConfig({
+        origin,
+      }),
+      "test event",
+      subscriber
+    );
 
     dispatch(origin, "different event", { data: "data" });
 
@@ -33,9 +42,13 @@ describe("dispatch", () => {
     const subscriber = jest.fn();
     const origin = "https://example.com";
 
-    Framebus.target({
-      origin,
-    }).on("test event", subscriber);
+    on(
+      new FramebusConfig({
+        origin,
+      }),
+      "test event",
+      subscriber
+    );
 
     dispatch("https://domain.com", "test event", { data: "data" });
 
@@ -47,9 +60,13 @@ describe("dispatch", () => {
     const reply = jest.fn();
     const origin = "https://example.com";
 
-    Framebus.target({
-      origin,
-    }).on("test event", subscriber);
+    on(
+      new FramebusConfig({
+        origin,
+      }),
+      "test event",
+      subscriber
+    );
 
     dispatch(origin, "test event", { data: "data" }, reply);
 
@@ -62,9 +79,13 @@ describe("dispatch", () => {
     const reply = jest.fn();
     const origin = "https://example.com";
 
-    Framebus.target({
-      origin,
-    }).on("test event", subscriber);
+    on(
+      new FramebusConfig({
+        origin,
+      }),
+      "test event",
+      subscriber
+    );
 
     // eslint-disable-next-line no-undefined
     dispatch(origin, "test event", undefined, reply);

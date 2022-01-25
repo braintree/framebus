@@ -113,111 +113,6 @@ describe("Framebus", () => {
     });
   });
 
-  describe("emit", () => {
-    it("returns true when subscriber is added", () => {
-      expect(bus.emit("event-name")).toBe(true);
-      expect(bus.emit("event-name", { foo: "bar" })).toBe(true);
-      expect(bus.emit("event-name", { foo: "bar" }, jest.fn())).toBe(true);
-      expect(bus.emit("event-name", jest.fn())).toBe(true);
-    });
-
-    it("returns false when subscriber is not added", () => {
-      // @ts-ignore
-      expect(bus.emit({ notAString: 12 })).toBe(false);
-    });
-
-    it("broadcasts", () => {
-      const data = { foo: "bar" };
-      bus.emit("event-name", data, () => {
-        // noop
-      });
-
-      expect(broadcast).toBeCalledTimes(1);
-      expect(broadcast).toBeCalledWith(
-        window.top,
-        expect.stringContaining('"foo":"bar"'),
-        "*"
-      );
-    });
-
-    it("does not broadcast if torn down", () => {
-      bus.teardown();
-
-      expect(bus.emit("event-name")).toBe(false);
-      expect(broadcast).toBeCalledTimes(0);
-    });
-
-    it("broadcasts to specified origin", () => {
-      bus = new Framebus({
-        origin: "foo",
-      });
-
-      const data = { foo: "bar" };
-      bus.emit("event-name", data, () => {
-        // noop
-      });
-
-      expect(broadcast).toBeCalledTimes(1);
-      expect(broadcast).toBeCalledWith(
-        window.top,
-        expect.stringContaining('"foo":"bar"'),
-        "foo"
-      );
-    });
-
-    it("broadcasts to specified channel", () => {
-      bus = new Framebus({
-        channel: "unique-channel",
-      });
-
-      const data = { foo: "bar" };
-      bus.emit("event-name", data, () => {
-        // noop
-      });
-
-      expect(broadcast).toBeCalledTimes(1);
-      expect(broadcast).toBeCalledWith(
-        window.top,
-        expect.stringContaining('"unique-channel:event-name"'),
-        "*"
-      );
-    });
-
-    it("does not require data", () => {
-      bus.emit("event-name", () => {
-        // noop
-      });
-
-      expect(broadcast).toBeCalledTimes(1);
-      expect(broadcast).toBeCalledWith(
-        window.top,
-        expect.stringContaining('"event-name"'),
-        "*"
-      );
-    });
-
-    it("does not require a callback", () => {
-      bus.emit("event-name", { foo: "bar" });
-
-      expect(broadcast).toBeCalledTimes(1);
-      expect(broadcast).toBeCalledWith(
-        window.top,
-        expect.stringContaining('"foo":"bar"'),
-        "*"
-      );
-    });
-
-    it("does not require data or a callback", () => {
-      bus.emit("event-name");
-
-      expect(broadcast).toBeCalledTimes(1);
-      expect(broadcast).toBeCalledWith(
-        window.top,
-        expect.stringContaining('"event-name"'),
-        "*"
-      );
-    });
-  });
 
   describe("emitAsPromise", () => {
     it("rejects when emit does not attach", async () => {
@@ -576,84 +471,84 @@ describe("Framebus", () => {
     });
   });
 
-  describe("off", () => {
-    it("returns true when subscriber is removed", () => {
-      const handler = jest.fn();
-      bus.on("event-name", handler);
+  // describe("off", () => {
+  //   it("returns true when subscriber is removed", () => {
+  //     const handler = jest.fn();
+  //     bus.on("event-name", handler);
 
-      expect(bus.off("event-name", handler)).toBe(true);
-    });
+  //     expect(bus.off("event-name", handler)).toBe(true);
+  //   });
 
-    it("returns false when subscriber is not removed", () => {
-      bus.on("event-name", jest.fn());
+  //   it("returns false when subscriber is not removed", () => {
+  //     bus.on("event-name", jest.fn());
 
-      // @ts-ignore
-      expect(bus.off("event-without-handler")).toBe(false);
-      expect(bus.off("event-without-first-calling-on", jest.fn())).toBe(false);
+  //     // @ts-ignore
+  //     expect(bus.off("event-without-handler")).toBe(false);
+  //     expect(bus.off("event-without-first-calling-on", jest.fn())).toBe(false);
 
-      bus.on("new-event", jest.fn());
+  //     bus.on("new-event", jest.fn());
 
-      // with a new handler
-      expect(bus.off("new-event", jest.fn())).toBe(false);
-    });
+  //     // with a new handler
+  //     expect(bus.off("new-event", jest.fn())).toBe(false);
+  //   });
 
-    it("removes subscriber", () => {
-      const handler = jest.fn();
-      bus.on("event-name", handler);
+  //   it("removes subscriber", () => {
+  //     const handler = jest.fn();
+  //     bus.on("event-name", handler);
 
-      expect(subscribers["*"]["event-name"].length).toBe(1);
+  //     expect(subscribers["*"]["event-name"].length).toBe(1);
 
-      bus.off("event-name", handler);
-      expect(subscribers["*"]["event-name"].length).toBe(0);
-    });
+  //     bus.off("event-name", handler);
+  //     expect(subscribers["*"]["event-name"].length).toBe(0);
+  //   });
 
-    it("does nothing when bus is torn down", () => {
-      const handler = jest.fn();
-      bus.on("event-name", handler);
+  //   it("does nothing when bus is torn down", () => {
+  //     const handler = jest.fn();
+  //     bus.on("event-name", handler);
 
-      expect(subscribers["*"]["event-name"].length).toBe(1);
+  //     expect(subscribers["*"]["event-name"].length).toBe(1);
 
-      bus.teardown();
+  //     bus.teardown();
 
-      expect(bus.off("event-name", handler)).toBe(false);
+  //     expect(bus.off("event-name", handler)).toBe(false);
 
-      expect(subscribers["*"]["event-name"].length).toBe(1);
-    });
+  //     expect(subscribers["*"]["event-name"].length).toBe(1);
+  //   });
 
-    it("can scope by origin", () => {
-      const busWithOrigin = new Framebus({
-        origin: "foo",
-      });
+  //   it("can scope by origin", () => {
+  //     const busWithOrigin = new Framebus({
+  //       origin: "foo",
+  //     });
 
-      const handler = jest.fn();
-      bus.on("event-name", handler);
-      busWithOrigin.on("event-name", handler);
+  //     const handler = jest.fn();
+  //     bus.on("event-name", handler);
+  //     busWithOrigin.on("event-name", handler);
 
-      expect(subscribers["*"]["event-name"].length).toBe(1);
-      expect(subscribers["foo"]["event-name"].length).toBe(1);
+  //     expect(subscribers["*"]["event-name"].length).toBe(1);
+  //     expect(subscribers["foo"]["event-name"].length).toBe(1);
 
-      busWithOrigin.off("event-name", handler);
-      expect(subscribers["*"]["event-name"].length).toBe(1);
-      expect(subscribers["foo"]["event-name"].length).toBe(0);
-    });
+  //     busWithOrigin.off("event-name", handler);
+  //     expect(subscribers["*"]["event-name"].length).toBe(1);
+  //     expect(subscribers["foo"]["event-name"].length).toBe(0);
+  //   });
 
-    it("can scope by channel", () => {
-      const busWithChannel = new Framebus({
-        channel: "unique-id",
-      });
+  //   it("can scope by channel", () => {
+  //     const busWithChannel = new Framebus({
+  //       channel: "unique-id",
+  //     });
 
-      const handler = jest.fn();
-      bus.on("event-name", handler);
-      busWithChannel.on("event-name", handler);
+  //     const handler = jest.fn();
+  //     bus.on("event-name", handler);
+  //     busWithChannel.on("event-name", handler);
 
-      expect(subscribers["*"]["event-name"].length).toBe(1);
-      expect(subscribers["*"]["unique-id:event-name"].length).toBe(1);
+  //     expect(subscribers["*"]["event-name"].length).toBe(1);
+  //     expect(subscribers["*"]["unique-id:event-name"].length).toBe(1);
 
-      busWithChannel.off("event-name", handler);
-      expect(subscribers["*"]["event-name"].length).toBe(1);
-      expect(subscribers["*"]["unique-id:event-name"].length).toBe(0);
-    });
-  });
+  //     busWithChannel.off("event-name", handler);
+  //     expect(subscribers["*"]["event-name"].length).toBe(1);
+  //     expect(subscribers["*"]["unique-id:event-name"].length).toBe(0);
+  //   });
+  // });
 
   describe("teardown", () => {
     it("calls off on all listeners", () => {

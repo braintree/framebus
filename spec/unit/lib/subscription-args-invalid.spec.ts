@@ -1,4 +1,4 @@
-import { subscriptionArgsInvalid } from "../../src/lib/subscription-args-invalid";
+import { subscriptionArgsInvalid } from "../../../src/lib/subscription-args-invalid";
 
 describe("subscriptionArgsInvalid", () => {
   it("should return false for valid types", () => {

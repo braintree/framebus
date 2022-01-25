@@ -1,23 +1,20 @@
-import { subscribers } from "../../src/lib/constants";
-import { Framebus } from "../../src/";
+import { subscribers } from "../../../src/lib/constants";
+import { FramebusConfig } from "../../../src/";
+import { on } from "../../../src/methods";
 
 describe("on", () => {
-  let bus: Framebus;
-
-  beforeEach(() => {
-    bus = new Framebus();
-  });
-
   it("should add subscriber to given event and origin", () => {
     const event = "event name";
     const origin = "https://example.com";
     const fn = jest.fn();
 
-    bus
-      .target({
+    on(
+      new FramebusConfig({
         origin,
-      })
-      .on(event, fn);
+      }),
+      event,
+      fn
+    );
 
     expect(subscribers[origin][event]).toEqual(expect.arrayContaining([fn]));
   });
@@ -26,7 +23,7 @@ describe("on", () => {
     const event = "event name";
     const fn = jest.fn();
 
-    bus.on(event, fn);
+    on(new FramebusConfig(), event, fn);
 
     expect(subscribers["*"][event]).toEqual(expect.arrayContaining([fn]));
   });

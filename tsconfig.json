@@ -7,7 +7,8 @@
     "target": "es5",
     "lib": ["es2015", "dom"],
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": ["@types/jest"]
   },
   "include": ["./src/**/*"],
   "exclude": ["./src/__tests__/**/*"]
