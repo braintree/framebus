@@ -1,4 +1,4 @@
-import Framebus = require("../../src/");
+import { Framebus } from "../../src/";
 
 describe("emit", () => {
   let bus: Framebus;

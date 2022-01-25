@@ -1,4 +1,4 @@
-import Framebus = require("../../src/");
+import { Framebus } from "../../src/";
 import { dispatch } from "../../src/lib/dispatch";
 
 describe("dispatch", () => {

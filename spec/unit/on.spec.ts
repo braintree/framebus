@@ -1,5 +1,5 @@
 import { subscribers } from "../../src/lib/constants";
-import Framebus = require("../../src/");
+import { Framebus } from "../../src/";
 
 describe("on", () => {
   let bus: Framebus;
