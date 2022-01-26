@@ -13,9 +13,6 @@ export type FramebusOptions = {
   verifyDomain?: VerifyDomainMethod;
 };
 
-const DefaultPromise = (typeof window !== "undefined" &&
-  window.Promise) as typeof Promise;
-
 export class FramebusConfig {
   origin: string;
   channel: string;
@@ -33,12 +30,6 @@ export class FramebusConfig {
 
     this.isDestroyed = false;
     this.listeners = [];
-  }
-
-  static Promise = DefaultPromise;
-
-  static target(options?: FramebusOptions): FramebusConfig {
-    return new FramebusConfig(options);
   }
 
   checkOrigin(postMessageOrigin: string) {
