@@ -101,6 +101,7 @@ describe("off", () => {
     it("returns false when subscriber is not removed", () => {
       on(config, "event-name", jest.fn());
 
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       expect(off(config, "event-without-handler")).toBe(false);
       expect(off(config, "event-without-first-calling-on", jest.fn())).toBe(

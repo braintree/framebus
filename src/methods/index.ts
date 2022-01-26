@@ -16,22 +16,9 @@ export { off } from "./off";
 export { emit } from "./emit";
 export { initialize } from "./initialize";
 export { teardown } from "./teardown";
+export { include } from "./include";
 
-export function include(childWindow: Window): boolean {
-  if (childWindow == null) {
-    return false;
-  }
-  if (childWindow.Window == null) {
-    return false;
-  }
-  if (childWindow.constructor !== childWindow.Window) {
-    return false;
-  }
 
-  childWindows.push(childWindow);
-
-  return true;
-}
 
 // export function target(options?: FramebusOptions): FramebusConfig {
 //   return FramebusConfig.target(options);

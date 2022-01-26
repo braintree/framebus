@@ -24,7 +24,9 @@ export function on(
 
   if (shouldVerifyDomain) {
     handler = function (...args) {
-      if (config.checkOrigin(origin ?? null)) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      if (config.checkOrigin(this && this.origin)) {
         originalHandler(...args);
       }
     };
