@@ -1,5 +1,5 @@
+import { FramebusConfig } from "../../../src/framebus";
 import { attach } from "../../../src/lib/attach";
-import { FramebusConfig } from "../../../src/";
 import { initialize } from "../../../src/methods";
 
 jest.mock("../../../src/lib/attach");

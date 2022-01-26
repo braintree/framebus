@@ -1,7 +1,7 @@
-import { FramebusConfig } from "../../../src/";
 import { emit, teardown } from "../../../src/methods";
 import { broadcast } from "../../../src/lib/broadcast";
 import { packagePayload } from "../../../src/lib/package-payload";
+import { FramebusConfig } from "../../../src/framebus";
 
 jest.mock("../../../src/lib/broadcast");
 jest.mock("../../../src/lib/package-payload");

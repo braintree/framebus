@@ -1,5 +1,5 @@
+import { FramebusConfig } from "../../../src/framebus";
 import { subscribers } from "../../../src/lib/constants";
-import { FramebusConfig } from "../../../src/";
 import { off, on, teardown } from "../../../src/methods";
 
 describe("off", () => {

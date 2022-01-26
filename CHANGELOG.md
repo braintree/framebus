@@ -14,14 +14,14 @@ _Breaking Changes_
   bus.emit(/* args */);
 
   // v6
-  import { Framebus } from "framebus";
-  const bus = new Framebus();
-  bus.on(/* args */);
-  bus.emit(/* args */);
+  import { initialize, on, emit } from "framebus";
+  const fbConfig = initialize();
+  on(fbConfig, /* args */);
+  emit(fbConfig, /* args */);
 
   // or
 
-  const { Framebus } = require("framebus");
+  const {  } = require("framebus");
   const bus = new Framebus();
   bus.on(/* args */);
   bus.emit(/* args */);

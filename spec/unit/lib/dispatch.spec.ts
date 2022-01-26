@@ -1,4 +1,4 @@
-import { FramebusConfig } from "../../../src";
+import { FramebusConfig } from "../../../src/framebus";
 import { dispatch } from "../../../src/lib/dispatch";
 import { on } from "../../../src/methods";
 
