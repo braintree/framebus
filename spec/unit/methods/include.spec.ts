@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { FramebusConfig } from "../../../src/framebus";
+import { FramebusConfig } from "../../../src/framebus-config";
 import { include } from "../../../src/methods";
 
 describe("include", () => {

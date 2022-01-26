@@ -1,16 +1,12 @@
-// import { isntString } from "./lib/is-not-string";
-// import { subscriptionArgsInvalid } from "./lib/subscription-args-invalid";
-// import { broadcast } from "./lib/broadcast";
-// import { packagePayload } from "./lib/package-payload";
-// import { childWindows, subscribers } from "./lib/constants";
-
 import type { FramebusOnHandler } from "./lib/types";
+
 type Listener = {
   eventName: string;
   handler: FramebusOnHandler;
   originalHandler: FramebusOnHandler;
 };
 type VerifyDomainMethod = (domain: string) => boolean;
+
 export type FramebusOptions = {
   channel?: string;
   origin?: string;

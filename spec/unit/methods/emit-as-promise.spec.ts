@@ -1,7 +1,6 @@
 import { emit } from "../../../src/methods/emit";
 import { emitAsPromise } from "../../../src/methods";
-import { FramebusConfig } from "../../../src/framebus";
-import { createVoidZero } from "typescript";
+import { FramebusConfig } from "../../../src/framebus-config";
 
 jest.mock("../../../src/methods/emit");
 

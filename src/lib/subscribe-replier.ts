@@ -1,4 +1,4 @@
-import { FramebusConfig } from "../framebus";
+import { FramebusConfig } from "../framebus-config";
 import { on, off } from "../methods";
 import generateUUID from "@braintree/uuid";
 

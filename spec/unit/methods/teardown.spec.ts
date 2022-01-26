@@ -1,4 +1,4 @@
-import { FramebusConfig } from "../../../src/framebus";
+import { FramebusConfig } from "../../../src/framebus-config";
 import { off, on, teardown } from "../../../src/methods";
 
 jest.mock("../../../src/methods/off");

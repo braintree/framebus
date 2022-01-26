@@ -1,4 +1,4 @@
-import { FramebusConfig, FramebusOptions } from "../framebus";
+import { FramebusConfig, FramebusOptions } from "../framebus-config";
 import { attach } from "../lib/attach";
 
 export function initialize(options: FramebusOptions = {}): FramebusConfig {

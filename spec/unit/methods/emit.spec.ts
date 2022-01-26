@@ -1,4 +1,4 @@
-import { FramebusConfig } from "../../../src/framebus";
+import { FramebusConfig } from "../../../src/framebus-config";
 import { emit, teardown } from "../../../src/methods";
 import { broadcast } from "../../../src/lib/broadcast";
 

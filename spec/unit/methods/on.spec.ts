@@ -1,4 +1,4 @@
-import { FramebusConfig } from "../../../src/framebus";
+import { FramebusConfig } from "../../../src/framebus-config";
 import { subscribers } from "../../../src/lib/constants";
 import { on, teardown } from "../../../src/methods";
 

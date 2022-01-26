@@ -1,5 +1,5 @@
 import type { FramebusOnHandler, FramebusSubscribeHandler } from "../lib/types";
-import type { FramebusConfig } from "../framebus";
+import type { FramebusConfig } from "../framebus-config";
 import { subscriptionArgsInvalid } from "../lib/subscription-args-invalid";
 import { subscribers } from "../lib/constants";
 

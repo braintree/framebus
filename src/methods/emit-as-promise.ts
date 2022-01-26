@@ -1,5 +1,5 @@
 import { emit } from "./emit";
-import type { FramebusConfig } from "../framebus";
+import type { FramebusConfig } from "../framebus-config";
 import type { FramebusSubscriberArg } from "../lib/types";
 
 export function emitAsPromise<T = unknown>(
