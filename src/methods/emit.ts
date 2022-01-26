@@ -4,7 +4,7 @@ import { isntString } from "../lib/is-not-string";
 import { packagePayload } from "../lib/package-payload";
 import { broadcast } from "../lib/broadcast";
 
-export function emit(
+export function emit<T = unknown>(
   config: FramebusConfig,
   eventName: string,
   data?: FramebusSubscriberArg | FramebusReplyHandler,
@@ -31,7 +31,11 @@ export function emit(
     data = undefined; // eslint-disable-line no-undefined
   }
 
-  const payload = packagePayload(eventName, origin, data, reply);
+  const payload = packagePayload(eventName, origin, data, (replyData) => {
+    if (reply) {
+      reply(replyData as T);
+    }
+  });
   if (!payload) {
     return false;
   }
