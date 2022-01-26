@@ -59,7 +59,7 @@ const bus = initialize({
 **returns**: `true` if the event was successfully published, `false` otherwise
 
 | Argument         | Type           | Description                                          |
-|------------------|----------------|------------------------------------------------------|
+| ---------------- | -------------- | ---------------------------------------------------- |
 | `config`         | FramebusConfig | The Framebus configuration to use                    |
 | `event`          | String         | The name of the event                                |
 | `data`           | Object         | The data to give to subscribers                      |
@@ -70,7 +70,7 @@ const bus = initialize({
 **returns**: A promise that resolves when the emitted event is responded to the first time. It will reject if the event could not be succesfully published.
 
 | Argument | Type           | Description                       |
-|----------|----------------|-----------------------------------|
+| -------- | -------------- | --------------------------------- |
 | `config` | FramebusConfig | The Framebus configuration to use |
 | `event`  | String         | The name of the event             |
 | `data`   | Object         | The data to give to subscribers   |
@@ -83,19 +83,19 @@ Unless already bound to a scope, the listener will be executed with `this` set
 to the `MessageEvent` received over postMessage.
 
 | Argument               | Type           | Description                                             |
-|------------------------|----------------|---------------------------------------------------------|
+| ---------------------- | -------------- | ------------------------------------------------------- | --- | ----- | ----------------------------------------------------------- |
 | `config`               | FramebusConfig | The Framebus configuration to use                       |
 | `event`                | String         | The name of the event                                   |
 | `fn(data?, callback?)` | Function       | Event handler. Arguments are from the `emit` invocation |
-| ↳ `this`               |                |                                                         |          | scope    | The `MessageEvent` object from the underlying `postMessage` |
+| ↳ `this`               |                |                                                         |     | scope | The `MessageEvent` object from the underlying `postMessage` |
 
 #### `off('event', fn): boolean`
 
 **returns**: `true` if the subscriber was successfully removed, `false` otherwise
 
 | Argument | Type           | Description                       |
-|----------|----------------|-----------------------------------|
-| `config` | FramebusConfig | The Framebus configuration to use |"
+| -------- | -------------- | --------------------------------- | --- |
+| `config` | FramebusConfig | The Framebus configuration to use | "   |
 | `event`  | String         | The name of the event             |
 | `fn`     | Function       | The function that was subscribed  |
 
@@ -111,7 +111,7 @@ emit(bus, "hello popup and friends!");
 ```
 
 | Argument | Type           | Description                                  |
-|----------|----------------|----------------------------------------------|
+| -------- | -------------- | -------------------------------------------- |
 | `config` | FramebusConfig | The Framebus configuration to use            |
 | `popup`  | Window         | The popup refrence returned by `window.open` |
 

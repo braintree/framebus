@@ -1,158 +1,166 @@
+import { FramebusConfig } from "../../../src/framebus";
 import { emit, teardown } from "../../../src/methods";
 import { broadcast } from "../../../src/lib/broadcast";
-import { packagePayload } from "../../../src/lib/package-payload";
-import { FramebusConfig } from "../../../src/framebus";
 
 jest.mock("../../../src/lib/broadcast");
-jest.mock("../../../src/lib/package-payload");
 
 describe("emit", () => {
   let config: FramebusConfig;
 
   beforeEach(() => {
     config = new FramebusConfig();
-    jest
-      .mocked(packagePayload)
-      .mockImplementation((eventName, origin, data, cb) => {
-        if (cb) {
-          cb({ returned: "data" });
-        }
-
-        return "fake-packaged-payload";
-      });
   });
 
-  it("should reject if event is not a string", async () => {
-    expect.assertions(1);
-
+  it("should return false if event is not a string", () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await expect(emit(config, {} as any, { data: "data" })).rejects.toEqual(
-      new Error("TODO")
+    const actual = emit(config, {} as any, { data: "data" });
+
+    expect(actual).toBe(false);
+  });
+
+  it("should return false if origin is not a string", () => {
+    const actual = emit(
+      new FramebusConfig({
+        origin: {
+          foo: "object",
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } as any,
+      }),
+      "event",
+      { data: "data" }
     );
+
+    expect(actual).toBe(false);
   });
 
-  it("should rejects if origin is not a string", async () => {
-    expect.assertions(1);
-
-    await expect(
-      emit(
-        new FramebusConfig({
-          origin: {
-            foo: "object",
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          } as any,
-        }),
-        "event",
-        { data: "data" }
-      )
-    ).rejects.toEqual(new Error("TODO"));
-  });
-
-  it("should resolves if origin and event are strings", async () => {
-    expect.assertions(1);
-
-    await expect(
-      emit(
-        new FramebusConfig({
-          origin: "https://example.com",
-        }),
-        "event",
-        { data: "data" }
-      )
-    ).resolves.toEqual({ returned: "data" });
-  });
-
-  it("should resolve without passing data", async () => {
-    expect.assertions(1);
-
-    await expect(emit(config, "event")).resolves.toEqual({
-      returned: "data",
-    });
-  });
-
-  it("should resolves when subscriber is added", async () => {
-    expect.assertions(3);
-
-    await expect(emit(config, "event-name")).resolves.toEqual({
-      returned: "data",
-    });
-
-    await expect(emit(config, "event-name", { foo: "bar" })).resolves.toEqual({
-      returned: "data",
-    });
-
-    await expect(emit(config, "event-name", jest.fn() as any)).resolves.toEqual(
-      {
-        returned: "data",
-      }
+  it("should return true if origin and event are strings", () => {
+    const actual = emit(
+      new FramebusConfig({
+        origin: "https://example.com",
+      }),
+      "event",
+      { data: "data" }
     );
+
+    expect(actual).toBe(true);
   });
 
-  it("should get rejected when subscriber is not added", async () => {
-    expect.assertions(1);
+  it("can pass a reply function without passing data", () => {
+    const actual = emit(config, "event", jest.fn());
 
-    await expect(emit(config, { notAString: 12 } as any)).rejects.toEqual(
-      new Error("TODO")
-    );
+    expect(actual).toBe(true);
   });
 
-  it("broadcasts", async () => {
+  it("returns true when subscriber is added", () => {
+    expect(emit(config, "event-name")).toBe(true);
+    expect(emit(config, "event-name", { foo: "bar" })).toBe(true);
+    expect(emit(config, "event-name", { foo: "bar" }, jest.fn())).toBe(true);
+    expect(emit(config, "event-name", jest.fn())).toBe(true);
+  });
+
+  it("returns false when subscriber is not added", () => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    expect(emit(config, { notAString: 12 })).toBe(false);
+  });
+
+  it("broadcasts", () => {
     const data = { foo: "bar" };
-    await emit(config, "event-name", data);
+    emit(config, "event-name", data, () => {
+      // noop
+    });
 
     expect(broadcast).toBeCalledTimes(1);
-    expect(broadcast).toBeCalledWith(window.top, "fake-packaged-payload", "*");
+    expect(broadcast).toBeCalledWith(
+      window.top,
+      expect.stringContaining('"foo":"bar"'),
+      "*"
+    );
   });
 
-  it("does not broadcast if torn down", async () => {
-    expect.assertions(2);
-
+  it("does not broadcast if torn down", () => {
     teardown(config);
 
-    await expect(emit(config, "event-name")).rejects.toEqual(new Error("TODO"));
+    expect(emit(config, "event-name")).toBe(false);
     expect(broadcast).toBeCalledTimes(0);
   });
 
-  it("broadcasts to specified origin", async () => {
-    expect.assertions(2);
-
+  it("broadcasts to specified origin", () => {
     const data = { foo: "bar" };
 
-    await emit(
+    emit(
       new FramebusConfig({
         origin: "foo",
       }),
       "event-name",
-      data
+      data,
+      () => {
+        // noop
+      }
     );
 
     expect(broadcast).toBeCalledTimes(1);
     expect(broadcast).toBeCalledWith(
       window.top,
-      "fake-packaged-payload",
+      expect.stringContaining('"foo":"bar"'),
       "foo"
     );
   });
 
-  it("broadcasts to specified channel", async () => {
+  it("broadcasts to specified channel", () => {
     const data = { foo: "bar" };
 
-    await emit(
+    emit(
       new FramebusConfig({
         channel: "unique-channel",
       }),
       "event-name",
-      data
+      data,
+      () => {
+        // noop
+      }
     );
 
     expect(broadcast).toBeCalledTimes(1);
-    expect(broadcast).toBeCalledWith(window.top, "fake-packaged-payload", "*");
+    expect(broadcast).toBeCalledWith(
+      window.top,
+      expect.stringContaining('"unique-channel:event-name"'),
+      "*"
+    );
   });
 
-  it("does not require data", async () => {
-    await emit(config, "event-name");
+  it("does not require data", () => {
+    emit(config, "event-name", () => {
+      // noop
+    });
 
     expect(broadcast).toBeCalledTimes(1);
-    expect(broadcast).toBeCalledWith(window.top, "fake-packaged-payload", "*");
+    expect(broadcast).toBeCalledWith(
+      window.top,
+      expect.stringContaining('"event-name"'),
+      "*"
+    );
+  });
+
+  it("does not require a callback", () => {
+    emit(config, "event-name", { foo: "bar" });
+
+    expect(broadcast).toBeCalledTimes(1);
+    expect(broadcast).toBeCalledWith(
+      window.top,
+      expect.stringContaining('"foo":"bar"'),
+      "*"
+    );
+  });
+
+  it("does not require data or a callback", () => {
+    emit(config, "event-name");
+
+    expect(broadcast).toBeCalledTimes(1);
+    expect(broadcast).toBeCalledWith(
+      window.top,
+      expect.stringContaining('"event-name"'),
+      "*"
+    );
   });
 });

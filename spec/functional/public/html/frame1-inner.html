@@ -15,13 +15,16 @@
         origin: remoteOrigin,
       });
       button.onclick = function () {
-        framebus
-          .emit(fbConfig, "Marco", {
+        framebus.emit(
+          fbConfig,
+          "Marco",
+          {
             message: "are you there?",
-          })
-          .then((reply) => {
+          },
+          function (reply) {
             app.printToDOM(reply.message);
-          });
+          }
+        );
       };
     </script>
   </body>

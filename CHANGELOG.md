@@ -3,6 +3,7 @@
 - Changed export strategy from commonJS to ESM style.
 
 _Breaking Changes_
+
 - Drop support for browsers that do not support `Promises` natively
 - Framebus now uses a modular ESM style instead of an instance method style so you only include the code you actually use on your site
 
@@ -18,15 +19,15 @@ _Breaking Changes_
   import { initialize, on, emit } from "framebus";
 
   const bus = initialize();
-  on(bus, /* args */);
-  emit(bus, /* args */);
+  on(bus /* args */);
+  emit(bus /* args */);
 
   // v6, using commonJS style
-  const { initialize, on, emit  } = require("framebus");
+  const { initialize, on, emit } = require("framebus");
 
   const bus = initialize();
-  on(bus, /* args */);
-  emit(bus, /* args */);
+  on(bus /* args */);
+  emit(bus /* args */);
   ```
 
 - Drop support for `target` method. Create a new framebus configuration using `initialize` instead.
