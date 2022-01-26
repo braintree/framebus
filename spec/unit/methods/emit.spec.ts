@@ -70,60 +70,69 @@ describe("emit", () => {
     });
   });
 
-  //   it("returns true when subscriber is added", () => {
-  //     expect(emit(config, "event-name")).toBe(true);
-  //     expect(emit(config, "event-name", { foo: "bar" })).toBe(true);
-  //     expect(emit(config, "event-name", { foo: "bar" }, jest.fn())).toBe(true);
-  //     expect(emit(config, "event-name", jest.fn())).toBe(true);
-  //   });
+  it("should resolves when subscriber is added", async () => {
+    expect.assertions(3);
 
-  //   it("returns false when subscriber is not added", () => {
-  //     // @ts-ignore
-  //     expect(emit(config, { notAString: 12 })).toBe(false);
-  //   });
+    await expect(emit(config, "event-name")).resolves.toEqual({
+      returned: "data",
+    });
 
-  //   it("broadcasts", () => {
-  //     const data = { foo: "bar" };
-  //     emit(config, "event-name", data, () => {
-  //       // noop
-  //     });
+    await expect(emit(config, "event-name", { foo: "bar" })).resolves.toEqual({
+      returned: "data",
+    });
 
-  //     expect(broadcast).toBeCalledTimes(1);
-  //     expect(broadcast).toBeCalledWith(
-  //       window.top,
-  //       "fake-packaged-payload",
-  //       "*"
-  //     );
-  //   });
+    await expect(emit(config, "event-name", jest.fn() as any)).resolves.toEqual(
+      {
+        returned: "data",
+      }
+    );
+  });
 
-  //   it("does not broadcast if torn down", () => {
-  //     teardown(config);
+  it("should get rejected when subscriber is not added", async () => {
+    expect.assertions(1);
 
-  //     expect(emit(config, "event-name")).toBe(false);
-  //     expect(broadcast).toBeCalledTimes(0);
-  //   });
+    await expect(emit(config, { notAString: 12 } as any)).rejects.toEqual(
+      new Error("TODO")
+    );
+  });
 
-  //   it("broadcasts to specified origin", () => {
-  //     const data = { foo: "bar" };
+  it("broadcasts", async () => {
+    const data = { foo: "bar" };
+    await emit(config, "event-name", data);
 
-  //     emit(
-  //       new FramebusConfig({
-  //         origin: "foo",
-  //       }),
-  //       "event-name",
-  //       data,
-  //       () => {
-  //         // noop
-  //       }
-  //     );
+    expect(broadcast).toBeCalledTimes(1);
+    expect(broadcast).toBeCalledWith(window.top, "fake-packaged-payload", "*");
+  });
 
-  //     expect(broadcast).toBeCalledTimes(1);
-  //     expect(broadcast).toBeCalledWith(
-  //       window.top,
-  //       "fake-packaged-payload",
-  //       "foo"
-  //     );
-  //   });
+  it("does not broadcast if torn down", async () => {
+    expect.assertions(2);
+
+    teardown(config);
+
+    await expect(emit(config, "event-name")).rejects.toEqual(new Error("TODO"));
+    expect(broadcast).toBeCalledTimes(0);
+  });
+
+  it("broadcasts to specified origin", async () => {
+    expect.assertions(2);
+
+    const data = { foo: "bar" };
+
+    await emit(
+      new FramebusConfig({
+        origin: "foo",
+      }),
+      "event-name",
+      data
+    );
+
+    expect(broadcast).toBeCalledTimes(1);
+    expect(broadcast).toBeCalledWith(
+      window.top,
+      "fake-packaged-payload",
+      "foo"
+    );
+  });
 
   it("broadcasts to specified channel", async () => {
     const data = { foo: "bar" };

@@ -1,4 +1,4 @@
-import type { FramebusSubscriberArg, FramebusReplyHandler } from "../lib/types";
+import type { FramebusSubscriberArg } from "../lib/types";
 import type { FramebusConfig } from "../framebus";
 import { isntString } from "../lib/is-not-string";
 import { packagePayload } from "../lib/package-payload";
