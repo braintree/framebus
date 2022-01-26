@@ -1,5 +1,5 @@
 import { off } from ".";
-import { FramebusConfig } from "..";
+import type { FramebusConfig } from "../framebus";
 
 export function teardown(config: FramebusConfig): void {
   const { listeners } = config;

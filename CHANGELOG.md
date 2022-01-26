@@ -7,25 +7,24 @@ _Breaking Changes_
 - Instantiate new instances of framebus
 
   ```js
-    // v5
-    var Framebus = require('framebus');
-    var bus = new Framebus();
-    bus.on(/* args */);
-    bus.emit(/* args */);
+  // v5
+  var Framebus = require("framebus");
+  var bus = new Framebus();
+  bus.on(/* args */);
+  bus.emit(/* args */);
 
-    // v6
-    import { Framebus } from 'framebus';
-    const bus = new Framebus();
-    bus.on(/* args */);
-    bus.emit(/* args */);
+  // v6
+  import { Framebus } from "framebus";
+  const bus = new Framebus();
+  bus.on(/* args */);
+  bus.emit(/* args */);
 
-      // or
+  // or
 
-    const { Framebus } = require('framebus');
-    const bus = new Framebus();
-    bus.on(/* args */);
-    bus.emit(/* args */);
-
+  const { Framebus } = require("framebus");
+  const bus = new Framebus();
+  bus.on(/* args */);
+  bus.emit(/* args */);
   ```
 
 # 5.1.2

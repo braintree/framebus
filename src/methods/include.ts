@@ -1,4 +1,4 @@
-import type { FramebusConfig } from "..";
+import type { FramebusConfig } from "../framebus";
 import { childWindows } from "../lib/constants";
 
 export function include(config: FramebusConfig, childWindow: Window): boolean {

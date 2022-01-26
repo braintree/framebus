@@ -9,21 +9,19 @@
     frame1-inner.html
     <script src="/js/test-app.js"></script>
     <script>
-      var remoteOrigin = "http://<%= domain %>:<%= port2 %>";
-      var button = document.getElementById("marco-button");
-
+      const remoteOrigin = "http://<%= domain %>:<%= port2 %>";
+      const button = document.getElementById("marco-button");
+      const fbConfig = framebus.initialize({
+        origin: remoteOrigin,
+      });
       button.onclick = function () {
-        Braintree.Framebus.target({
-          origin: remoteOrigin,
-        }).emit(
-          "Marco",
-          {
+        framebus
+          .emit(fbConfig, "Marco", {
             message: "are you there?",
-          },
-          function (reply) {
+          })
+          .then((reply) => {
             app.printToDOM(reply.message);
-          }
-        );
+          });
       };
     </script>
   </body>

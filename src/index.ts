@@ -1,5 +1,1 @@
-import { attach } from "./lib/attach";
-
-attach();
-
-export * from "./framebus";
+export * from "./methods";

@@ -23,7 +23,7 @@ function cleanTest() {
 function build() {
   const b = browserify({
     entries: "./src/index.ts",
-    standalone: "Braintree",
+    standalone: "framebus",
     debug: true,
   });
 

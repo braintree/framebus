@@ -150,7 +150,6 @@ describe("on", () => {
     });
     const handler = jest.fn();
     on(verifyDomainConfig, "event-name", handler);
-  
     const newHandler = subscribers["*"]["event-name"][0];
 
     expect(newHandler).toBeInstanceOf(Function);
