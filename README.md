@@ -5,9 +5,9 @@ Framebus allows you to easily send messages across frames (and iframes).
 In one frame:
 
 ```js
-import { initialize, emit } from "framebus";
+import { initialize as initializeFramebus, emit } from "framebus";
 
-const bus = initialize();
+const bus = initializeFramebus();
 
 emit(bus, "message", {
   from: "Ron",
@@ -18,11 +18,11 @@ emit(bus, "message", {
 In another frame:
 
 ```js
-import { initialize, on } from "framebus";
+import { initialize as initializeFramebus, on } from "framebus";
 
-const bus = initialize();
+const bus = initializeFramebus();
 
-on(bus, "message", function (data) {
+on(bus, "message", (data) => {
   console.log(data.from + " said: " + data.contents);
 });
 ```
@@ -44,36 +44,38 @@ The `channel` namespaces the events called with `on` and `emit` so you can have 
 If a `verifyDomain` is passed, then the `on` listener will only fire if the domain of the origin of the post message matches the `location.href` value of page or the function passed for `verifyDomain` returns `true`.
 
 ```js
-const bus = initialize({
-  verifyDomain: function (url) {
+const bus = initializeFramebus({
+  verifyDomain(url) {
     // only return true if the domain of the url matches exactly
-    url.startsWith("https://my-domain/");
+    return url.startsWith("https://my-domain/");
   },
 });
 ```
 
 ## API
 
-#### `emit<T = unknown>(config, 'event', data?, callback?): Promise<T>`
+#### `emit<T = unknown>(config, 'event', data?, callback?): boolean`
 
 **returns**: `true` if the event was successfully published, `false` otherwise
 
 | Argument         | Type           | Description                                          |
-| ---------------- | -------------- | ---------------------------------------------------- |
+|------------------|----------------|------------------------------------------------------|
 | `config`         | FramebusConfig | The Framebus configuration to use                    |
 | `event`          | String         | The name of the event                                |
 | `data`           | Object         | The data to give to subscribers                      |
 | `callback(data)` | Function       | Give subscribers a function for easy, direct replies |
 
-#### `emitAsPromise('event', data?): Promise`
+#### `emitAsPromise<T = unknown>('event', data?): Promise<T>`
 
 **returns**: A promise that resolves when the emitted event is responded to the first time. It will reject if the event could not be succesfully published.
 
 | Argument | Type           | Description                       |
-| -------- | -------------- | --------------------------------- |
+|----------|----------------|-----------------------------------|
 | `config` | FramebusConfig | The Framebus configuration to use |
 | `event`  | String         | The name of the event             |
 | `data`   | Object         | The data to give to subscribers   |
+
+**Note:**: If the `replyCallback` is used with `on` (see below), `emitAsPromise` will only resolve for the first `replyCallback`. Any subsequent calls to `replyCallback` will be ignored.
 
 #### `on(config, 'event', fn): boolean`
 
@@ -82,20 +84,20 @@ const bus = initialize({
 Unless already bound to a scope, the listener will be executed with `this` set
 to the `MessageEvent` received over postMessage.
 
-| Argument               | Type           | Description                                             |
-| ---------------------- | -------------- | ------------------------------------------------------- | --- | ----- | ----------------------------------------------------------- |
-| `config`               | FramebusConfig | The Framebus configuration to use                       |
-| `event`                | String         | The name of the event                                   |
-| `fn(data?, callback?)` | Function       | Event handler. Arguments are from the `emit` invocation |
-| ↳ `this`               |                |                                                         |     | scope | The `MessageEvent` object from the underlying `postMessage` |
+| Argument               | Type           | Description                                                 |
+|------------------------|----------------|-------------------------------------------------------------|
+| `config`               | FramebusConfig | The Framebus configuration to use                           |
+| `event`                | String         | The name of the event                                       |
+| `fn(data?, callback?)` | Function       | Event handler. Arguments are from the `emit` invocation     |
+| ↳ `this`               | scope          | The `MessageEvent` object from the underlying `postMessage` |
 
-#### `off('event', fn): boolean`
+#### `off(config, 'event', fn): boolean`
 
 **returns**: `true` if the subscriber was successfully removed, `false` otherwise
 
 | Argument | Type           | Description                       |
-| -------- | -------------- | --------------------------------- | --- |
-| `config` | FramebusConfig | The Framebus configuration to use | "   |
+|----------|----------------|-----------------------------------|
+| `config` | FramebusConfig | The Framebus configuration to use |
 | `event`  | String         | The name of the event             |
 | `fn`     | Function       | The function that was subscribed  |
 
@@ -104,14 +106,14 @@ to the `MessageEvent` received over postMessage.
 **returns**: `true` if the popup was successfully included, `false` otherwise
 
 ```javascript
-var popup = window.open("https://example.com");
+const popup = window.open("https://example.com");
 
 include(bus, popup);
 emit(bus, "hello popup and friends!");
 ```
 
 | Argument | Type           | Description                                  |
-| -------- | -------------- | -------------------------------------------- |
+|----------|----------------|----------------------------------------------|
 | `config` | FramebusConfig | The Framebus configuration to use            |
 | `popup`  | Window         | The popup refrence returned by `window.open` |
 
@@ -122,7 +124,7 @@ Calls `off` on all listeners used for this bus instance and makes subsequent cal
 ```javascript
 on(bus, "event-name", handler);
 
-// event-name listener is torn down
+// the listener for the "event-name" event is removed
 teardown(bus);
 
 // these now do nothing
@@ -186,7 +188,7 @@ as follows:
    callback function to send data back to the emitter's origin
 
    ```javascript
-   const bus = initialize({
+   const bus = initializeFramebus({
      origin: "http://emitter.example.com")
    });
 
