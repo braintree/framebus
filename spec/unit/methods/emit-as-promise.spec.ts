@@ -11,6 +11,7 @@ describe("emitAsPromise", () => {
     config = new FramebusConfig();
     jest.mocked(emit).mockReturnValue(true);
   });
+
   it("rejects when emit does not attach", async () => {
     expect.assertions(1);
 
