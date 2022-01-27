@@ -1,4 +1,5 @@
-import { Framebus } from "../framebus";
+import { FramebusConfig } from "../framebus-config";
+import { on, off } from "../methods";
 import generateUUID from "@braintree/uuid";
 
 import type { FramebusSubscriberArg, FramebusSubscribeHandler } from "./types";
@@ -9,19 +10,19 @@ export function subscribeReplier(
 ): string {
   const uuid = generateUUID();
 
+  const config = new FramebusConfig({
+    origin,
+  });
+
   function replier(
     data: FramebusSubscriberArg,
     replyOriginHandler: FramebusSubscribeHandler
   ): void {
     fn(data, replyOriginHandler);
-    Framebus.target({
-      origin,
-    }).off(uuid, replier);
+    off(config, uuid, replier);
   }
 
-  Framebus.target({
-    origin,
-  }).on(uuid, replier);
+  on(config, uuid, replier);
 
   return uuid;
 }

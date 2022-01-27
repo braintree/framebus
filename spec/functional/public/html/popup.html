@@ -10,16 +10,16 @@
     <button id="send">Send</button>
     <script src="/js/test-app.js"></script>
     <script>
-      var bus = new Braintree.Framebus();
+      const fbConfig = framebus.initialize();
 
-      bus.on("message", function (data) {
+      framebus.on(fbConfig, "message", function (data) {
         app.printToDOM(data.message);
       });
 
       document.querySelector("#send").addEventListener(
         "click",
         function () {
-          bus.emit("from-popup", {
+          framebus.emit(fbConfig, "from-popup", {
             message: document.querySelector("#from-popup-message").value,
           });
         },
@@ -27,7 +27,7 @@
       );
 
       var count = 0;
-      bus.on("from-popup", function () {
+      framebus.on(fbConfig, "from-popup", function () {
         count++;
 
         if (count > 1) {
@@ -36,7 +36,7 @@
       });
 
       var countFromTop = 0;
-      bus.on("from-top", function (data) {
+      framebus.on(fbConfig, "from-top", function (data) {
         countFromTop++;
 
         if (countFromTop > 1) {

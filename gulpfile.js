@@ -23,7 +23,7 @@ function cleanTest() {
 function build() {
   const b = browserify({
     entries: "./src/index.ts",
-    standalone: "Braintree",
+    standalone: "framebus",
     debug: true,
   });
 
@@ -51,11 +51,11 @@ function functionalPrep() {
 }
 
 function watch() {
-  gulp.watch(["lib/**/*.js", "index.js"], gulp.task(build));
+  gulp.watch(["internal/**/*.js", "index.js"], gulp.task(build));
 }
 
 function watchIntegration() {
-  gulp.watch(["lib/**/*.js", "index.js"], gulp.task(build));
+  gulp.watch(["internal/**/*.js", "index.js"], gulp.task(build));
 }
 
 function clean() {

@@ -1,5 +1,5 @@
-import { subscribers } from "../../src/lib/constants";
-import { subscribeReplier } from "../../src/lib/subscribe-replier";
+import { subscribers } from "../../../src/internal/constants";
+import { subscribeReplier } from "../../../src/internal/subscribe-replier";
 
 describe("subscribeReplier", () => {
   it("should return UUID of reply event", () => {

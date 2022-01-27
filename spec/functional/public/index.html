@@ -26,16 +26,16 @@
     </script>
     <script src="/js/test-app.js"></script>
     <script>
-      var bus = new Braintree.Framebus();
+      const fbConfig = framebus.initialize();
 
-      bus.on("Marco", function () {
+      framebus.on(fbConfig, "Marco", function () {
         app.printToDOM('FAIL: [index] received "Marco"');
       });
 
       document.querySelector("#send-from-top").addEventListener(
         "click",
         function () {
-          bus.emit("from-top", {
+          framebus.emit(fbConfig, "from-top", {
             message: document.querySelector("#from-top-message").value,
           });
         },
@@ -49,7 +49,7 @@
           document.querySelector("#send-from-top").style.display = "block";
 
           var popup = window.open("/html/popup.html", "popup");
-          bus.include(popup);
+          framebus.include(fbConfig, popup);
         },
         false
       );

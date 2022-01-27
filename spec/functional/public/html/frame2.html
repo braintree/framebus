@@ -13,11 +13,11 @@
     >
     <script src="/js/test-app.js"></script>
     <script>
-      var bus = new Braintree.Framebus();
-      bus.on("Marco", function () {
+      const fbConfig = framebus.initialize();
+      framebus.on(fbConfig, "Marco", function () {
         app.printToDOM('FAIL: [frame 2] received "Marco"');
       });
-      bus.on("from-popup", function (data) {
+      framebus.on(fbConfig, "from-popup", function (data) {
         app.printToDOM('received "' + data.message + '" from popup');
       });
     </script>

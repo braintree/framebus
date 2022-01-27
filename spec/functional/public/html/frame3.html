@@ -13,15 +13,15 @@
 
     <script src="/js/test-app.js"></script>
     <script>
-      var bus = new Braintree.Framebus();
+      const fbConfig = framebus.initialize();
 
       document.querySelector("#send").addEventListener("click", function () {
-        bus.emit("message", {
+        framebus.emit(fbConfig, "message", {
           message: document.querySelector("#popup-message").value,
         });
       });
 
-      bus.on("Marco", function (data, reply) {
+      framebus.on(fbConfig, "Marco", function (data, reply) {
         var polo = document.getElementById("polo-text").value;
         app.printToDOM(data.message);
         reply({
