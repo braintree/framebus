@@ -1,5 +1,5 @@
 import { FramebusConfig, FramebusOptions } from "../framebus-config";
-import { attach } from "../lib/attach";
+import { attach } from "../internal/attach";
 
 export function initialize(options: FramebusOptions = {}): FramebusConfig {
   const framebusConfig = new FramebusConfig(options);

@@ -1,8 +1,11 @@
-import type { FramebusSubscriberArg, FramebusReplyHandler } from "../lib/types";
+import type {
+  FramebusSubscriberArg,
+  FramebusReplyHandler,
+} from "../internal/types";
 import type { FramebusConfig } from "../framebus-config";
-import { isntString } from "../lib/is-not-string";
-import { packagePayload } from "../lib/package-payload";
-import { broadcast } from "../lib/broadcast";
+import { isntString } from "../internal/is-not-string";
+import { packagePayload } from "../internal/package-payload";
+import { broadcast } from "../internal/broadcast";
 
 export function emit<T = unknown>(
   config: FramebusConfig,

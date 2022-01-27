@@ -1,7 +1,7 @@
-import type { FramebusOnHandler } from "../lib/types";
+import type { FramebusOnHandler } from "../internal/types";
 import type { FramebusConfig } from "../framebus-config";
-import { subscriptionArgsInvalid } from "../lib/subscription-args-invalid";
-import { subscribers } from "../lib/constants";
+import { subscriptionArgsInvalid } from "../internal/subscription-args-invalid";
+import { subscribers } from "../internal/constants";
 
 export function off(
   config: FramebusConfig,

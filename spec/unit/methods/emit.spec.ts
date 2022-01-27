@@ -1,8 +1,8 @@
 import { FramebusConfig } from "../../../src/framebus-config";
 import { emit, teardown } from "../../../src/methods";
-import { broadcast } from "../../../src/lib/broadcast";
+import { broadcast } from "../../../src/internal/broadcast";
 
-jest.mock("../../../src/lib/broadcast");
+jest.mock("../../../src/internal/broadcast");
 
 describe("emit", () => {
   let config: FramebusConfig;

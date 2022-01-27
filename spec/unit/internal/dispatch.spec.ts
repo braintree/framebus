@@ -1,5 +1,5 @@
 import { FramebusConfig } from "../../../src/framebus-config";
-import { dispatch } from "../../../src/lib/dispatch";
+import { dispatch } from "../../../src/internal/dispatch";
 import { on } from "../../../src/methods";
 
 describe("dispatch", () => {

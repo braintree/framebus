@@ -1,4 +1,4 @@
-import type { FramebusOnHandler } from "./lib/types";
+import type { FramebusOnHandler } from "./internal/types";
 
 type Listener = {
   eventName: string;

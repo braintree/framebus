@@ -1,5 +1,5 @@
 import type { FramebusConfig } from "../framebus-config";
-import { childWindows } from "../lib/constants";
+import { childWindows } from "../internal/constants";
 
 export function include(config: FramebusConfig, childWindow: Window): boolean {
   if (childWindow == null) {

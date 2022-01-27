@@ -1,4 +1,4 @@
-import { packagePayload } from "../../../src/lib/package-payload";
+import { packagePayload } from "../../../src/internal/package-payload";
 
 const messagePrefix = "/*framebus*/";
 
