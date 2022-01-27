@@ -31,18 +31,6 @@ describe("off", () => {
       expect(subscribers[origin][event].length).toBe(1);
     });
 
-    it("should correctly update the array", () => {
-      const event = "the event";
-      const fn = jest.fn();
-
-      subscribers[origin] = {};
-      subscribers[origin][event] = [jest.fn(), fn];
-
-      off(config, event, fn);
-
-      expect(subscribers[origin][event].length).toBe(1);
-    });
-
     it("should return true if removed", () => {
       const event = "the event";
       const fn = jest.fn();
