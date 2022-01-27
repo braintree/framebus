@@ -6,7 +6,7 @@ jest.mock("../../../src/lib/attach");
 jest.mock("../../../src/framebus-config");
 
 describe("initialize", () => {
-  it("returns a FramebusConfig instanct", () => {
+  it("returns a FramebusConfig instance", () => {
     const config = initialize({
       channel: "channel",
       origin: "origin",
