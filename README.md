@@ -95,7 +95,7 @@ to the `MessageEvent` received over postMessage.
 
 **returns**: `true` if the subscriber was successfully added, `false` otherwise
 
-This is essentially the same as `on`, expect it will only ever trigger once. It's equivalent to using `on` and then calling `off` as soon as the callback is called.
+This is essentially the same as `on`, except it will only ever trigger once. It's equivalent to using `on` and then calling `off` as soon as the callback is called.
 
 | Argument               | Type           | Description                                                 |
 | ---------------------- | -------------- | ----------------------------------------------------------- |
