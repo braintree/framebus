@@ -1,6 +1,7 @@
 # unreleased
 
 - Changed export strategy from commonJS to ESM style
+- Add `once` method to only trigger `on` functionality once
 
 _Breaking Changes_
 
