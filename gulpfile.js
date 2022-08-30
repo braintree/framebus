@@ -1,23 +1,23 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-const gulp = require("gulp");
-const source = require("vinyl-source-stream");
-const buffer = require("vinyl-buffer");
-const uglify = require("gulp-uglify");
-const streamify = require("gulp-streamify");
-const size = require("gulp-size");
-const concat = require("gulp-concat");
-const del = require("del");
-const removeCode = require("gulp-remove-code");
-const browserify = require("browserify");
+const gulp = require("gulp")
+const source = require("vinyl-source-stream")
+const buffer = require("vinyl-buffer")
+const uglify = require("gulp-uglify")
+const streamify = require("gulp-streamify")
+const size = require("gulp-size")
+const concat = require("gulp-concat")
+const del = require("del")
+const removeCode = require("gulp-remove-code")
+const browserify = require("browserify")
 
 function cleanBuild() {
-  return del(["dist-app/*"]);
+  return del(["dist-app/*"])
 }
 
 function cleanTest() {
-  return del(["spec/functional/public/js/test-app.js"]);
+  return del(["spec/functional/public/js/test-app.js"])
 }
 
 function build() {
@@ -25,7 +25,7 @@ function build() {
     entries: "./src/index.ts",
     standalone: "framebus",
     debug: true,
-  });
+  })
 
   return b
     .plugin("tsify", { strict: true })
@@ -35,7 +35,7 @@ function build() {
     .pipe(removeCode({ production: true }))
     .pipe(streamify(size({ showFiles: true })))
     .pipe(uglify())
-    .pipe(gulp.dest("./dist-app/"));
+    .pipe(gulp.dest("./dist-app/"))
 }
 
 function functionalPrep() {
@@ -46,25 +46,25 @@ function functionalPrep() {
         "spec/functional/public/js/app-support.js",
       ])
       .pipe(concat("test-app.js"))
-      .pipe(gulp.dest("spec/functional/public/js"));
-  });
+      .pipe(gulp.dest("spec/functional/public/js"))
+  })
 }
 
 function watch() {
-  gulp.watch(["internal/**/*.js", "index.js"], gulp.task(build));
+  gulp.watch(["internal/**/*.js", "index.js"], gulp.task(build))
 }
 
 function watchIntegration() {
-  gulp.watch(["internal/**/*.js", "index.js"], gulp.task(build));
+  gulp.watch(["internal/**/*.js", "index.js"], gulp.task(build))
 }
 
 function clean() {
-  return gulp.series(cleanBuild, cleanTest);
+  return gulp.series(cleanBuild, cleanTest)
 }
 
-exports.clean = clean();
-exports.functionalTestPrep = functionalPrep();
-exports.functionalTestPrep.displayName = "functional:prep";
-exports.watchIntegration = watchIntegration;
-exports.watchIntegration.displayName = "watch:integration";
-exports.watch = watch;
+exports.clean = clean()
+exports.functionalTestPrep = functionalPrep()
+exports.functionalTestPrep.displayName = "functional:prep"
+exports.watchIntegration = watchIntegration
+exports.watchIntegration.displayName = "watch:integration"
+exports.watch = watch
