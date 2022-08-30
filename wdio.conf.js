@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const appServer = require("./spec/functional/server");
+const appServer = require("./spec/functional/server")
 
 exports.config = {
   //
@@ -162,7 +162,7 @@ exports.config = {
    * @param {Array.<Object>} capabilities list of capabilities details
    */
   onPrepare: function () {
-    return appServer.start();
+    return appServer.start()
   },
   /**
    * Gets executed just before initialising the webdriver session and test framework. It allows you
@@ -259,7 +259,7 @@ exports.config = {
    * @param {<Object>} results object containing test results
    */
   onComplete: function () {
-    return appServer.stop();
+    return appServer.stop()
   },
   /**
    * Gets executed when a refresh happens.
@@ -268,4 +268,4 @@ exports.config = {
    */
   // onReload: function(oldSessionId, newSessionId) {
   // }
-};
+}
