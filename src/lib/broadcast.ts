@@ -26,7 +26,7 @@ export function broadcast(
     while ((frameToBroadcastTo = frame.frames[i])) {
       // If a specifc `origin` is provided, and `limitBroadCastToOrigin` is set to `true`, then we want to only broadcast messages
       // to domains that match the configured `origin`.
-      if (origin != "*" && limitBroadCastToOrigin) {
+      if (origin !== "*" && limitBroadCastToOrigin) {
         if (frameToBroadcastTo.origin === origin) {
           broadcast(
             frameToBroadcastTo,
