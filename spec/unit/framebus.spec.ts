@@ -236,7 +236,7 @@ describe("Framebus", () => {
 
       try {
         await bus.emitAsPromise("event-name");
-      } catch (err) {
+      } catch (err: any) {
         expect(err.message).toBe('Listener not added for "event-name"');
       }
     });

@@ -27,17 +27,13 @@ export function broadcast(
       // If a specifc `origin` is provided, and `limitBroadCastToOrigin` is set to `true`, then we want to only broadcast messages
       // to domains that match the configured `origin`.
       if (origin !== "*" && limitBroadCastToOrigin) {
-        if (frameToBroadcastTo.origin === origin) {
-          broadcast(
-            frameToBroadcastTo,
-            payload,
-            origin,
-            limitBroadCastToOrigin
-          );
+        if (frameToBroadcastTo.origin !== origin) {
+          i++;
+          continue;
         }
-      } else {
-        broadcast(frameToBroadcastTo, payload, origin, limitBroadCastToOrigin);
       }
+
+      broadcast(frameToBroadcastTo, payload, origin, limitBroadCastToOrigin);
       i++;
     }
   } catch (_) {

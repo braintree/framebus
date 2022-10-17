@@ -27,7 +27,7 @@ export function packagePayload(
 
   try {
     packaged = prefix + JSON.stringify(payload);
-  } catch (e) {
+  } catch (e: any) {
     throw new Error(`Could not stringify event: ${e.message}`);
   }
 
