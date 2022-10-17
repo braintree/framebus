@@ -6,7 +6,7 @@ function mkFrame(desiredOrigin?: string) {
     ...(window as Window),
     postMessage: jest.fn(),
     closed: false,
-    origin: desiredOrigin,
+    origin: desiredOrigin || "someorigin",
   };
 }
 
@@ -39,15 +39,25 @@ describe("broadcast", () => {
     expect(frame.frames[0].postMessage).toBeCalled();
   });
 
-  it("should only broadcast to target origin when <someconfig> set as true", () => {
+  it("should only broadcast to target origin when limitBroadCastToOrigin set as true", () => {
     const happyPathOrigin = "https://some-target-origin.com";
     const limitBroadCastToOrigin = true;
-    const frame = mkFrame("someorigin");
+    const frame = mkFrame("someorigin") as Window;
     const frameToSendTo = mkFrame(happyPathOrigin);
     const frameNoMessage = mkFrame("https://no-msg-for-you.com");
 
-    frame.frames = [frameToSendTo as Window, frameNoMessage as Window];
-    
+    /* window.frames is an "array-like" object. That basically means it is an object with keys that are integers.
+       This means all child frames are like this: { 0: Window, 1: Window } etc.
+
+       We have to have the parent frame set itself on `frames` so those are accessible.
+     */
+    frame[0] = frameToSendTo as Window;
+    frame[1] = frameNoMessage as Window;
+    Object.defineProperty(frame, "frames", {
+      value: frame as Window,
+      writable: true,
+    });
+
     broadcast(
       frame as Window,
       "some-payload",
@@ -57,6 +67,26 @@ describe("broadcast", () => {
 
     expect(frameToSendTo.postMessage).toHaveBeenCalledTimes(1);
     expect(frameNoMessage.postMessage).toHaveBeenCalledTimes(0);
+  });
+
+  it("should broadcast broadly when using origin wildcard even with limitBroadCastToOrigin", () => {
+    const happyPathOrigin = "https://some-target-origin.com";
+    const limitBroadCastToOrigin = true;
+    const frame = mkFrame("someorigin") as Window;
+    const frameToSendTo = mkFrame(happyPathOrigin);
+    const frameNoMessage = mkFrame("https://no-msg-for-you.com");
+
+    frame[0] = frameToSendTo as Window;
+    frame[1] = frameNoMessage as Window;
+    Object.defineProperty(frame, "frames", {
+      value: frame as Window,
+      writable: true,
+    });
+
+    broadcast(frame as Window, "some-payload", "*", limitBroadCastToOrigin);
+
+    expect(frameToSendTo.postMessage).toHaveBeenCalledTimes(1);
+    expect(frameNoMessage.postMessage).toHaveBeenCalledTimes(1);
   });
 
   describe("to opener", () => {

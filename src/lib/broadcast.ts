@@ -24,7 +24,9 @@ export function broadcast(
     // until there are no longer any frames
     // eslint-disable-next-line no-cond-assign
     while ((frameToBroadcastTo = frame.frames[i])) {
-      if (limitBroadCastToOrigin) {
+      // If a specifc `origin` is provided, and `limitBroadCastToOrigin` is set to `true`, then we want to only broadcast messages
+      // to domains that match the configured `origin`.
+      if (origin != "*" && limitBroadCastToOrigin) {
         if (frameToBroadcastTo.origin === origin) {
           broadcast(
             frameToBroadcastTo,
