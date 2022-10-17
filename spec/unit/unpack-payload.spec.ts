@@ -67,7 +67,7 @@ describe("_unpackPayload", () => {
     const data = { data: "some data" };
     const actual = unpackPayload(
       makeEvent({
-        source: fakeSource,
+        source: fakeSource as unknown as MessageEventSource,
         origin: "origin",
         data:
           messagePrefix +

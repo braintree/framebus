@@ -1,19 +1,19 @@
 import { broadcast } from "../../src/lib/broadcast";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-function mkFrame(desiredOrigin?: string) {
+function mkFrame(desiredOrigin?: string): Window {
   return {
     ...(window as Window),
     postMessage: jest.fn(),
     closed: false,
     origin: desiredOrigin || "someorigin",
-  };
+  } as unknown as Window;
 }
 
 describe("broadcast", () => {
   it("should not throw exception when postMessage is denied", () => {
     const frame = mkFrame();
-    frame.postMessage.mockImplementation(() => {
+    frame.postMessage = jest.fn().mockImplementation(() => {
       throw new Error("Invalid calling object");
     });
 
@@ -42,7 +42,7 @@ describe("broadcast", () => {
   it("should only broadcast to target origin when limitBroadCastToOrigin set as true", () => {
     const happyPathOrigin = "https://some-target-origin.com";
     const limitBroadCastToOrigin = true;
-    const frame = mkFrame("someorigin") as Window;
+    const frame = mkFrame("someorigin");
     const frameToSendTo = mkFrame(happyPathOrigin);
     const frameNoMessage = mkFrame("https://no-msg-for-you.com");
 
@@ -51,15 +51,15 @@ describe("broadcast", () => {
 
        We have to have the parent frame set itself on `frames` so those are accessible.
      */
-    frame[0] = frameToSendTo as Window;
-    frame[1] = frameNoMessage as Window;
+    frame[0] = frameToSendTo;
+    frame[1] = frameNoMessage;
     Object.defineProperty(frame, "frames", {
-      value: frame as Window,
+      value: frame,
       writable: true,
     });
 
     broadcast(
-      frame as Window,
+      frame,
       "some-payload",
       happyPathOrigin,
       limitBroadCastToOrigin
@@ -72,18 +72,18 @@ describe("broadcast", () => {
   it("should broadcast broadly when using origin wildcard even with limitBroadCastToOrigin", () => {
     const happyPathOrigin = "https://some-target-origin.com";
     const limitBroadCastToOrigin = true;
-    const frame = mkFrame("someorigin") as Window;
+    const frame = mkFrame("someorigin");
     const frameToSendTo = mkFrame(happyPathOrigin);
     const frameNoMessage = mkFrame("https://no-msg-for-you.com");
 
-    frame[0] = frameToSendTo as Window;
-    frame[1] = frameNoMessage as Window;
+    frame[0] = frameToSendTo;
+    frame[1] = frameNoMessage;
     Object.defineProperty(frame, "frames", {
-      value: frame as Window,
+      value: frame,
       writable: true,
     });
 
-    broadcast(frame as Window, "some-payload", "*", limitBroadCastToOrigin);
+    broadcast(frame, "some-payload", "*", limitBroadCastToOrigin);
 
     expect(frameToSendTo.postMessage).toHaveBeenCalledTimes(1);
     expect(frameNoMessage.postMessage).toHaveBeenCalledTimes(1);
@@ -93,8 +93,12 @@ describe("broadcast", () => {
     it("should postMessage to window.top.opener if it exists", () => {
       const frame = mkFrame();
 
+      Object.defineProperty(frame, "top", {
+        value: frame,
+        writable: true,
+      });
+
       frame.opener = mkFrame();
-      frame.top = frame;
       frame.opener.top = frame.opener;
 
       broadcast(frame, "payload", "*");
@@ -111,7 +115,10 @@ describe("broadcast", () => {
         closed: true,
       };
       frame.opener.top = frame.opener;
-      frame.top = frame;
+      Object.defineProperty(frame, "top", {
+        value: frame,
+        writable: true,
+      });
 
       broadcast(frame, "payload", "*");
 
@@ -123,7 +130,10 @@ describe("broadcast", () => {
 
       jest.setTimeout(10);
       frame.opener = frame;
-      frame.top = frame;
+      Object.defineProperty(frame, "top", {
+        value: frame,
+        writable: true,
+      });
 
       broadcast(frame, "payload", "*");
 
@@ -136,12 +146,20 @@ describe("broadcast", () => {
       const child = mkFrame();
 
       child.opener = frame;
-      child.parent = frame;
-      child.top = frame;
+      Object.defineProperty(child, "parent", {
+        value: frame,
+        writable: true,
+      });
+      Object.defineProperty(child, "top", {
+        value: frame,
+        writable: true,
+      });
+      Object.defineProperty(frame, "top", {
+        value: frame,
+        writable: true,
+      });
 
       frame.frames[0] = child;
-      frame.top = frame;
-
       broadcast(frame, "payload", "*");
 
       // don't infinitely recurse
@@ -156,7 +174,10 @@ describe("broadcast", () => {
 
       frame.opener = openerFrame;
       frame.opener.top = frame.opener;
-      frame.top = frame;
+      Object.defineProperty(frame, "top", {
+        value: frame,
+        writable: true,
+      });
 
       broadcast(frame, "payload", "*");
 
@@ -166,8 +187,11 @@ describe("broadcast", () => {
     it("should not throw if window.opener has access denied", () => {
       const frame = mkFrame();
 
-      frame.top = frame;
-
+      Object.defineProperty(frame, "top", {
+        value: frame,
+        writable: true,
+      });
+      
       Object.defineProperty(frame, "opener", {
         get() {
           throw new Error("Access denied");
