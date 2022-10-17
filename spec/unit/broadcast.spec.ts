@@ -58,12 +58,7 @@ describe("broadcast", () => {
       writable: true,
     });
 
-    broadcast(
-      frame,
-      "some-payload",
-      happyPathOrigin,
-      limitBroadCastToOrigin
-    );
+    broadcast(frame, "some-payload", happyPathOrigin, limitBroadCastToOrigin);
 
     expect(frameToSendTo.postMessage).toHaveBeenCalledTimes(1);
     expect(frameNoMessage.postMessage).toHaveBeenCalledTimes(0);
@@ -191,7 +186,7 @@ describe("broadcast", () => {
         value: frame,
         writable: true,
       });
-      
+
       Object.defineProperty(frame, "opener", {
         get() {
           throw new Error("Access denied");
