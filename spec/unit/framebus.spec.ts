@@ -127,6 +127,7 @@ describe("Framebus", () => {
     });
 
     it("broadcasts", () => {
+      const expectedLimitBroadCastToOrigin = false;
       const data = { foo: "bar" };
       bus.emit("event-name", data, () => {
         // noop
@@ -136,7 +137,8 @@ describe("Framebus", () => {
       expect(broadcast).toBeCalledWith(
         window.top,
         expect.stringContaining('"foo":"bar"'),
-        "*"
+        "*",
+        expectedLimitBroadCastToOrigin
       );
     });
 
@@ -148,8 +150,10 @@ describe("Framebus", () => {
     });
 
     it("broadcasts to specified origin", () => {
+      const expectedLimitBroadCastToOrigin = true;
       bus = new Framebus({
         origin: "foo",
+        limitBroadCastToOrigin: expectedLimitBroadCastToOrigin,
       });
 
       const data = { foo: "bar" };
@@ -161,7 +165,8 @@ describe("Framebus", () => {
       expect(broadcast).toBeCalledWith(
         window.top,
         expect.stringContaining('"foo":"bar"'),
-        "foo"
+        "foo",
+        expectedLimitBroadCastToOrigin
       );
     });
 
@@ -179,7 +184,8 @@ describe("Framebus", () => {
       expect(broadcast).toBeCalledWith(
         window.top,
         expect.stringContaining('"unique-channel:event-name"'),
-        "*"
+        "*",
+        false
       );
     });
 
@@ -192,7 +198,8 @@ describe("Framebus", () => {
       expect(broadcast).toBeCalledWith(
         window.top,
         expect.stringContaining('"event-name"'),
-        "*"
+        "*",
+        false
       );
     });
 
@@ -203,7 +210,8 @@ describe("Framebus", () => {
       expect(broadcast).toBeCalledWith(
         window.top,
         expect.stringContaining('"foo":"bar"'),
-        "*"
+        "*",
+        false
       );
     });
 
@@ -214,7 +222,8 @@ describe("Framebus", () => {
       expect(broadcast).toBeCalledWith(
         window.top,
         expect.stringContaining('"event-name"'),
-        "*"
+        "*",
+        false
       );
     });
   });

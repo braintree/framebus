@@ -1,11 +1,12 @@
 import { broadcast } from "../../src/lib/broadcast";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-function mkFrame() {
+function mkFrame(desiredOrigin?: string) {
   return {
     ...(window as Window),
     postMessage: jest.fn(),
     closed: false,
+    origin: desiredOrigin,
   };
 }
 
@@ -36,6 +37,26 @@ describe("broadcast", () => {
     broadcast(frame, "payload", "*");
 
     expect(frame.frames[0].postMessage).toBeCalled();
+  });
+
+  it("should only broadcast to target origin when <someconfig> set as true", () => {
+    const happyPathOrigin = "https://some-target-origin.com";
+    const limitBroadCastToOrigin = true;
+    const frame = mkFrame("someorigin");
+    const frameToSendTo = mkFrame(happyPathOrigin);
+    const frameNoMessage = mkFrame("https://no-msg-for-you.com");
+
+    frame.frames = [frameToSendTo as Window, frameNoMessage as Window];
+    
+    broadcast(
+      frame as Window,
+      "some-payload",
+      happyPathOrigin,
+      limitBroadCastToOrigin
+    );
+
+    expect(frameToSendTo.postMessage).toHaveBeenCalledTimes(1);
+    expect(frameNoMessage.postMessage).toHaveBeenCalledTimes(0);
   });
 
   describe("to opener", () => {
