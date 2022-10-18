@@ -3,8 +3,7 @@ import { hasOpener } from "./has-opener";
 export function broadcast(
   frame: Window,
   payload: string,
-  origin: string,
-  limitBroadCastToOrigin?: boolean
+  origin: string
 ): void {
   let i = 0;
   let frameToBroadcastTo;
@@ -12,7 +11,7 @@ export function broadcast(
   try {
     frame.postMessage(payload, origin);
     if (hasOpener(frame) && frame.opener.top !== window.top) {
-      broadcast(frame.opener.top, payload, origin, limitBroadCastToOrigin);
+      broadcast(frame.opener.top, payload, origin);
     }
 
     // previously, our max value was frame.frames.length
@@ -24,16 +23,14 @@ export function broadcast(
     // until there are no longer any frames
     // eslint-disable-next-line no-cond-assign
     while ((frameToBroadcastTo = frame.frames[i])) {
-      // If a specifc `origin` is provided, and `limitBroadCastToOrigin` is set to `true`, then we want to only broadcast messages
-      // to domains that match the configured `origin`.
-      if (origin !== "*" && limitBroadCastToOrigin) {
-        if (frameToBroadcastTo.origin !== origin) {
-          i++;
-          continue;
-        }
+      // If a specifc `origin` is provided then we want to only broadcast messages
+      // to domains that match the configured `origin`. Otherwise the browser will output noisy console errors.
+      if (origin !== "*" && frameToBroadcastTo.origin !== origin) {
+        i++;
+        continue;
       }
 
-      broadcast(frameToBroadcastTo, payload, origin, limitBroadCastToOrigin);
+      broadcast(frameToBroadcastTo, payload, origin);
       i++;
     }
   } catch (_) {

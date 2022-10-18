@@ -20,5 +20,5 @@ export function onmessage(e: MessageEvent): void {
 
   dispatch("*", payload.event, data, reply, e);
   dispatch(e.origin, payload.event, data, reply, e);
-  broadcastToChildWindows(e.data, payload.origin, e.source as Window, false);
+  broadcastToChildWindows(e.data, payload.origin, e.source as Window);
 }
