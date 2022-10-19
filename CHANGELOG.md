@@ -1,6 +1,6 @@
 # 5.2.0
 
-- Add support for `limitBroadCastToOrigin` as a framebus config option
+- Add support for `limitBroadcastToOrigin` as a framebus config option
 
 # 5.1.2
 

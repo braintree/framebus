@@ -32,7 +32,7 @@ type FramebusOptions = {
   origin?: string, // default: "*"
   channel?: string, // no default
   verifyDomain?: (url: string) => boolean, // no default
-  limitBroadCastToOrigin?: boolean, // default false
+  limitBroadcastToOrigin?: boolean, // default false
 };
 ```
 
@@ -42,7 +42,7 @@ The `channel` namespaces the events called with `on` and `emit` so you can have 
 
 If a `verifyDomain` is passed, then the `on` listener will only fire if the domain of the origin of the post message matches the `location.href` value of page or the function passed for `verifyDomain` returns `true`.
 
-When provided, `limitBroadCastToOrigin` allows you to restrict the message broadcasting to only frames that match the provided `origin`. This prevents messages from being sent to frames that will be rejected due to the `postMessage` target origin not matching. The outcome of a restricted message is the same as if you don't use this flag, but by using this you can avoid noisey browser errors in the console.
+When provided, `limitBroadcastToOrigin` allows you to restrict the message broadcasting to only frames that match the provided `origin`. This prevents messages from being sent to frames that will be rejected due to the `postMessage` target origin not matching. The outcome of a restricted message is the same as if you don't use this flag, but by using this you can avoid noisey browser errors in the console.
 
 ```js
 var bus = new Framebus({
