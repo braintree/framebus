@@ -17,5 +17,6 @@ jobs:
       - run: sudo apt-get install xvfb
       # there's a weird typescript incompatibility with jest types and mocha types
       # for whatever reason, just removing the mocha types module fixes the issue
-      - run: rm -rf node_modules/@types/mocha
+      # in addition, the jsdom type definitions don't play nicely with the functional tests
+      - run: rm -rf node_modules/@types/mocha node_modules/@types/jsdom
       - run: xvfb-run --auto-servernum npm run test:functional
