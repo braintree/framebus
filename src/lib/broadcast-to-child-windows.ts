@@ -13,7 +13,7 @@ export function broadcastToChildWindows(
       childWindows.splice(i, 1);
     } else if (source !== childWindow) {
       if (childWindow.top) {
-        broadcast(childWindow.top, payload, origin);
+        broadcast(childWindow.top, payload, origin, false);
       }
     }
   }

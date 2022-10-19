@@ -3,7 +3,8 @@ import { hasOpener } from "./has-opener";
 export function broadcast(
   frame: Window,
   payload: string,
-  origin: string
+  origin: string,
+  limitBroadCastToOrigin?: boolean
 ): void {
   let i = 0;
   let frameToBroadcastTo;
@@ -11,7 +12,7 @@ export function broadcast(
   try {
     frame.postMessage(payload, origin);
     if (hasOpener(frame) && frame.opener.top !== window.top) {
-      broadcast(frame.opener.top, payload, origin);
+      broadcast(frame.opener.top, payload, origin, limitBroadCastToOrigin);
     }
 
     // previously, our max value was frame.frames.length
@@ -25,12 +26,13 @@ export function broadcast(
     while ((frameToBroadcastTo = frame.frames[i])) {
       // If a specifc `origin` is provided then we want to only broadcast messages
       // to domains that match the configured `origin`. Otherwise the browser will output noisy console errors.
-      if (origin !== "*" && frameToBroadcastTo.origin !== origin) {
-        i++;
-        continue;
+      if (origin !== "*" && limitBroadCastToOrigin) {
+        if (frameToBroadcastTo.origin !== origin) {
+          i++;
+          continue;
+        }
       }
-
-      broadcast(frameToBroadcastTo, payload, origin);
+      broadcast(frameToBroadcastTo, payload, origin, limitBroadCastToOrigin);
       i++;
     }
   } catch (_) {

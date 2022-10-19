@@ -39,7 +39,8 @@ describe("broadcast", () => {
     expect(frame.frames[0].postMessage).toBeCalled();
   });
 
-  it("should only broadcast to target origin when a specific origin is provided", () => {
+  it("should only broadcast to target origin when limitBroadCastToOrigin set as true", () => {
+    const limitBroadCastToOrigin = true;
     const happyPathOrigin = "https://some-target-origin.com";
     const frame = mkFrame("someorigin");
     const frameToSendTo = mkFrame(happyPathOrigin);
@@ -57,13 +58,14 @@ describe("broadcast", () => {
       writable: true,
     });
 
-    broadcast(frame, "some-payload", happyPathOrigin);
+    broadcast(frame, "some-payload", happyPathOrigin, limitBroadCastToOrigin);
 
     expect(frameToSendTo.postMessage).toHaveBeenCalledTimes(1);
     expect(frameNoMessage.postMessage).toHaveBeenCalledTimes(0);
   });
 
   it("should broadcast broadly when using origin wildcard even with limitBroadCastToOrigin", () => {
+    const limitBroadCastToOrigin = false;
     const happyPathOrigin = "https://some-target-origin.com";
     const frame = mkFrame("someorigin");
     const frameToSendTo = mkFrame(happyPathOrigin);
@@ -76,7 +78,7 @@ describe("broadcast", () => {
       writable: true,
     });
 
-    broadcast(frame, "some-payload", "*");
+    broadcast(frame, "some-payload", "*", limitBroadCastToOrigin);
 
     expect(frameToSendTo.postMessage).toHaveBeenCalledTimes(1);
     expect(frameNoMessage.postMessage).toHaveBeenCalledTimes(1);

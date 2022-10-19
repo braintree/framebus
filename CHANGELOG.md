@@ -1,6 +1,6 @@
 # 5.2.0
 
-- Only broadcast to matching origins when a specific origin is provided
+- Add support for `limitBroadCastToOrigin` as a framebus config option
 
 # 5.1.2
 

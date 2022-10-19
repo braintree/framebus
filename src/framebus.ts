@@ -21,6 +21,7 @@ type FramebusOptions = {
   channel?: string;
   origin?: string;
   verifyDomain?: VerifyDomainMethod;
+  limitBroadCastToOrigin?: boolean;
 };
 
 const DefaultPromise = (typeof window !== "undefined" &&
@@ -33,11 +34,13 @@ export class Framebus {
   private verifyDomain?: VerifyDomainMethod;
   private isDestroyed: boolean;
   private listeners: Listener[];
+  private limitBroadCastToOrigin: boolean;
 
   constructor(options: FramebusOptions = {}) {
     this.origin = options.origin || "*";
     this.channel = options.channel || "";
     this.verifyDomain = options.verifyDomain;
+    this.limitBroadCastToOrigin = options.limitBroadCastToOrigin || false;
 
     this.isDestroyed = false;
     this.listeners = [];
@@ -103,7 +106,12 @@ export class Framebus {
       return false;
     }
 
-    broadcast(window.top || window.self, payload, origin);
+    broadcast(
+      window.top || window.self,
+      payload,
+      origin,
+      this.limitBroadCastToOrigin
+    );
 
     return true;
   }
