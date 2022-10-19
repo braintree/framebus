@@ -153,7 +153,7 @@ describe("Framebus", () => {
       const expectedLimitBroadCastToOrigin = true;
       bus = new Framebus({
         origin: "foo",
-        limitBroadCastToOrigin: expectedLimitBroadCastToOrigin,
+        limitBroadcastToOrigin: expectedLimitBroadCastToOrigin,
       });
 
       const data = { foo: "bar" };
