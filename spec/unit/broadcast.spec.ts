@@ -153,7 +153,9 @@ describe("broadcast", () => {
         get() {
           throw new Error("not allowed");
         },
-        set() {},
+        set() {
+          // noop
+        },
       });
 
       broadcast(frame, "payload", "https://not-example.com");
