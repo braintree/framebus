@@ -127,5 +127,42 @@ describe("broadcast", () => {
         broadcast(frame, "payload", "*");
       }).not.toThrowError("Access denied");
     });
+
+    it("should not attempt to broadcast if the domain of the iframe is different than the specified origin", () => {
+      const frame = mkFrame();
+
+      frame.origin = "https://example.com";
+
+      broadcast(frame, "payload", "https://not-example.com");
+
+      expect(frame.postMessage).not.toBeCalled();
+
+      broadcast(frame, "payload", "https://example.com");
+
+      expect(frame.postMessage).toBeCalledTimes(1);
+
+      broadcast(frame, "payload", "*");
+
+      expect(frame.postMessage).toBeCalledTimes(2);
+    });
+
+    it("should attempt to broadcast if accessing the origin throws an error (cross domain makes it impossible to check)", () => {
+      const frame = mkFrame();
+
+      Object.defineProperty(frame, "origin", {
+        get() {
+          throw new Error("not allowed");
+        },
+        set() {},
+      });
+
+      broadcast(frame, "payload", "https://not-example.com");
+
+      expect(frame.postMessage).toBeCalledTimes(1);
+
+      broadcast(frame, "payload", "*");
+
+      expect(frame.postMessage).toBeCalledTimes(2);
+    });
   });
 });

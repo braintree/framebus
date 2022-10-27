@@ -1,5 +1,26 @@
 import { hasOpener } from "./has-opener";
 
+// this method is mostly to reduce the number of console.error messages
+// when the origin is set to anything other than the default (*)
+function shouldBroadcast(frameToBroadcastTo: Window, origin: string): boolean {
+  // this is the default origin, so we can short circuit any logic around this
+  // if the origin is * and just tell it to broadcast
+  if (origin === "*") {
+    return true;
+  }
+
+  // this is wrapped in a try catch because if the domain is different than
+  // the domain of the frame issuing the postMessage, we will not be able
+  // to access the origin attribute and it will throw instead
+  // in that case, we _must_ broadcast to it even if the origin does not match,
+  // resulting in an ugly (but benign) console.error
+  try {
+    return frameToBroadcastTo.origin === origin;
+  } catch (err) {
+    return true;
+  }
+}
+
 export function broadcast(
   frame: Window,
   payload: string,
@@ -9,7 +30,9 @@ export function broadcast(
   let frameToBroadcastTo;
 
   try {
-    frame.postMessage(payload, origin);
+    if (shouldBroadcast(frame, origin)) {
+      frame.postMessage(payload, origin);
+    }
 
     if (hasOpener(frame) && frame.opener.top !== window.top) {
       broadcast(frame.opener.top, payload, origin);
