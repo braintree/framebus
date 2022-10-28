@@ -35,6 +35,7 @@ export class Framebus {
   private verifyDomain?: VerifyDomainMethod;
   private isDestroyed: boolean;
   private listeners: Listener[];
+  private hasAdditionalChecksForOnListeners: boolean;
 
   constructor(options: FramebusOptions = {}) {
     this.origin = options.origin || "*";
@@ -55,6 +56,8 @@ export class Framebus {
 
     this.isDestroyed = false;
     this.listeners = [];
+
+    this.hasAdditionalChecksForOnListeners = Boolean(this.verifyDomain);
   }
 
   static Promise = DefaultPromise;
@@ -157,13 +160,15 @@ export class Framebus {
       return false;
     }
 
-    if (this.verifyDomain) {
+    if (this.hasAdditionalChecksForOnListeners) {
       /* eslint-disable no-invalid-this, @typescript-eslint/ban-ts-comment */
       handler = function (...args) {
         // @ts-ignore
-        if (self.checkOrigin(this && this.origin)) {
-          originalHandler(...args);
+        if (!self.passesVerifyDomainCheck(this && this.origin)) {
+          return;
         }
+
+        originalHandler(...args);
       };
       /* eslint-enable no-invalid-this, @typescript-eslint/ban-ts-comment */
     }
@@ -235,6 +240,15 @@ export class Framebus {
     }
 
     this.listeners.length = 0;
+  }
+
+  private passesVerifyDomainCheck(origin: string): boolean {
+    if (!this.verifyDomain) {
+      // always pass this check if no verifyDomain option was set
+      return true;
+    }
+
+    return this.checkOrigin(origin);
   }
 
   private checkOrigin(postMessageOrigin: string) {
