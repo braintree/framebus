@@ -5,7 +5,7 @@ with a simple bus.
 
 In one frame:
 
-```js
+``` js
 var Framebus = require("framebus");
 var bus = new Framebus();
 
@@ -17,7 +17,7 @@ bus.emit("message", {
 
 In another frame:
 
-```js
+``` js
 var Framebus = require("framebus");
 var bus = new Framebus();
 
@@ -29,12 +29,12 @@ bus.on("message", function (data) {
 The Framebus class takes a configuration object, where all the params
 are optional.
 
-```js
+``` js
 type FramebusOptions = {
   origin?: string, // default: "*"
   channel?: string, // no default
   verifyDomain?: (url: string) => boolean, // no default
-  targetFrames?: Window[], // by default, all frames available to broadcast to
+  targetFrames?: <HTMLFrameElement | Window>[], // by default, all frames available to broadcast to
 };
 ```
 
@@ -50,7 +50,7 @@ fire if the domain of the origin of the post message matches the
 `location.href` value of page or the function passed for `verifyDomain`
 returns `true`.
 
-```js
+``` js
 var bus = new Framebus({
   verifyDomain: function (url) {
     // only return true if the domain of the url matches exactly
@@ -60,9 +60,11 @@ var bus = new Framebus({
 ```
 
 If a `targetFrames` array is passed, then framebus will only broadcast
-to those frames and listen for messages from those frames.
+to those frames and listen for messages from those frames. You can pass
+a reference to a `Window` (the return value of `window.open`) or an
+`HTMLFrameElement` (a DOM node representing an iframe).
 
-```js
+``` js
 var myIframe = document.getElementById("my-iframe");
 
 var bus = new Framebus({
@@ -74,7 +76,7 @@ To add additional frames to the `targetFrames` array in the future, use
 the `include` method. `targetFrames` must be set, even if it's an empty
 array, for this method to work.
 
-```js
+``` js
 var myIframe = document.getElementById("my-iframe");
 
 var bus = new Framebus({
@@ -95,7 +97,7 @@ This method is used in conjuction with `emit`, `on`, and `off` to
 restrict their results to the given origin. By default, an origin of
 `'*'` is used.
 
-```javascript
+``` javascript
 framebus
   .target({
     origin: "https://example.com",
@@ -134,7 +136,7 @@ Using this method assumes the browser context you are using supports
 Promises. If it does not, set a polyfill for the Framebus class with
 `setPromise`
 
-```js
+``` js
 // or however you want to polyfill the promise
 const PolyfilledPromise = require("promise-polyfill");
 
@@ -174,7 +176,7 @@ otherwise
 If framebus was instantiated with `targetFrames`, then the popup will be
 added to the `targetFrames` array.
 
-```javascript
+``` javascript
 var popup = window.open("https://example.com");
 
 framebus.include(popup);
@@ -190,7 +192,7 @@ framebus.emit("hello popup and friends!");
 Calls `off` on all listeners used for this bus instance and makes
 subsequent calls to all methods `noop`.
 
-```javascript
+``` javascript
 bus.on("event-name", handler);
 
 // event-name listener is torn down
@@ -242,12 +244,12 @@ occur as follows:
 
 1.  `http://emitter.example.com` publishes an event with a function as
     the event data
-
-    ```javascript
+    
+    ``` javascript
     var callback = function (data) {
       console.log("Got back %s as a reply!", data);
     };
-
+    
     framebus.emit("Marco!", callback, "http://listener.example.com");
     ```
 
@@ -262,8 +264,8 @@ occur as follows:
 4.  The subscriber on `http://listener.example.com` uses the local
     one-time-use callback function to send data back to the emitter's
     origin
-
-    ```javascript
+    
+    ``` javascript
     framebus
       .target("http://emitter.example.com")
       .on("Marco!", function (callback) {

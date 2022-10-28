@@ -21,7 +21,7 @@ type FramebusOptions = {
   channel?: string;
   origin?: string;
   verifyDomain?: VerifyDomainMethod;
-  targetFrames?: Window[];
+  targetFrames?: Array<HTMLIFrameElement | Window>;
 };
 
 const DefaultPromise = (typeof window !== "undefined" &&
@@ -30,17 +30,28 @@ const DefaultPromise = (typeof window !== "undefined" &&
 export class Framebus {
   origin: string;
   channel: string;
+  targetFrames?: Window[];
 
   private verifyDomain?: VerifyDomainMethod;
   private isDestroyed: boolean;
   private listeners: Listener[];
-  private targetFrames?: Window[];
 
   constructor(options: FramebusOptions = {}) {
     this.origin = options.origin || "*";
     this.channel = options.channel || "";
     this.verifyDomain = options.verifyDomain;
-    this.targetFrames = options.targetFrames;
+
+    if (options.targetFrames) {
+      this.targetFrames = options.targetFrames.map((iframeOrWindow) => {
+        // if it's an iframe, we need a reference to the Window proxy object
+        // https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/contentWindow
+        if (iframeOrWindow instanceof HTMLIFrameElement) {
+          return iframeOrWindow.contentWindow;
+        }
+
+        return iframeOrWindow;
+      }) as Window[];
+    }
 
     this.isDestroyed = false;
     this.listeners = [];

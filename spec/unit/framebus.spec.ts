@@ -32,6 +32,26 @@ describe("Framebus", () => {
     });
   });
 
+  describe("targetFrames", () => {
+    it("normalizes targetFrames to Window objects", () => {
+      const iframe = document.createElement("iframe");
+      const targetFrames = [iframe, window] as Array<
+        HTMLIFrameElement | Window
+      >;
+
+      const busWithTargetFrames = new Framebus({
+        targetFrames,
+      });
+
+      const targets = busWithTargetFrames.targetFrames as Window[];
+
+      expect(targets.length).toBe(2);
+      expect(targets[0]).toBe(iframe.contentWindow);
+      // checking the window equality will result in a circular json error
+      expect(targets[1]).toBeTruthy();
+    });
+  });
+
   describe("target", () => {
     it("returns a new Framebus isntance", () => {
       const instance = Framebus.target();
@@ -121,17 +141,19 @@ describe("Framebus", () => {
         constructor: fakeWindow,
       };
       const targetFrames = [] as Window[];
-      const busWithTargetFrames = bus.target({
+      const busWithTargetFrames = new Framebus({
         targetFrames,
       });
 
-      expect(targetFrames.length).toBe(0);
+      const targets = busWithTargetFrames.targetFrames as Window[];
+
+      expect(targets.length).toBe(0);
 
       // @ts-ignore
       busWithTargetFrames.include(frame);
 
-      expect(targetFrames.length).toBe(1);
-      expect(targetFrames[0]).toBe(frame);
+      expect(targets.length).toBe(1);
+      expect(targets[0]).toBe(frame);
     });
   });
 
