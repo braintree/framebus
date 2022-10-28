@@ -125,6 +125,22 @@ describe("broadcast", () => {
       done();
     });
 
+    it("should not postMessage to window.top.opener if limitBroadcastToFramesArray is true", () => {
+      const frame = mkFrame();
+
+      frame.opener = mkFrame();
+      frame.top = frame;
+      frame.opener.top = frame.opener;
+
+      broadcast("payload", {
+        origin: "*",
+        frames: [frame],
+        limitBroadcastToFramesArray: true,
+      });
+
+      expect(frame.opener.top.postMessage).not.toBeCalled();
+    });
+
     it("should postMessage to the window.opener's child frames", () => {
       const frame = mkFrame();
       const openerFrame = mkFrame();
@@ -142,6 +158,25 @@ describe("broadcast", () => {
       });
 
       expect(frame.opener.top.frames[0].postMessage).toBeCalled();
+    });
+
+    it("should not postMessage to the window.opener's child frames when limitBroadcastToFramesArray is true", () => {
+      const frame = mkFrame();
+      const openerFrame = mkFrame();
+
+      openerFrame.frames[0] = mkFrame();
+
+      frame.opener = openerFrame;
+      frame.opener.top = frame.opener;
+      frame.top = frame;
+
+      broadcast("payload", {
+        origin: "*",
+        frames: [frame],
+        limitBroadcastToFramesArray: true,
+      });
+
+      expect(frame.opener.top.frames[0].postMessage).not.toBeCalled();
     });
 
     it("should not throw if window.opener has access denied", () => {

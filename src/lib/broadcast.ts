@@ -16,9 +16,9 @@ export function broadcast(payload: string, options: BroadcastOptions): void {
     try {
       frame.postMessage(payload, origin);
 
-      // if (limitBroadcastToFramesArray) {
-      //   return;
-      // }
+      if (limitBroadcastToFramesArray) {
+        return;
+      }
 
       if (hasOpener(frame) && frame.opener.top !== window.top) {
         broadcast(payload, {

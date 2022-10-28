@@ -210,6 +210,29 @@ describe("Framebus", () => {
       );
     });
 
+    it("broadcasts to targetFrames", () => {
+      const iframe1 = document.createElement("iframe");
+      const iframe2 = document.createElement("iframe");
+      document.body.appendChild(iframe1);
+      document.body.appendChild(iframe2);
+
+      bus = new Framebus({
+        targetFrames: [iframe1, iframe2],
+      });
+
+      const data = { foo: "bar" };
+      bus.emit("event-name", data, () => {
+        // noop
+      });
+
+      expect(broadcast).toBeCalledTimes(1);
+      expect(broadcast).toBeCalledWith(expect.stringContaining('"foo":"bar"'), {
+        origin: "*",
+        frames: [iframe1.contentWindow, iframe2.contentWindow],
+        limitBroadcastToFramesArray: true,
+      });
+    });
+
     it("does not require data", () => {
       bus.emit("event-name", () => {
         // noop

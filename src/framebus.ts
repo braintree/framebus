@@ -116,10 +116,21 @@ export class Framebus {
       return false;
     }
 
+    const targetFrames = this.targetFramesAsWindows();
+    const limitBroadcastToFramesArray = Boolean(this.targetFrames);
+
+    if (!limitBroadcastToFramesArray) {
+      // if there are no targetted frames, default
+      // to the top level window or self
+      // the broadcast function will loop through
+      // all the known siblings and children of the window
+      targetFrames.push(window.top || window.self);
+    }
+
     broadcast(payload, {
       origin,
-      frames: [window.top || window.self],
-      limitBroadcastToFramesArray: false,
+      frames: targetFrames,
+      limitBroadcastToFramesArray,
     });
 
     return true;
@@ -252,16 +263,26 @@ export class Framebus {
     return this.checkOrigin(origin);
   }
 
+  private targetFramesAsWindows(): Window[] {
+    if (!this.targetFrames) {
+      return [];
+    }
+
+    return this.targetFrames.map((frame) => {
+      if (frame instanceof HTMLIFrameElement) {
+        return frame.contentWindow;
+      }
+      return frame;
+    }) as Window[];
+  }
+
   private hasMatchingTargetFrame(source: Window): boolean {
     if (!this.targetFrames) {
       // always pass this check if no targetFrames option was set
       return true;
     }
 
-    const matchingFrame = this.targetFrames.find((frame) => {
-      if (frame instanceof HTMLIFrameElement) {
-        return frame.contentWindow === source;
-      }
+    const matchingFrame = this.targetFramesAsWindows().find((frame) => {
       return frame === source;
     });
 
