@@ -57,7 +57,9 @@ export class Framebus {
     this.isDestroyed = false;
     this.listeners = [];
 
-    this.hasAdditionalChecksForOnListeners = Boolean(this.verifyDomain);
+    this.hasAdditionalChecksForOnListeners = Boolean(
+      this.verifyDomain || this.targetFrames
+    );
   }
 
   static Promise = DefaultPromise;
@@ -168,6 +170,11 @@ export class Framebus {
           return;
         }
 
+        // @ts-ignore
+        if (!self.hasMatchingTargetFrame(this && this.source)) {
+          return;
+        }
+
         originalHandler(...args);
       };
       /* eslint-enable no-invalid-this, @typescript-eslint/ban-ts-comment */
@@ -249,6 +256,19 @@ export class Framebus {
     }
 
     return this.checkOrigin(origin);
+  }
+
+  private hasMatchingTargetFrame(source: Window): boolean {
+    if (!this.targetFrames) {
+      // always pass this check if no targetFrames option was set
+      return true;
+    }
+
+    const matchingFrame = this.targetFrames.find((frame) => {
+      return frame === source;
+    });
+
+    return Boolean(matchingFrame);
   }
 
   private checkOrigin(postMessageOrigin: string) {

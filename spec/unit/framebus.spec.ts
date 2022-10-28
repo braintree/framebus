@@ -618,6 +618,105 @@ describe("Framebus", () => {
 
       expect(handler).toBeCalledTimes(0);
     });
+
+    it("modifies handler if targetFrames is used", () => {
+      const iframe = document.createElement("iframe");
+      document.body.append(iframe);
+
+      const busWithTargettedFrames = new Framebus({
+        targetFrames: [iframe],
+      });
+      const handler = jest.fn();
+      busWithTargettedFrames.on("event-name", handler);
+
+      const newHandler = subscribers["*"]["event-name"][0];
+
+      expect(newHandler).toBeInstanceOf(Function);
+      expect(newHandler).not.toBe(handler);
+
+      const cb = jest.fn();
+      newHandler.call(
+        {
+          source: iframe.contentWindow,
+        },
+        {
+          data: "foo",
+        },
+        cb
+      );
+
+      expect(handler).toBeCalledTimes(1);
+      expect(handler).toBeCalledWith({ data: "foo" }, cb);
+    });
+
+    it("does not call original handler when a targetFrames is passed and source is not found in the targetFrames", () => {
+      const iframe = document.createElement("iframe");
+      document.body.append(iframe);
+
+      bus = new Framebus({
+        targetFrames: [iframe],
+      });
+      const handler = jest.fn();
+      bus.on("event-name", handler);
+
+      const newHandler = subscribers["*"]["event-name"][0];
+
+      expect(newHandler).toBeInstanceOf(Function);
+      expect(newHandler).not.toBe(handler);
+
+      const cb = jest.fn();
+      newHandler(
+        {
+          data: "foo",
+        },
+        cb
+      );
+
+      expect(handler).toBeCalledTimes(0);
+    });
+
+    it("does call original handler when a source is found inside targetFrames", () => {
+      const iframe = document.createElement("iframe");
+      document.body.append(iframe);
+
+      bus = new Framebus({
+        targetFrames: [iframe],
+      });
+      const handler = jest.fn();
+      bus.on("event-name", handler);
+
+      const newHandler = subscribers["*"]["event-name"][0];
+
+      expect(newHandler).toBeInstanceOf(Function);
+      expect(newHandler).not.toBe(handler);
+
+      const cb = jest.fn();
+      newHandler.call(
+        {
+          origin: "https://example.com",
+        },
+        {
+          data: "disallowed",
+        },
+        cb
+      );
+
+      expect(handler).toBeCalledTimes(0);
+
+      newHandler.call(
+        {
+          source: iframe.contentWindow,
+          origin: "https://example.com",
+        },
+        {
+          data: "allowed",
+        },
+        cb
+      );
+
+      expect(handler).toBeCalledTimes(1);
+      expect(handler).toBeCalledWith({ data: "allowed" }, cb);
+    });
   });
 
   describe("off", () => {
