@@ -12,6 +12,12 @@
       var remoteOrigin = "http://<%= domain %>:<%= port2 %>";
       var button = document.getElementById("marco-button");
 
+      Framebus.target({
+        origin: "*"
+      }).on("special-message-to-parent", function (payload) {
+        app.printToDOM('FAIL: [inner frame 1] received "' + payload.message + '"');
+      });
+
       button.onclick = function () {
         Framebus.target({
           origin: remoteOrigin,
