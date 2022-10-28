@@ -10,7 +10,7 @@ export function broadcast(payload: string, options: BroadcastOptions): void {
   let i = 0;
   let frameToBroadcastTo;
 
-  const { frames, limitBroadcastToFramesArray } = options;
+  const { origin, frames, limitBroadcastToFramesArray } = options;
 
   const frame = frames[0];
   // frames.forEach((frame) => {
