@@ -21,6 +21,7 @@ type FramebusOptions = {
   channel?: string;
   origin?: string;
   verifyDomain?: VerifyDomainMethod;
+  targetFrames?: Window[];
 };
 
 const DefaultPromise = (typeof window !== "undefined" &&
@@ -33,11 +34,13 @@ export class Framebus {
   private verifyDomain?: VerifyDomainMethod;
   private isDestroyed: boolean;
   private listeners: Listener[];
+  private targetFrames?: Window[];
 
   constructor(options: FramebusOptions = {}) {
     this.origin = options.origin || "*";
     this.channel = options.channel || "";
     this.verifyDomain = options.verifyDomain;
+    this.targetFrames = options.targetFrames;
 
     this.isDestroyed = false;
     this.listeners = [];
@@ -65,6 +68,10 @@ export class Framebus {
     }
 
     childWindows.push(childWindow);
+
+    if (this.targetFrames) {
+      this.targetFrames.push(childWindow);
+    }
 
     return true;
   }

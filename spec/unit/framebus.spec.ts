@@ -111,6 +111,28 @@ describe("Framebus", () => {
         })
       ).toBe(true);
     });
+
+    it("includes the frame in the targetFrames property, when configured", () => {
+      const fakeWindow = {};
+      const frame = {
+        // @ts-ignore
+        Window: fakeWindow,
+        // @ts-ignore
+        constructor: fakeWindow,
+      };
+      const targetFrames = [] as Window[];
+      const busWithTargetFrames = bus.target({
+        targetFrames,
+      });
+
+      expect(targetFrames.length).toBe(0);
+
+      // @ts-ignore
+      busWithTargetFrames.include(frame);
+
+      expect(targetFrames.length).toBe(1);
+      expect(targetFrames[0]).toBe(frame);
+    });
   });
 
   describe("emit", () => {
