@@ -44,9 +44,10 @@ The `channel` namespaces the events called with `on` and `emit` so you
 can have multiple bus instances on the page and have them only
 communicate with busses with the same channel value.
 
-If a `verifyDomain` is passed, then the `on` listener will only fire if
-the domain of the origin of the post message matches the `location.href`
-value of page or the function passed for `verifyDomain` returns `true`.
+If a `verifyDomain` function is passed, then the `on` listener will only
+fire if the domain of the origin of the post message matches the
+`location.href` value of page or the function passed for `verifyDomain`
+returns `true`.
 
 ```js
 var bus = new Framebus({
