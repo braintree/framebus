@@ -34,6 +34,7 @@ type FramebusOptions = {
   origin?: string, // default: "*"
   channel?: string, // no default
   verifyDomain?: (url: string) => boolean, // no default
+  targetFrames?: Window[], // by default, all frames available to broadcast to
 };
 ```
 
@@ -56,6 +57,31 @@ var bus = new Framebus({
     url.indexOf("https://my-domain") === 0;
   },
 });
+```
+
+If a `targetFrames` array is passed, then framebus will only broadcast
+to those frames and listen for messages from those frames.
+
+```js
+var myIframe = document.getElementById("my-iframe");
+
+var bus = new Framebus({
+  targetFrames: [myIframe],
+});
+```
+
+To add additional frames to the `targetFrames` array in the future, use
+the `include` method. `targetFrames` must be set, even if it's an empty
+array, for this method to work.
+
+```js
+var myIframe = document.getElementById("my-iframe");
+
+var bus = new Framebus({
+  targetFrames: [],
+});
+
+bus.include(myIframe);
 ```
 
 ## API
@@ -144,6 +170,9 @@ otherwise
 
 **returns**: `true` if the popup was successfully included, `false`
 otherwise
+
+If framebus was instantiated with `targetFrames`, then the popup will be
+added to the `targetFrames` array.
 
 ```javascript
 var popup = window.open("https://example.com");
