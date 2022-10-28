@@ -17,14 +17,22 @@ describe("broadcast", () => {
     });
 
     expect(() => {
-      broadcast(frame, "payload", "*");
+      broadcast("payload", {
+        origin: "*",
+        frames: [frame],
+        limitBroadcastToFramesArray: false,
+      });
     }).not.toThrowError();
   });
 
   it("should postMessage to current frame", () => {
     const frame = mkFrame();
 
-    broadcast(frame, "payload", "*");
+    broadcast("payload", {
+      origin: "*",
+      frames: [frame],
+      limitBroadcastToFramesArray: false,
+    });
 
     expect(frame.postMessage).toBeCalled();
   });
@@ -33,7 +41,11 @@ describe("broadcast", () => {
     const frame = mkFrame();
     frame.frames[0] = mkFrame();
 
-    broadcast(frame, "payload", "*");
+    broadcast("payload", {
+      origin: "*",
+      frames: [frame],
+      limitBroadcastToFramesArray: false,
+    });
 
     expect(frame.frames[0].postMessage).toBeCalled();
   });
@@ -46,7 +58,11 @@ describe("broadcast", () => {
       frame.top = frame;
       frame.opener.top = frame.opener;
 
-      broadcast(frame, "payload", "*");
+      broadcast("payload", {
+        origin: "*",
+        frames: [frame],
+        limitBroadcastToFramesArray: false,
+      });
 
       expect(frame.opener.top.postMessage).toBeCalled();
     });
@@ -62,7 +78,11 @@ describe("broadcast", () => {
       frame.opener.top = frame.opener;
       frame.top = frame;
 
-      broadcast(frame, "payload", "*");
+      broadcast("payload", {
+        origin: "*",
+        frames: [frame],
+        limitBroadcastToFramesArray: false,
+      });
 
       expect(frame.opener.top.postMessage).not.toBeCalled();
     });
@@ -74,7 +94,11 @@ describe("broadcast", () => {
       frame.opener = frame;
       frame.top = frame;
 
-      broadcast(frame, "payload", "*");
+      broadcast("payload", {
+        origin: "*",
+        frames: [frame],
+        limitBroadcastToFramesArray: false,
+      });
 
       // don't infinitely recurse
       done();
@@ -91,7 +115,11 @@ describe("broadcast", () => {
       frame.frames[0] = child;
       frame.top = frame;
 
-      broadcast(frame, "payload", "*");
+      broadcast("payload", {
+        origin: "*",
+        frames: [frame],
+        limitBroadcastToFramesArray: false,
+      });
 
       // don't infinitely recurse
       done();
@@ -107,7 +135,11 @@ describe("broadcast", () => {
       frame.opener.top = frame.opener;
       frame.top = frame;
 
-      broadcast(frame, "payload", "*");
+      broadcast("payload", {
+        origin: "*",
+        frames: [frame],
+        limitBroadcastToFramesArray: false,
+      });
 
       expect(frame.opener.top.frames[0].postMessage).toBeCalled();
     });
@@ -124,7 +156,11 @@ describe("broadcast", () => {
       });
 
       expect(() => {
-        broadcast(frame, "payload", "*");
+        broadcast("payload", {
+          origin: "*",
+          frames: [frame],
+          limitBroadcastToFramesArray: false,
+        });
       }).not.toThrowError("Access denied");
     });
   });

@@ -116,7 +116,11 @@ export class Framebus {
       return false;
     }
 
-    broadcast(window.top || window.self, payload, origin);
+    broadcast(payload, {
+      origin,
+      frames: [window.top || window.self],
+      limitBroadcastToFramesArray: false,
+    });
 
     return true;
   }

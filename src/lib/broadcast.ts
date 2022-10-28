@@ -1,18 +1,32 @@
 import { hasOpener } from "./has-opener";
 
-export function broadcast(
-  frame: Window,
-  payload: string,
-  origin: string
-): void {
+type BroadcastOptions = {
+  origin: string;
+  frames: Window[];
+  limitBroadcastToFramesArray: boolean;
+};
+
+export function broadcast(payload: string, options: BroadcastOptions): void {
   let i = 0;
   let frameToBroadcastTo;
 
+  const { frames, limitBroadcastToFramesArray } = options;
+
+  const frame = frames[0];
+  // frames.forEach((frame) => {
   try {
     frame.postMessage(payload, origin);
 
+    // if (limitBroadcastToFramesArray) {
+    //   return;
+    // }
+
     if (hasOpener(frame) && frame.opener.top !== window.top) {
-      broadcast(frame.opener.top, payload, origin);
+      broadcast(payload, {
+        origin,
+        frames: [frame.opener.top],
+        limitBroadcastToFramesArray,
+      });
     }
 
     // previously, our max value was frame.frames.length
@@ -24,10 +38,15 @@ export function broadcast(
     // until there are no longer any frames
     // eslint-disable-next-line no-cond-assign
     while ((frameToBroadcastTo = frame.frames[i])) {
-      broadcast(frameToBroadcastTo, payload, origin);
+      broadcast(payload, {
+        origin,
+        frames: [frameToBroadcastTo],
+        limitBroadcastToFramesArray,
+      });
       i++;
     }
   } catch (_) {
     /* ignored */
   }
+  // });
 }

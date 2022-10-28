@@ -157,11 +157,11 @@ describe("Framebus", () => {
       });
 
       expect(broadcast).toBeCalledTimes(1);
-      expect(broadcast).toBeCalledWith(
-        window.top,
-        expect.stringContaining('"foo":"bar"'),
-        "*"
-      );
+      expect(broadcast).toBeCalledWith(expect.stringContaining('"foo":"bar"'), {
+        origin: "*",
+        frames: [window.top],
+        limitBroadcastToFramesArray: false,
+      });
     });
 
     it("does not broadcast if torn down", () => {
@@ -182,11 +182,11 @@ describe("Framebus", () => {
       });
 
       expect(broadcast).toBeCalledTimes(1);
-      expect(broadcast).toBeCalledWith(
-        window.top,
-        expect.stringContaining('"foo":"bar"'),
-        "foo"
-      );
+      expect(broadcast).toBeCalledWith(expect.stringContaining('"foo":"bar"'), {
+        origin: "foo",
+        frames: [window.top],
+        limitBroadcastToFramesArray: false,
+      });
     });
 
     it("broadcasts to specified channel", () => {
@@ -201,9 +201,12 @@ describe("Framebus", () => {
 
       expect(broadcast).toBeCalledTimes(1);
       expect(broadcast).toBeCalledWith(
-        window.top,
         expect.stringContaining('"unique-channel:event-name"'),
-        "*"
+        {
+          origin: "*",
+          frames: [window.top],
+          limitBroadcastToFramesArray: false,
+        }
       );
     });
 
@@ -214,9 +217,12 @@ describe("Framebus", () => {
 
       expect(broadcast).toBeCalledTimes(1);
       expect(broadcast).toBeCalledWith(
-        window.top,
         expect.stringContaining('"event-name"'),
-        "*"
+        {
+          origin: "*",
+          frames: [window.top],
+          limitBroadcastToFramesArray: false,
+        }
       );
     });
 
@@ -224,11 +230,11 @@ describe("Framebus", () => {
       bus.emit("event-name", { foo: "bar" });
 
       expect(broadcast).toBeCalledTimes(1);
-      expect(broadcast).toBeCalledWith(
-        window.top,
-        expect.stringContaining('"foo":"bar"'),
-        "*"
-      );
+      expect(broadcast).toBeCalledWith(expect.stringContaining('"foo":"bar"'), {
+        origin: "*",
+        frames: [window.top],
+        limitBroadcastToFramesArray: false,
+      });
     });
 
     it("does not require data or a callback", () => {
@@ -236,9 +242,12 @@ describe("Framebus", () => {
 
       expect(broadcast).toBeCalledTimes(1);
       expect(broadcast).toBeCalledWith(
-        window.top,
         expect.stringContaining('"event-name"'),
-        "*"
+        {
+          origin: "*",
+          frames: [window.top],
+          limitBroadcastToFramesArray: false,
+        }
       );
     });
   });
