@@ -17,11 +17,12 @@ type Listener = {
   originalHandler: FramebusOnHandler;
 };
 type VerifyDomainMethod = (domain: string) => boolean;
+type IFrameOrWindowList = Array<HTMLIFrameElement | Window>;
 type FramebusOptions = {
   channel?: string;
   origin?: string;
   verifyDomain?: VerifyDomainMethod;
-  targetFrames?: Array<HTMLIFrameElement | Window>;
+  targetFrames?: IFrameOrWindowList;
 };
 
 const DefaultPromise = (typeof window !== "undefined" &&
@@ -30,7 +31,7 @@ const DefaultPromise = (typeof window !== "undefined" &&
 export class Framebus {
   origin: string;
   channel: string;
-  targetFrames?: Window[];
+  targetFrames?: IFrameOrWindowList;
 
   private verifyDomain?: VerifyDomainMethod;
   private isDestroyed: boolean;
@@ -41,18 +42,7 @@ export class Framebus {
     this.origin = options.origin || "*";
     this.channel = options.channel || "";
     this.verifyDomain = options.verifyDomain;
-
-    if (options.targetFrames) {
-      this.targetFrames = options.targetFrames.map((iframeOrWindow) => {
-        // if it's an iframe, we need a reference to the Window proxy object
-        // https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/contentWindow
-        if (iframeOrWindow instanceof HTMLIFrameElement) {
-          return iframeOrWindow.contentWindow;
-        }
-
-        return iframeOrWindow;
-      }) as Window[];
-    }
+    this.targetFrames = options.targetFrames;
 
     this.isDestroyed = false;
     this.listeners = [];
@@ -265,6 +255,9 @@ export class Framebus {
     }
 
     const matchingFrame = this.targetFrames.find((frame) => {
+      if (frame instanceof HTMLIFrameElement) {
+        return frame.contentWindow === source;
+      }
       return frame === source;
     });
 
