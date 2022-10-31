@@ -163,7 +163,7 @@ describe("Framebus", () => {
         origin: "*",
         frame: window.top,
       });
-      expect(sendMessage).not.toBeCalled()
+      expect(sendMessage).not.toBeCalled();
     });
 
     it("does not broadcast if torn down", () => {
