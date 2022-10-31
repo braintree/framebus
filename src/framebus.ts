@@ -31,24 +31,33 @@ const DefaultPromise = (typeof window !== "undefined" &&
 export class Framebus {
   origin: string;
   channel: string;
-  targetFrames?: IFrameOrWindowList;
+  targetFrames: IFrameOrWindowList;
 
   private verifyDomain?: VerifyDomainMethod;
   private isDestroyed: boolean;
   private listeners: Listener[];
   private hasAdditionalChecksForOnListeners: boolean;
+  private limitBroadcastToFramesArray: boolean;
 
   constructor(options: FramebusOptions = {}) {
     this.origin = options.origin || "*";
     this.channel = options.channel || "";
     this.verifyDomain = options.verifyDomain;
-    this.targetFrames = options.targetFrames;
+
+    // if targetFrames is not used, we will be broadcasting
+    // to the top level window or to itself.
+    // By default, the broadcast function will loop through
+    // all the known siblings and children of the window.
+    // If a targetFrames array is passed, it will instead
+    // only broadcast to those targetFrames
+    this.targetFrames = options.targetFrames || [window.top || window.self];
+    this.limitBroadcastToFramesArray = Boolean(options.targetFrames);
 
     this.isDestroyed = false;
     this.listeners = [];
 
     this.hasAdditionalChecksForOnListeners = Boolean(
-      this.verifyDomain || this.targetFrames
+      this.verifyDomain || this.limitBroadcastToFramesArray
     );
   }
 
@@ -75,7 +84,7 @@ export class Framebus {
 
     childWindows.push(childWindow);
 
-    if (this.targetFrames) {
+    if (this.limitBroadcastToFramesArray) {
       this.targetFrames.push(childWindow);
     }
 
@@ -116,21 +125,10 @@ export class Framebus {
       return false;
     }
 
-    const targetFrames = this.targetFramesAsWindows();
-    const limitBroadcastToFramesArray = Boolean(this.targetFrames);
-
-    if (!limitBroadcastToFramesArray) {
-      // if there are no targetted frames, default
-      // to the top level window or self
-      // the broadcast function will loop through
-      // all the known siblings and children of the window
-      targetFrames.push(window.top || window.self);
-    }
-
     broadcast(payload, {
       origin,
-      frames: targetFrames,
-      limitBroadcastToFramesArray,
+      frames: this.targetFramesAsWindows(),
+      limitBroadcastToFramesArray: this.limitBroadcastToFramesArray,
     });
 
     return true;
@@ -268,17 +266,30 @@ export class Framebus {
       return [];
     }
 
-    return this.targetFrames.map((frame) => {
-      if (frame instanceof HTMLIFrameElement) {
-        return frame.contentWindow;
-      }
-      return frame;
-    }) as Window[];
+    return this.targetFrames
+      .map((frame) => {
+        // we can't pull off the contentWindow
+        // when the iframe is originally added
+        // to the array, because if it is not
+        // in the DOM at that time, it will have
+        // a contentWindow of `null`
+        if (frame instanceof HTMLIFrameElement) {
+          return frame.contentWindow;
+        }
+        return frame;
+      })
+      .filter((win) => {
+        // just in case an iframe element
+        // was removed from the DOM
+        // and the contentWindow property
+        // is null
+        return win;
+      }) as Window[];
   }
 
   private hasMatchingTargetFrame(source: Window): boolean {
-    if (!this.targetFrames) {
-      // always pass this check if no targetFrames option was set
+    if (!this.limitBroadcastToFramesArray) {
+      // always pass this check if we aren't limiting to the target frames
       return true;
     }
 
