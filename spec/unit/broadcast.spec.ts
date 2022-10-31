@@ -19,8 +19,7 @@ describe("broadcast", () => {
     expect(() => {
       broadcast("payload", {
         origin: "*",
-        frames: [frame],
-        limitBroadcastToFramesArray: false,
+        frame: frame,
       });
     }).not.toThrowError();
   });
@@ -30,8 +29,7 @@ describe("broadcast", () => {
 
     broadcast("payload", {
       origin: "*",
-      frames: [frame],
-      limitBroadcastToFramesArray: false,
+      frame: frame,
     });
 
     expect(frame.postMessage).toBeCalled();
@@ -43,8 +41,7 @@ describe("broadcast", () => {
 
     broadcast("payload", {
       origin: "*",
-      frames: [frame],
-      limitBroadcastToFramesArray: false,
+      frame: frame,
     });
 
     expect(frame.frames[0].postMessage).toBeCalled();
@@ -60,8 +57,7 @@ describe("broadcast", () => {
 
       broadcast("payload", {
         origin: "*",
-        frames: [frame],
-        limitBroadcastToFramesArray: false,
+        frame: frame,
       });
 
       expect(frame.opener.top.postMessage).toBeCalled();
@@ -80,8 +76,7 @@ describe("broadcast", () => {
 
       broadcast("payload", {
         origin: "*",
-        frames: [frame],
-        limitBroadcastToFramesArray: false,
+        frame: frame,
       });
 
       expect(frame.opener.top.postMessage).not.toBeCalled();
@@ -96,8 +91,7 @@ describe("broadcast", () => {
 
       broadcast("payload", {
         origin: "*",
-        frames: [frame],
-        limitBroadcastToFramesArray: false,
+        frame: frame,
       });
 
       // don't infinitely recurse
@@ -117,28 +111,11 @@ describe("broadcast", () => {
 
       broadcast("payload", {
         origin: "*",
-        frames: [frame],
-        limitBroadcastToFramesArray: false,
+        frame: frame,
       });
 
       // don't infinitely recurse
       done();
-    });
-
-    it("should not postMessage to window.top.opener if limitBroadcastToFramesArray is true", () => {
-      const frame = mkFrame();
-
-      frame.opener = mkFrame();
-      frame.top = frame;
-      frame.opener.top = frame.opener;
-
-      broadcast("payload", {
-        origin: "*",
-        frames: [frame],
-        limitBroadcastToFramesArray: true,
-      });
-
-      expect(frame.opener.top.postMessage).not.toBeCalled();
     });
 
     it("should postMessage to the window.opener's child frames", () => {
@@ -153,30 +130,10 @@ describe("broadcast", () => {
 
       broadcast("payload", {
         origin: "*",
-        frames: [frame],
-        limitBroadcastToFramesArray: false,
+        frame: frame,
       });
 
       expect(frame.opener.top.frames[0].postMessage).toBeCalled();
-    });
-
-    it("should not postMessage to the window.opener's child frames when limitBroadcastToFramesArray is true", () => {
-      const frame = mkFrame();
-      const openerFrame = mkFrame();
-
-      openerFrame.frames[0] = mkFrame();
-
-      frame.opener = openerFrame;
-      frame.opener.top = frame.opener;
-      frame.top = frame;
-
-      broadcast("payload", {
-        origin: "*",
-        frames: [frame],
-        limitBroadcastToFramesArray: true,
-      });
-
-      expect(frame.opener.top.frames[0].postMessage).not.toBeCalled();
     });
 
     it("should not throw if window.opener has access denied", () => {
@@ -193,8 +150,7 @@ describe("broadcast", () => {
       expect(() => {
         broadcast("payload", {
           origin: "*",
-          frames: [frame],
-          limitBroadcastToFramesArray: false,
+          frame: frame,
         });
       }).not.toThrowError("Access denied");
     });

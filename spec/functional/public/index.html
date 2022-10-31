@@ -31,11 +31,13 @@
       bus.on("Marco", function () {
         app.printToDOM('FAIL: [index] received "Marco"');
       });
-      bus.target({
-        targetFrames: [document.querySelector("[name='frame3']")]
-      }).on("special-message-to-parent", function (payload) {
-        app.printToDOM(payload.message);
-      });
+      bus
+        .target({
+          targetFrames: [document.querySelector("[name='frame3']")],
+        })
+        .on("special-message-to-parent", function (payload) {
+          app.printToDOM(payload.message);
+        });
 
       document.querySelector("#send-from-top").addEventListener(
         "click",

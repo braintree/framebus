@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 jest.mock("../../src/lib/broadcast");
+jest.mock("../../src/lib/send-message");
 
 import { attach } from "../../src/lib/attach";
 import { broadcast } from "../../src/lib/broadcast";
+import { sendMessage } from "../../src/lib/send-message";
 import { Framebus } from "../../src/framebus";
 import { subscribers } from "../../src/lib/constants";
 
@@ -150,7 +152,7 @@ describe("Framebus", () => {
       expect(bus.emit({ notAString: 12 })).toBe(false);
     });
 
-    it("broadcasts", () => {
+    it("broadcasts if no targetFrames are provided", () => {
       const data = { foo: "bar" };
       bus.emit("event-name", data, () => {
         // noop
@@ -159,9 +161,9 @@ describe("Framebus", () => {
       expect(broadcast).toBeCalledTimes(1);
       expect(broadcast).toBeCalledWith(expect.stringContaining('"foo":"bar"'), {
         origin: "*",
-        frames: [window.top],
-        limitBroadcastToFramesArray: false,
+        frame: window.top,
       });
+      expect(sendMessage).not.toBeCalled()
     });
 
     it("does not broadcast if torn down", () => {
@@ -184,8 +186,7 @@ describe("Framebus", () => {
       expect(broadcast).toBeCalledTimes(1);
       expect(broadcast).toBeCalledWith(expect.stringContaining('"foo":"bar"'), {
         origin: "foo",
-        frames: [window.top],
-        limitBroadcastToFramesArray: false,
+        frame: window.top,
       });
     });
 
@@ -204,13 +205,12 @@ describe("Framebus", () => {
         expect.stringContaining('"unique-channel:event-name"'),
         {
           origin: "*",
-          frames: [window.top],
-          limitBroadcastToFramesArray: false,
+          frame: window.top,
         }
       );
     });
 
-    it("broadcasts to targetFrames", () => {
+    it("sends message to targetFrames when configured", () => {
       const iframe1 = document.createElement("iframe");
       const iframe2 = document.createElement("iframe");
       document.body.appendChild(iframe1);
@@ -225,12 +225,19 @@ describe("Framebus", () => {
         // noop
       });
 
-      expect(broadcast).toBeCalledTimes(1);
-      expect(broadcast).toBeCalledWith(expect.stringContaining('"foo":"bar"'), {
-        origin: "*",
-        frames: [iframe1.contentWindow, iframe2.contentWindow],
-        limitBroadcastToFramesArray: true,
-      });
+      expect(sendMessage).toHaveBeenNthCalledWith(
+        1,
+        iframe1,
+        expect.stringContaining('"foo":"bar"'),
+        "*"
+      );
+      expect(sendMessage).toHaveBeenNthCalledWith(
+        2,
+        iframe2,
+        expect.stringContaining('"foo":"bar"'),
+        "*"
+      );
+      expect(broadcast).not.toBeCalled();
     });
 
     it("does not require data", () => {
@@ -243,8 +250,7 @@ describe("Framebus", () => {
         expect.stringContaining('"event-name"'),
         {
           origin: "*",
-          frames: [window.top],
-          limitBroadcastToFramesArray: false,
+          frame: window.top,
         }
       );
     });
@@ -255,8 +261,7 @@ describe("Framebus", () => {
       expect(broadcast).toBeCalledTimes(1);
       expect(broadcast).toBeCalledWith(expect.stringContaining('"foo":"bar"'), {
         origin: "*",
-        frames: [window.top],
-        limitBroadcastToFramesArray: false,
+        frame: window.top,
       });
     });
 
@@ -268,8 +273,7 @@ describe("Framebus", () => {
         expect.stringContaining('"event-name"'),
         {
           origin: "*",
-          frames: [window.top],
-          limitBroadcastToFramesArray: false,
+          frame: window.top,
         }
       );
     });

@@ -14,7 +14,9 @@
     <br />
     <hr />
 
-    <button id="send-to-parent">Send a targetted message to only the parent frame</button>
+    <button id="send-to-parent">
+      Send a targetted message to only the parent frame
+    </button>
 
     <script src="/js/test-app.js"></script>
     <script>
@@ -26,13 +28,17 @@
         });
       });
 
-      document.querySelector("#send-to-parent").addEventListener("click", function () {
-        bus.target({
-          targetFrames: [window.parent]
-        }).emit("special-message-to-parent", {
-          message: "Special targetted message to only parent."
-        })
-      });
+      document
+        .querySelector("#send-to-parent")
+        .addEventListener("click", function () {
+          bus
+            .target({
+              targetFrames: [window.parent],
+            })
+            .emit("special-message-to-parent", {
+              message: "Special targetted message to only parent.",
+            });
+        });
 
       bus.on("Marco", function (data, reply) {
         var polo = document.getElementById("polo-text").value;

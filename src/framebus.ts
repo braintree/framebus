@@ -2,6 +2,7 @@ import { isntString } from "./lib/is-not-string";
 import { subscriptionArgsInvalid } from "./lib/subscription-args-invalid";
 import { broadcast } from "./lib/broadcast";
 import { packagePayload } from "./lib/package-payload";
+import { sendMessage } from "./lib/send-message";
 
 import { childWindows, subscribers } from "./lib/constants";
 
@@ -124,12 +125,16 @@ export class Framebus {
     if (!payload) {
       return false;
     }
-
-    broadcast(payload, {
-      origin,
-      frames: this.targetFramesAsWindows(),
-      limitBroadcastToFramesArray: this.limitBroadcastToFramesArray,
-    });
+    if (this.limitBroadcastToFramesArray) {
+      this.targetFrames.forEach((frame) => {
+        sendMessage(frame as Window, payload, origin);
+      });
+    } else {
+      broadcast(payload, {
+        origin,
+        frame: window.top || window.self,
+      });
+    }
 
     return true;
   }

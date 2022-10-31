@@ -14,8 +14,7 @@ export function broadcastToChildWindows(
     } else if (source !== childWindow) {
       broadcast(payload, {
         origin,
-        frames: [childWindow.top as Window],
-        limitBroadcastToFramesArray: false,
+        frame: childWindow.top as Window,
       });
     }
   }

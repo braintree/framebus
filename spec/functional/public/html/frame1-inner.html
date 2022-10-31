@@ -13,9 +13,11 @@
       var button = document.getElementById("marco-button");
 
       Framebus.target({
-        origin: "*"
+        origin: "*",
       }).on("special-message-to-parent", function (payload) {
-        app.printToDOM('FAIL: [inner frame 1] received "' + payload.message + '"');
+        app.printToDOM(
+          'FAIL: [inner frame 1] received "' + payload.message + '"'
+        );
       });
 
       button.onclick = function () {
