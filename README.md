@@ -59,7 +59,7 @@ var bus = new Framebus({
 });
 ```
 
-If a `targetFrames` array is passed, then framebus will only broadcast
+If a `targetFrames` array is passed, then framebus will only send messages
 to those frames and listen for messages from those frames. You can pass
 a reference to a `Window` (the return value of `window.open`) or an
 `HTMLFrameElement` (a DOM node representing an iframe).
