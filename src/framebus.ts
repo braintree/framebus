@@ -78,10 +78,19 @@ export class Framebus {
     return new Framebus(options);
   }
 
+  addTargetFrame(frame: Window | HTMLIFrameElement): void {
+    if (!this.limitBroadcastToFramesArray) {
+      return;
+    }
+
+    this.targetFrames.push(frame);
+  }
+
   include(childWindow: Window): boolean {
     if (childWindow == null) {
       return false;
     }
+
     if (childWindow.Window == null) {
       return false;
     }
@@ -90,10 +99,6 @@ export class Framebus {
     }
 
     childWindows.push(childWindow);
-
-    if (this.limitBroadcastToFramesArray) {
-      this.targetFrames.push(childWindow);
-    }
 
     return true;
   }

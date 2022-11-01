@@ -59,10 +59,10 @@ var bus = new Framebus({
 });
 ```
 
-If a `targetFrames` array is passed, then framebus will only send messages
-to those frames and listen for messages from those frames. You can pass
-a reference to a `Window` (the return value of `window.open`) or an
-`HTMLFrameElement` (a DOM node representing an iframe).
+If a `targetFrames` array is passed, then framebus will only send
+messages to those frames and listen for messages from those frames. You
+can pass a reference to a `Window` (the return value of `window.open`)
+or an `HTMLFrameElement` (a DOM node representing an iframe).
 
 ```js
 var myIframe = document.getElementById("my-iframe");
@@ -73,8 +73,8 @@ var bus = new Framebus({
 ```
 
 To add additional frames to the `targetFrames` array in the future, use
-the `include` method. `targetFrames` must be set, even if it's an empty
-array, for this method to work.
+the `addTargetFrame` method. `targetFrames` must be set, even if it's an
+empty array, for this method to work.
 
 ```js
 var myIframe = document.getElementById("my-iframe");
@@ -83,7 +83,7 @@ var bus = new Framebus({
   targetFrames: [],
 });
 
-bus.include(myIframe);
+bus.addTargetFrame(myIframe);
 ```
 
 ## API
@@ -173,9 +173,6 @@ otherwise
 **returns**: `true` if the popup was successfully included, `false`
 otherwise
 
-If framebus was instantiated with `targetFrames`, then the popup will be
-added to the `targetFrames` array as well.
-
 ```javascript
 var popup = window.open("https://example.com");
 
@@ -186,6 +183,23 @@ framebus.emit("hello popup and friends!");
 | Argument | Type   | Description                                  |
 | -------- | ------ | -------------------------------------------- |
 | `popup`  | Window | The popup refrence returned by `window.open` |
+
+#### `addTargetFrame(frame): boolean`
+
+Used in conjunction with `targetFrames` configuration. If a
+`targetFrames` array is not passed on instantiation, this method will
+noop.
+
+```javascript
+var frame = document.getElementById("my-iframe");
+
+framebus.addTargetFrame(frame);
+framebus.emit("hello targetted iframe!");
+```
+
+| Argument | Type                        | Description                                  |
+| -------- | --------------------------- | -------------------------------------------- |
+| `frame`  | Window or HTMLIFrameElement | The iframe or popup to add to `targetFrames` |
 
 #### `teardown(): void`
 

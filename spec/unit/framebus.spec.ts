@@ -113,8 +113,10 @@ describe("Framebus", () => {
         })
       ).toBe(true);
     });
+  });
 
-    it("includes the frame in the targetFrames property, when configured", () => {
+  describe("addTargetFrame", () => {
+    it("includes the window in the targetFrames property, when configured", () => {
       const fakeWindow = {};
       const frame = {
         // @ts-ignore
@@ -132,7 +134,25 @@ describe("Framebus", () => {
       expect(targets.length).toBe(0);
 
       // @ts-ignore
-      busWithTargetFrames.include(frame);
+      busWithTargetFrames.addTargetFrame(frame);
+
+      expect(targets.length).toBe(1);
+      expect(targets[0]).toBe(frame);
+    });
+
+    it("includes the iframe in the targetFrames property, when configured", () => {
+      const frame = document.createElement("iframe");
+      const targetFrames = [] as Window[];
+      const busWithTargetFrames = new Framebus({
+        targetFrames,
+      });
+
+      const targets = busWithTargetFrames.targetFrames as Window[];
+
+      expect(targets.length).toBe(0);
+
+      // @ts-ignore
+      busWithTargetFrames.addTargetFrame(frame);
 
       expect(targets.length).toBe(1);
       expect(targets[0]).toBe(frame);
