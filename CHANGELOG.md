@@ -1,3 +1,8 @@
+# 5.2.0
+
+- Add ability to target specific frames with `targetFrames` configuration
+- Add `addTargetFrame` method to add additional frames to `targetFrames`
+
 # 5.1.2
 
 - Fix issue where framebus could not be used with server side
