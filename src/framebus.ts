@@ -273,7 +273,7 @@ export class Framebus {
   }
 
   private targetFramesAsWindows(): Window[] {
-    if (!this.targetFrames) {
+    if (!this.limitBroadcastToFramesArray) {
       return [];
     }
 

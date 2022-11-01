@@ -227,13 +227,13 @@ describe("Framebus", () => {
 
       expect(sendMessage).toHaveBeenNthCalledWith(
         1,
-        iframe1,
+        iframe1.contentWindow,
         expect.stringContaining('"foo":"bar"'),
         "*"
       );
       expect(sendMessage).toHaveBeenNthCalledWith(
         2,
-        iframe2,
+        iframe2.contentWindow,
         expect.stringContaining('"foo":"bar"'),
         "*"
       );
