@@ -12,6 +12,9 @@
       bus.on("Marco", function () {
         app.printToDOM('FAIL: [frame 1] received "Marco"');
       });
+      bus.on("special-message-to-parent", function (payload) {
+        app.printToDOM('FAIL: [frame 1] received "' + payload.message + '"');
+      });
     </script>
     <iframe src="/html/frame1-inner.html" name="frame1-inner"></iframe>
   </body>

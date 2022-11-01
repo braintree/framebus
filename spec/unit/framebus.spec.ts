@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 jest.mock("../../src/lib/broadcast");
+jest.mock("../../src/lib/send-message");
 
 import { attach } from "../../src/lib/attach";
 import { broadcast } from "../../src/lib/broadcast";
+import { sendMessage } from "../../src/lib/send-message";
 import { Framebus } from "../../src/framebus";
 import { subscribers } from "../../src/lib/constants";
 
@@ -113,6 +115,50 @@ describe("Framebus", () => {
     });
   });
 
+  describe("addTargetFrame", () => {
+    it("includes the window in the targetFrames property, when configured", () => {
+      const fakeWindow = {};
+      const frame = {
+        // @ts-ignore
+        Window: fakeWindow,
+        // @ts-ignore
+        constructor: fakeWindow,
+      };
+      const targetFrames = [] as Window[];
+      const busWithTargetFrames = new Framebus({
+        targetFrames,
+      });
+
+      const targets = busWithTargetFrames.targetFrames as Window[];
+
+      expect(targets.length).toBe(0);
+
+      // @ts-ignore
+      busWithTargetFrames.addTargetFrame(frame);
+
+      expect(targets.length).toBe(1);
+      expect(targets[0]).toBe(frame);
+    });
+
+    it("includes the iframe in the targetFrames property, when configured", () => {
+      const frame = document.createElement("iframe");
+      const targetFrames = [] as Window[];
+      const busWithTargetFrames = new Framebus({
+        targetFrames,
+      });
+
+      const targets = busWithTargetFrames.targetFrames as Window[];
+
+      expect(targets.length).toBe(0);
+
+      // @ts-ignore
+      busWithTargetFrames.addTargetFrame(frame);
+
+      expect(targets.length).toBe(1);
+      expect(targets[0]).toBe(frame);
+    });
+  });
+
   describe("emit", () => {
     it("returns true when subscriber is added", () => {
       expect(bus.emit("event-name")).toBe(true);
@@ -126,18 +172,18 @@ describe("Framebus", () => {
       expect(bus.emit({ notAString: 12 })).toBe(false);
     });
 
-    it("broadcasts", () => {
+    it("broadcasts if no targetFrames are provided", () => {
       const data = { foo: "bar" };
       bus.emit("event-name", data, () => {
         // noop
       });
 
       expect(broadcast).toBeCalledTimes(1);
-      expect(broadcast).toBeCalledWith(
-        window.top,
-        expect.stringContaining('"foo":"bar"'),
-        "*"
-      );
+      expect(broadcast).toBeCalledWith(expect.stringContaining('"foo":"bar"'), {
+        origin: "*",
+        frame: window.top,
+      });
+      expect(sendMessage).not.toBeCalled();
     });
 
     it("does not broadcast if torn down", () => {
@@ -158,11 +204,10 @@ describe("Framebus", () => {
       });
 
       expect(broadcast).toBeCalledTimes(1);
-      expect(broadcast).toBeCalledWith(
-        window.top,
-        expect.stringContaining('"foo":"bar"'),
-        "foo"
-      );
+      expect(broadcast).toBeCalledWith(expect.stringContaining('"foo":"bar"'), {
+        origin: "foo",
+        frame: window.top,
+      });
     });
 
     it("broadcasts to specified channel", () => {
@@ -177,10 +222,42 @@ describe("Framebus", () => {
 
       expect(broadcast).toBeCalledTimes(1);
       expect(broadcast).toBeCalledWith(
-        window.top,
         expect.stringContaining('"unique-channel:event-name"'),
+        {
+          origin: "*",
+          frame: window.top,
+        }
+      );
+    });
+
+    it("sends message to targetFrames when configured", () => {
+      const iframe1 = document.createElement("iframe");
+      const iframe2 = document.createElement("iframe");
+      document.body.appendChild(iframe1);
+      document.body.appendChild(iframe2);
+
+      bus = new Framebus({
+        targetFrames: [iframe1, iframe2],
+      });
+
+      const data = { foo: "bar" };
+      bus.emit("event-name", data, () => {
+        // noop
+      });
+
+      expect(sendMessage).toHaveBeenNthCalledWith(
+        1,
+        iframe1.contentWindow,
+        expect.stringContaining('"foo":"bar"'),
         "*"
       );
+      expect(sendMessage).toHaveBeenNthCalledWith(
+        2,
+        iframe2.contentWindow,
+        expect.stringContaining('"foo":"bar"'),
+        "*"
+      );
+      expect(broadcast).not.toBeCalled();
     });
 
     it("does not require data", () => {
@@ -190,9 +267,11 @@ describe("Framebus", () => {
 
       expect(broadcast).toBeCalledTimes(1);
       expect(broadcast).toBeCalledWith(
-        window.top,
         expect.stringContaining('"event-name"'),
-        "*"
+        {
+          origin: "*",
+          frame: window.top,
+        }
       );
     });
 
@@ -200,11 +279,10 @@ describe("Framebus", () => {
       bus.emit("event-name", { foo: "bar" });
 
       expect(broadcast).toBeCalledTimes(1);
-      expect(broadcast).toBeCalledWith(
-        window.top,
-        expect.stringContaining('"foo":"bar"'),
-        "*"
-      );
+      expect(broadcast).toBeCalledWith(expect.stringContaining('"foo":"bar"'), {
+        origin: "*",
+        frame: window.top,
+      });
     });
 
     it("does not require data or a callback", () => {
@@ -212,9 +290,11 @@ describe("Framebus", () => {
 
       expect(broadcast).toBeCalledTimes(1);
       expect(broadcast).toBeCalledWith(
-        window.top,
         expect.stringContaining('"event-name"'),
-        "*"
+        {
+          origin: "*",
+          frame: window.top,
+        }
       );
     });
   });
@@ -573,6 +653,105 @@ describe("Framebus", () => {
       );
 
       expect(handler).toBeCalledTimes(0);
+    });
+
+    it("modifies handler if targetFrames is used", () => {
+      const iframe = document.createElement("iframe");
+      document.body.append(iframe);
+
+      const busWithTargettedFrames = new Framebus({
+        targetFrames: [iframe],
+      });
+      const handler = jest.fn();
+      busWithTargettedFrames.on("event-name", handler);
+
+      const newHandler = subscribers["*"]["event-name"][0];
+
+      expect(newHandler).toBeInstanceOf(Function);
+      expect(newHandler).not.toBe(handler);
+
+      const cb = jest.fn();
+      newHandler.call(
+        {
+          source: iframe.contentWindow,
+        },
+        {
+          data: "foo",
+        },
+        cb
+      );
+
+      expect(handler).toBeCalledTimes(1);
+      expect(handler).toBeCalledWith({ data: "foo" }, cb);
+    });
+
+    it("does not call original handler when a targetFrames is passed and source is not found in the targetFrames", () => {
+      const iframe = document.createElement("iframe");
+      document.body.append(iframe);
+
+      bus = new Framebus({
+        targetFrames: [iframe],
+      });
+      const handler = jest.fn();
+      bus.on("event-name", handler);
+
+      const newHandler = subscribers["*"]["event-name"][0];
+
+      expect(newHandler).toBeInstanceOf(Function);
+      expect(newHandler).not.toBe(handler);
+
+      const cb = jest.fn();
+      newHandler(
+        {
+          data: "foo",
+        },
+        cb
+      );
+
+      expect(handler).toBeCalledTimes(0);
+    });
+
+    it("does call original handler when a source is found inside targetFrames", () => {
+      const iframe = document.createElement("iframe");
+      document.body.append(iframe);
+
+      bus = new Framebus({
+        targetFrames: [iframe],
+      });
+      const handler = jest.fn();
+      bus.on("event-name", handler);
+
+      const newHandler = subscribers["*"]["event-name"][0];
+
+      expect(newHandler).toBeInstanceOf(Function);
+      expect(newHandler).not.toBe(handler);
+
+      const cb = jest.fn();
+      newHandler.call(
+        {
+          origin: "https://example.com",
+        },
+        {
+          data: "disallowed",
+        },
+        cb
+      );
+
+      expect(handler).toBeCalledTimes(0);
+
+      newHandler.call(
+        {
+          source: iframe.contentWindow,
+          origin: "https://example.com",
+        },
+        {
+          data: "allowed",
+        },
+        cb
+      );
+
+      expect(handler).toBeCalledTimes(1);
+      expect(handler).toBeCalledWith({ data: "allowed" }, cb);
     });
   });
 

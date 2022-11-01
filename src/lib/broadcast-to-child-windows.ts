@@ -12,7 +12,10 @@ export function broadcastToChildWindows(
     if (childWindow.closed) {
       childWindows.splice(i, 1);
     } else if (source !== childWindow) {
-      broadcast(childWindow.top as Window, payload, origin);
+      broadcast(payload, {
+        origin,
+        frame: childWindow.top as Window,
+      });
     }
   }
 }

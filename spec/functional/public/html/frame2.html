@@ -20,6 +20,9 @@
       bus.on("from-popup", function (data) {
         app.printToDOM('received "' + data.message + '" from popup');
       });
+      bus.on("special-message-to-parent", function (payload) {
+        app.printToDOM('FAIL: [frame 2] received "' + payload.message + '"');
+      });
     </script>
   </body>
 </html>

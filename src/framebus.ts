@@ -2,6 +2,7 @@ import { isntString } from "./lib/is-not-string";
 import { subscriptionArgsInvalid } from "./lib/subscription-args-invalid";
 import { broadcast } from "./lib/broadcast";
 import { packagePayload } from "./lib/package-payload";
+import { sendMessage } from "./lib/send-message";
 
 import { childWindows, subscribers } from "./lib/constants";
 
@@ -17,10 +18,17 @@ type Listener = {
   originalHandler: FramebusOnHandler;
 };
 type VerifyDomainMethod = (domain: string) => boolean;
+// this is a mixed type so that users can add iframes to the array
+// before they have been added to the DOM (in which case, they
+// would not have a contentWindow yet). When accessing these
+// windows in Framebus, the targetFramesAsWindows private
+// method should be used
+type IFrameOrWindowList = Array<HTMLIFrameElement | Window>;
 type FramebusOptions = {
   channel?: string;
   origin?: string;
   verifyDomain?: VerifyDomainMethod;
+  targetFrames?: IFrameOrWindowList;
 };
 
 const DefaultPromise = (typeof window !== "undefined" &&
@@ -29,18 +37,35 @@ const DefaultPromise = (typeof window !== "undefined" &&
 export class Framebus {
   origin: string;
   channel: string;
+  targetFrames: IFrameOrWindowList;
 
   private verifyDomain?: VerifyDomainMethod;
   private isDestroyed: boolean;
   private listeners: Listener[];
+  private hasAdditionalChecksForOnListeners: boolean;
+  private limitBroadcastToFramesArray: boolean;
 
   constructor(options: FramebusOptions = {}) {
     this.origin = options.origin || "*";
     this.channel = options.channel || "";
     this.verifyDomain = options.verifyDomain;
 
+    // if a targetFrames configuration is not passed in,
+    // the default behavior is to broadcast the payload
+    // to the top level window or to the frame itself.
+    // By default, the broadcast function will loop through
+    // all the known siblings and children of the window.
+    // If a targetFrames array is passed, it will instead
+    // only broadcast to those specified targetFrames
+    this.targetFrames = options.targetFrames || [];
+    this.limitBroadcastToFramesArray = Boolean(options.targetFrames);
+
     this.isDestroyed = false;
     this.listeners = [];
+
+    this.hasAdditionalChecksForOnListeners = Boolean(
+      this.verifyDomain || this.limitBroadcastToFramesArray
+    );
   }
 
   static Promise = DefaultPromise;
@@ -53,10 +78,19 @@ export class Framebus {
     return new Framebus(options);
   }
 
+  addTargetFrame(frame: Window | HTMLIFrameElement): void {
+    if (!this.limitBroadcastToFramesArray) {
+      return;
+    }
+
+    this.targetFrames.push(frame);
+  }
+
   include(childWindow: Window): boolean {
     if (childWindow == null) {
       return false;
     }
+
     if (childWindow.Window == null) {
       return false;
     }
@@ -102,8 +136,16 @@ export class Framebus {
     if (!payload) {
       return false;
     }
-
-    broadcast(window.top || window.self, payload, origin);
+    if (this.limitBroadcastToFramesArray) {
+      this.targetFramesAsWindows().forEach((frame) => {
+        sendMessage(frame, payload, origin);
+      });
+    } else {
+      broadcast(payload, {
+        origin,
+        frame: window.top || window.self,
+      });
+    }
 
     return true;
   }
@@ -139,13 +181,20 @@ export class Framebus {
       return false;
     }
 
-    if (this.verifyDomain) {
+    if (this.hasAdditionalChecksForOnListeners) {
       /* eslint-disable no-invalid-this, @typescript-eslint/ban-ts-comment */
       handler = function (...args) {
         // @ts-ignore
-        if (self.checkOrigin(this && this.origin)) {
-          originalHandler(...args);
+        if (!self.passesVerifyDomainCheck(this && this.origin)) {
+          return;
         }
+
+        // @ts-ignore
+        if (!self.hasMatchingTargetFrame(this && this.source)) {
+          return;
+        }
+
+        originalHandler(...args);
       };
       /* eslint-enable no-invalid-this, @typescript-eslint/ban-ts-comment */
     }
@@ -217,6 +266,54 @@ export class Framebus {
     }
 
     this.listeners.length = 0;
+  }
+
+  private passesVerifyDomainCheck(origin: string): boolean {
+    if (!this.verifyDomain) {
+      // always pass this check if no verifyDomain option was set
+      return true;
+    }
+
+    return this.checkOrigin(origin);
+  }
+
+  private targetFramesAsWindows(): Window[] {
+    if (!this.limitBroadcastToFramesArray) {
+      return [];
+    }
+
+    return this.targetFrames
+      .map((frame) => {
+        // we can't pull off the contentWindow
+        // when the iframe is originally added
+        // to the array, because if it is not
+        // in the DOM at that time, it will have
+        // a contentWindow of `null`
+        if (frame instanceof HTMLIFrameElement) {
+          return frame.contentWindow;
+        }
+        return frame;
+      })
+      .filter((win) => {
+        // just in case an iframe element
+        // was removed from the DOM
+        // and the contentWindow property
+        // is null
+        return win;
+      }) as Window[];
+  }
+
+  private hasMatchingTargetFrame(source: Window): boolean {
+    if (!this.limitBroadcastToFramesArray) {
+      // always pass this check if we aren't limiting to the target frames
+      return true;
+    }
+
+    const matchingFrame = this.targetFramesAsWindows().find((frame) => {
+      return frame === source;
+    });
+
+    return Boolean(matchingFrame);
   }
 
   private checkOrigin(postMessageOrigin: string) {
