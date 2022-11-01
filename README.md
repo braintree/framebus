@@ -174,7 +174,7 @@ otherwise
 otherwise
 
 If framebus was instantiated with `targetFrames`, then the popup will be
-added to the `targetFrames` array.
+added to the `targetFrames` array as well.
 
 ```javascript
 var popup = window.open("https://example.com");

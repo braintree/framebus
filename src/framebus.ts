@@ -18,6 +18,11 @@ type Listener = {
   originalHandler: FramebusOnHandler;
 };
 type VerifyDomainMethod = (domain: string) => boolean;
+// this is a mixed type so that users can add iframes to the array
+// before they have been added to the DOM (in which case, they
+// would not have a contentWindow yet). When accessing these
+// windows in Framebus, the targetFramesAsWindows private 
+// method should be used
 type IFrameOrWindowList = Array<HTMLIFrameElement | Window>;
 type FramebusOptions = {
   channel?: string;
@@ -45,13 +50,14 @@ export class Framebus {
     this.channel = options.channel || "";
     this.verifyDomain = options.verifyDomain;
 
-    // if targetFrames is not used, we will be broadcasting
-    // to the top level window or to itself.
+    // if a targetFrames configuration is not passed in,
+    // the default behavior is to broadcast the payload
+    // to the top level window or to the frame itself.
     // By default, the broadcast function will loop through
     // all the known siblings and children of the window.
     // If a targetFrames array is passed, it will instead
-    // only broadcast to those targetFrames
-    this.targetFrames = options.targetFrames || [window.top || window.self];
+    // only broadcast to those specified targetFrames
+    this.targetFrames = options.targetFrames || [];
     this.limitBroadcastToFramesArray = Boolean(options.targetFrames);
 
     this.isDestroyed = false;
@@ -126,8 +132,8 @@ export class Framebus {
       return false;
     }
     if (this.limitBroadcastToFramesArray) {
-      this.targetFrames.forEach((frame) => {
-        sendMessage(frame as Window, payload, origin);
+      this.targetFramesAsWindows().forEach((frame) => {
+        sendMessage(frame, payload, origin);
       });
     } else {
       broadcast(payload, {
