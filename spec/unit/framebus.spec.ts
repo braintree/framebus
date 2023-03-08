@@ -71,7 +71,7 @@ describe("Framebus", () => {
 
   describe("setPromise", () => {
     it("sets a custom Promise object", () => {
-      const FakePromise = {} as typeof Framebus["Promise"];
+      const FakePromise = {} as (typeof Framebus)["Promise"];
 
       Framebus.setPromise(FakePromise);
 
