@@ -70,7 +70,7 @@ export class Framebus {
 
   static Promise = DefaultPromise;
 
-  static setPromise(PromiseGlobal: typeof Framebus["Promise"]): void {
+  static setPromise(PromiseGlobal: (typeof Framebus)["Promise"]): void {
     Framebus.Promise = PromiseGlobal;
   }
 
