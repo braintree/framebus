@@ -1,7 +1,6 @@
-import { prefix } from "./constants";
-import { packagePayload } from "./package-payload";
+import { prefix, packagePayload } from "./";
 
-import type { FramebusPayload, FramebusSubscriberArg } from "./types";
+import type { FramebusPayload, FramebusSubscriberArg } from "./";
 
 export function unpackPayload(e: MessageEvent): FramebusPayload | false {
   let payload: FramebusPayload;

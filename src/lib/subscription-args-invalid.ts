@@ -1,6 +1,6 @@
-import { isntString } from "./is-not-string";
+import { isntString } from "./";
 
-import type { FramebusOnHandler } from "./types";
+import type { FramebusOnHandler } from "./";
 
 export function subscriptionArgsInvalid(
   event: string,

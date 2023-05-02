@@ -1,4 +1,4 @@
-import { subscribers } from "../../src/lib/constants";
+import { subscribers } from "../../src/lib";
 import Framebus = require("../../src/");
 
 describe("off", () => {

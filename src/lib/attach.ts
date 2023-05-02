@@ -1,4 +1,4 @@
-import { onmessage } from "./message";
+import { onmessage } from "./";
 
 let isAttached = false;
 

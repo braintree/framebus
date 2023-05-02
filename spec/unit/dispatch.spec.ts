@@ -1,5 +1,5 @@
 import Framebus = require("../../src/");
-import { dispatch } from "../../src/lib/dispatch";
+import { dispatch } from "../../src/lib";
 
 describe("dispatch", () => {
   it("should execute subscribers for the given event and origin", () => {

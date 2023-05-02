@@ -1,5 +1,4 @@
-import { broadcast } from "./broadcast";
-import { childWindows } from "./constants";
+import { broadcast, childWindows } from "./";
 
 export function broadcastToChildWindows(
   payload: string,

@@ -1,5 +1,4 @@
-import { attach, detach } from "../../src/lib/attach";
-import { onmessage } from "../../src/lib/message";
+import { attach, detach, onmessage } from "../../src/lib";
 
 describe("_attach", () => {
   let addEventSpy: jest.SpyInstance;

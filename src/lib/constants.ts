@@ -1,4 +1,4 @@
-import type { FramebusSubscriber } from "./types";
+import type { FramebusSubscriber } from "./";
 
 export const prefix = "/*framebus*/";
 export const childWindows: Window[] = [];

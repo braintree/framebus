@@ -1,4 +1,4 @@
-import { attach } from "./lib/attach";
+import { attach } from "./lib";
 import { Framebus } from "./framebus";
 
 attach();
