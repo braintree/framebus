@@ -1,4 +1,12 @@
-import { isntString, subscriptionArgsInvalid, broadcast, packagePayload, sendMessage, childWindows, subscribers } from "./lib";
+import {
+  isntString,
+  subscriptionArgsInvalid,
+  broadcast,
+  packagePayload,
+  sendMessage,
+  childWindows,
+  subscribers,
+} from "./lib";
 
 import type {
   FramebusSubscriberArg,
