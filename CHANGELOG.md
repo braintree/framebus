@@ -1,3 +1,6 @@
+# Unreleased
+ - Fix circular dependency issue ([Issue #97](https://github.com/braintree/framebus/issues/97))
+
 # 5.2.0
 
 - Add ability to target specific frames with `targetFrames` configuration
