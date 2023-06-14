@@ -14,11 +14,13 @@ import type {
   FramebusOnHandler,
   FramebusReplyHandler,
 } from "./lib";
+
 type Listener = {
   eventName: string;
   handler: FramebusOnHandler;
   originalHandler: FramebusOnHandler;
 };
+
 type VerifyDomainMethod = (domain: string) => boolean;
 // this is a mixed type so that users can add iframes to the array
 // before they have been added to the DOM (in which case, they
@@ -26,6 +28,7 @@ type VerifyDomainMethod = (domain: string) => boolean;
 // windows in Framebus, the targetFramesAsWindows private
 // method should be used
 type IFrameOrWindowList = Array<HTMLIFrameElement | Window>;
+
 type FramebusOptions = {
   channel?: string;
   origin?: string;

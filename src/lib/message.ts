@@ -7,7 +7,7 @@ import {
   broadcastToChildWindows,
 } from "./";
 
-export function onmessage(e: MessageEvent): void {
+export function onMessage(e: MessageEvent): void {
   if (isntString(e.data)) {
     return;
   }
