@@ -3,11 +3,8 @@
 jest.mock("../../src/lib/broadcast");
 jest.mock("../../src/lib/send-message");
 
-import { attach } from "../../src/lib/attach";
-import { broadcast } from "../../src/lib/broadcast";
-import { sendMessage } from "../../src/lib/send-message";
+import { attach, broadcast, sendMessage, subscribers } from "../../src/lib";
 import { Framebus } from "../../src/framebus";
-import { subscribers } from "../../src/lib/constants";
 
 describe("Framebus", () => {
   let bus: Framebus;

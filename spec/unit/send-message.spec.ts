@@ -1,4 +1,4 @@
-import { sendMessage } from "../../src/lib/send-message";
+import { sendMessage } from "../../src/lib";
 
 function mkFrame() {
   return {

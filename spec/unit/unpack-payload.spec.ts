@@ -1,9 +1,9 @@
-import { unpackPayload } from "../../src/lib/unpack-payload";
+import { unpackPayload } from "../../src/lib";
 import type {
   FramebusPayload,
   FramebusSubscriberArg,
   FramebusSubscribeHandler,
-} from "../../src/lib/types";
+} from "../../src/lib";
 
 const messagePrefix = "/*framebus*/";
 

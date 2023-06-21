@@ -1,4 +1,4 @@
-import { onmessage } from "./message";
+import { onMessage } from "./";
 
 let isAttached = false;
 
@@ -8,12 +8,12 @@ export function attach(): void {
   }
 
   isAttached = true;
-  window.addEventListener("message", onmessage, false);
+  window.addEventListener("message", onMessage, false);
 }
 
 // removeIf(production)
 export function detach(): void {
   isAttached = false;
-  window.removeEventListener("message", onmessage, false);
+  window.removeEventListener("message", onMessage, false);
 }
 // endRemoveIf(production)

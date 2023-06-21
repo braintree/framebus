@@ -1,4 +1,4 @@
-import { hasOpener } from "./has-opener";
+import { hasOpener } from "./";
 
 type BroadcastOptions = {
   origin: string;

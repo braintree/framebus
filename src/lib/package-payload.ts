@@ -1,5 +1,4 @@
-import { subscribeReplier } from "./subscribe-replier";
-import { prefix } from "./constants";
+import { subscribeReplier, prefix } from "./";
 
 import type {
   FramebusPayload,

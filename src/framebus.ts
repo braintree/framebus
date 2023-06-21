@@ -1,22 +1,26 @@
-import { isntString } from "./lib/is-not-string";
-import { subscriptionArgsInvalid } from "./lib/subscription-args-invalid";
-import { broadcast } from "./lib/broadcast";
-import { packagePayload } from "./lib/package-payload";
-import { sendMessage } from "./lib/send-message";
-
-import { childWindows, subscribers } from "./lib/constants";
+import {
+  isntString,
+  subscriptionArgsInvalid,
+  broadcast,
+  packagePayload,
+  sendMessage,
+  childWindows,
+  subscribers,
+} from "./lib";
 
 import type {
   FramebusSubscriberArg,
   FramebusSubscribeHandler,
   FramebusOnHandler,
   FramebusReplyHandler,
-} from "./lib/types";
+} from "./lib";
+
 type Listener = {
   eventName: string;
   handler: FramebusOnHandler;
   originalHandler: FramebusOnHandler;
 };
+
 type VerifyDomainMethod = (domain: string) => boolean;
 // this is a mixed type so that users can add iframes to the array
 // before they have been added to the DOM (in which case, they
@@ -24,6 +28,7 @@ type VerifyDomainMethod = (domain: string) => boolean;
 // windows in Framebus, the targetFramesAsWindows private
 // method should be used
 type IFrameOrWindowList = Array<HTMLIFrameElement | Window>;
+
 type FramebusOptions = {
   channel?: string;
   origin?: string;

@@ -1,5 +1,4 @@
-import { attach, detach } from "../../src/lib/attach";
-import { onmessage } from "../../src/lib/message";
+import { attach, detach, onMessage } from "../../src/lib";
 
 describe("_attach", () => {
   let addEventSpy: jest.SpyInstance;
@@ -12,7 +11,7 @@ describe("_attach", () => {
   it("should add listener to scope", () => {
     attach();
 
-    expect(addEventSpy).toBeCalledWith("message", onmessage, false);
+    expect(addEventSpy).toBeCalledWith("message", onMessage, false);
   });
 
   it("should only add listener to scope once", () => {

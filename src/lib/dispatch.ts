@@ -1,6 +1,6 @@
-import { subscribers } from "./constants";
+import { subscribers } from "./";
 
-import type { FramebusSubscriberArg, FramebusSubscribeHandler } from "./types";
+import type { FramebusSubscriberArg, FramebusSubscribeHandler } from "./";
 
 export function dispatch(
   origin: string,
