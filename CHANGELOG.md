@@ -1,3 +1,10 @@
+# CHANGELOG
+
+# Unreleased
+
+- Update to node v18
+- Update to TypeScript 5
+
 # 5.2.1
 
 - Fix circular dependency issue ([Issue #97](https://github.com/braintree/framebus/issues/97))
