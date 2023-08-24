@@ -3,7 +3,9 @@
 # Unreleased
 
 - Update to node v18
-- Update to TypeScript 5
+
+- Dev Dependency Updates
+  - Update to TypeScript 5
 
 # 5.2.1
 
