@@ -56,7 +56,7 @@
     "prettier": "^2.8.4",
     "ts-jest": "^29.0.5",
     "tsify": "^5.0.4",
-    "typescript": "^4.9.5",
+    "typescript": "^5.1.6",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0",
     "wdio-chromedriver-service": "^8.1.1"
