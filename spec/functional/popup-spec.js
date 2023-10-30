@@ -35,10 +35,12 @@ describe("Popup Events", () => {
         timeout: 1000,
       }
     );
-    const actual = $("p").getText();
-
-    expect($$("p").length).toBe(1);
-    expect(actual).toBe(expected);
+    $("p")
+      .getText()
+      .then((actual) => {
+        expect($$("p").length).toBe(1);
+        expect(actual).toBe(expected);
+      });
   });
 
   it("should be able to send events to opener frames", () => {
@@ -71,10 +73,12 @@ describe("Popup Events", () => {
         timeout: 1000,
       }
     );
-    const actual = $("p").getText();
-
-    expect($$("p").length).toBe(1);
-    expect(actual).toContain(expected);
+    $("p")
+      .getText()
+      .then((actual) => {
+        expect($$("p").length).toBe(1);
+        expect(actual).toContain(expected);
+      });
   });
 
   it("should not double-receive events in popups", () => {
@@ -107,10 +111,12 @@ describe("Popup Events", () => {
         timeout: 1000,
       }
     );
-    const actual = $("p").getText();
-
-    expect($$("p").length).toBe(1);
-    expect(actual).not.toContain("FAILURE");
+    $("p")
+      .getText()
+      .then((actual) => {
+        expect($$("p").length).toBe(1);
+        expect(actual).not.toContain("FAILURE");
+      });
   });
 
   it("should be able to receive messages from opener window", () => {
@@ -141,9 +147,11 @@ describe("Popup Events", () => {
         timeout: 1000,
       }
     );
-    const actual = $("p").getText();
-
-    expect($$("p").length).toBe(1);
-    expect(actual).not.toContain("FAILURE");
+    $("p")
+      .getText()
+      .then((actual) => {
+        expect($$("p").length).toBe(1);
+        expect(actual).not.toContain("FAILURE");
+      });
   });
 });
