@@ -6,6 +6,7 @@
 
 - Dev Dependency Updates
   - Update to TypeScript 5
+  - Update Chromedriver to 118
 
 # 5.2.1
 

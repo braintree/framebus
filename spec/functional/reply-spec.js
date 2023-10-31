@@ -41,9 +41,16 @@ describe("Reply Events", () => {
     browser.switchToFrame(2);
     const frame3ReceivedQuestion = $("p").getText();
 
-    expect(indexReceived).toBe(0);
-    expect(frame1Received).toBe(0);
-    expect(frame2Received).toBe(0);
-    expect(frame3ReceivedQuestion).toBe("are you there?");
+    Promise.all([
+      indexReceived,
+      frame1Received,
+      frame2Received,
+      frame3ReceivedQuestion,
+    ]).then(() => {
+      expect(indexReceived).toBe(0);
+      expect(frame1Received).toBe(0);
+      expect(frame2Received).toBe(0);
+      expect(frame3ReceivedQuestion).toBe("are you there?");
+    });
   });
 });
