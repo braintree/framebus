@@ -1,5 +1,10 @@
 # CHANGELOG
 
+# UNRELEASED
+
+- Update package-lock file version from 1 to 3
+- Minor dev dependency updates
+
 # 6.0.0
 
 - Update to node v18
