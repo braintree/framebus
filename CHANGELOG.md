@@ -1,6 +1,6 @@
 # CHANGELOG
 
-# Unreleased
+# 6.0.0
 
 - Update to node v18
 
