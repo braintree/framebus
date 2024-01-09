@@ -1,11 +1,12 @@
 # CHANGELOG
 
-# Unreleased
+# 6.0.0
 
 - Update to node v18
 
 - Dev Dependency Updates
   - Update to TypeScript 5
+  - Update Chromedriver to 118
 
 # 5.2.1
 

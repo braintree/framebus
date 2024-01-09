@@ -38,10 +38,18 @@ describe("targetFrames Events", () => {
     browser.switchToFrame(2);
     const frame3ReceivedQuestion = $$("p").length;
 
-    expect(indexReceived).toBe(1);
-    expect(innerframe1Received).toBe(0);
-    expect(frame1Received).toBe(0);
-    expect(frame2Received).toBe(0);
-    expect(frame3ReceivedQuestion).toBe(0);
+    Promise.all([
+      indexReceived,
+      innerframe1Received,
+      frame1Received,
+      frame2Received,
+      frame3ReceivedQuestion,
+    ]).then(() => {
+      expect(indexReceived).toBe(1);
+      expect(innerframe1Received).toBe(0);
+      expect(frame1Received).toBe(0);
+      expect(frame2Received).toBe(0);
+      expect(frame3ReceivedQuestion).toBe(0);
+    });
   });
 });
