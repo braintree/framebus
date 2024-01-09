@@ -6,7 +6,7 @@
     "url": "git@github.com:braintree/framebus"
   },
   "homepage": "https://github.com/braintree/framebus",
-  "version": "5.2.1",
+  "version": "6.0.0",
   "main": "dist/index.js",
   "files": [
     "dist/"
@@ -38,7 +38,7 @@
     "@wdio/sync": "^7.25.2",
     "async": "^3.2.4",
     "browserify": "^17.0.0",
-    "chromedriver": "^119.0.1",
+    "chromedriver": "^120.0.1",
     "del": "^6.0.0",
     "ejs": "^3.1.8",
     "eslint": "^8.35.0",
