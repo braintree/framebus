@@ -44,7 +44,7 @@
     "eslint": "^8.56.0",
     "eslint-config-braintree": "6.0.0-typescript-prep-rc.2",
     "express": "^4.19.2",
-    "gulp": "^4.0.2",
+    "gulp": "^5.0.0",
     "gulp-concat": "^2.4.2",
     "gulp-remove-code": "^3.0.4",
     "gulp-size": "^3.0.0",
