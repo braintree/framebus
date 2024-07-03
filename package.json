@@ -27,7 +27,7 @@
   "license": "MIT",
   "author": "braintree <code@getbraintree.com>",
   "dependencies": {
-    "@braintree/uuid": "^0.1.0"
+    "@braintree/uuid": "^1.0.0"
   },
   "devDependencies": {
     "@types/jest": "^29.5.11",
@@ -40,10 +40,10 @@
     "browserify": "^17.0.0",
     "chromedriver": "^120.0.1",
     "del": "^6.0.0",
-    "ejs": "^3.1.8",
+    "ejs": "^3.1.10",
     "eslint": "^8.56.0",
     "eslint-config-braintree": "6.0.0-typescript-prep-rc.2",
-    "express": "^4.18.2",
+    "express": "^4.19.2",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.4.2",
     "gulp-remove-code": "^3.0.4",
