@@ -1,7 +1,12 @@
 # CHANGELOG
 
-# UNRELEASED
-
+# 6.0.1
+- Update @braintree/uuid to v1.0.0
+- Update dev dependencies:
+  - chromedriver to v125.0.3
+  - ejs to v3.1.10
+  - express to v4.19.2
+  - gulp to v5.0.0
 - Update package-lock file version from 1 to 3
 - Minor dev dependency updates
 
