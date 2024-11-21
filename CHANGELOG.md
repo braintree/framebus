@@ -7,6 +7,8 @@
   - cookie
   - elliptic
   - micromatch
+- Update dev dependencies:
+  - chromedriver to v131.0.1
 
 ## 6.0.1
 - Update @braintree/uuid to v1.0.0
