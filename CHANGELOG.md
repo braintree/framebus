@@ -3,12 +3,16 @@
 ## UNRELEASED
 
 - Update (sub-)dependencies
-  - axios
-  - cookie
-  - elliptic
-  - micromatch
+  - axios to 1.7.7
+  - body-parse to1.20.3
+  - cookie to 0.7.1
+  - elliptic to 6.6.1
+  - micromatch to 4.0.8
+  - send to 0.19.0
+  - serve-static to 1.16.2
 - Update dev dependencies:
   - chromedriver to v131.0.1
+  - express to 4.20.1
 
 ## 6.0.1
 - Update @braintree/uuid to v1.0.0
