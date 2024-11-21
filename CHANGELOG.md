@@ -1,6 +1,21 @@
 # CHANGELOG
 
-# 6.0.1
+## UNRELEASED
+
+- Update (sub-)dependencies
+  - axios to 1.7.7
+  - body-parse to 1.20.3
+  - cookie to 0.7.1
+  - elliptic to 6.6.1
+  - micromatch to 4.0.8
+  - send to 0.19.0
+  - serve-static to 1.16.2
+
+- Update dev dependencies:
+  - chromedriver to v131.0.1
+  - express to 4.20.1
+
+## 6.0.1
 - Update @braintree/uuid to v1.0.0
 - Update dev dependencies:
   - chromedriver to v125.0.3
@@ -10,7 +25,7 @@
 - Update package-lock file version from 1 to 3
 - Minor dev dependency updates
 
-# 6.0.0
+## 6.0.0
 
 - Update to node v18
 
@@ -18,26 +33,26 @@
   - Update to TypeScript 5
   - Update Chromedriver to 118
 
-# 5.2.1
+## 5.2.1
 
 - Fix circular dependency issue ([Issue #97](https://github.com/braintree/framebus/issues/97))
 
-# 5.2.0
+## 5.2.0
 
 - Add ability to target specific frames with `targetFrames` configuration
 - Add `addTargetFrame` method to add additional frames to `targetFrames`
 
-# 5.1.2
+## 5.1.2
 
 - Fix issue where framebus could not be used with server side
   rendering
 
-# 5.1.1
+## 5.1.1
 
 - Fix issue where Internet Explorer would error because Promise is not
   defined
 
-# 5.1.0
+## 5.1.0
 
 - Fix issue where emitting to new window could cause an infinite loop
   (closes \#41, thanks @blutorange)
@@ -46,7 +61,7 @@
 - Add `setPromise` static method for easy polyfilling environments
   that do not support promises
 
-# 5.0.0
+## 5.0.0
 
 - Allow scoping to a specific channel for events
 
@@ -105,26 +120,26 @@ _Breaking Changes_
   });
   ```
 
-# 4.0.5
+## 4.0.5
 
 - Fixup Framebus typing for Typescript integrations
 
-# v4.0.3 and v4.0.4
+## v4.0.3 and v4.0.4
 
 - Use `@braintree/uuid` package for uuid generation
 - Update typescript to v4
 
-# v4.0.2
+## v4.0.2
 
 - Fix issue where rollup bundlers could not import framebus (see
   [braintree-web\#504](https://github.com/braintree/braintree-web/issues/504))
 
-# v4.0.1
+## v4.0.1
 
 - Fix issue where framebus could not be used with server side
   rendering
 
-# v4.0.0
+## v4.0.0
 
 _Breaking Changes_
 
@@ -136,17 +151,17 @@ _Breaking Changes_
 - Drop support for passing multiple arguments to `emit`, not it only
   supports passing `data` and `reply`
 
-# 3.0.2
+## 3.0.2
 
 - Fix issue where framebus would error when trying to reply to a
   non-existent window/frame
 
-  # 3.0.1
+  ## 3.0.1
 
 - Fix issue where broadcasts to frames would fail if parent page has
   overwritten the window.length variable
 
-  # 3.0.0
+  ## 3.0.0
 
 _BREAKING CHANGES_
 
@@ -155,38 +170,38 @@ _BREAKING CHANGES_
 
 - Bower support dropped
 
-  # 2.0.8
+  ## 2.0.8
 
 - Fall back to `window.self` when `window.top` is undefined in old
   versions of IE.
 
-  # 2.0.7
+  ## 2.0.7
 
 - Corrects a regression introduced in 2.0.6 that prevented CommonJS
   runtimes from working.
 
-  # 2.0.6
+  ## 2.0.6
 
 - framebus can be required (but not executed) from Node.js®
   environments.
 
-  # 2.0.5
+  ## 2.0.5
 
 - Only traverse to `opener` from the top-level frame
 
-  # 2.0.4
+  ## 2.0.4
 
 - Avoid exceptions while broadcasting events
 
-  # 2.0.3
+  ## 2.0.3
 
 - Do not infinitely recurse when `window.opener === window`
 
-  # 2.0.2
+  ## 2.0.2
 
 \[unpublished\]
 
-# 2.0.1
+## 2.0.1
 
 - Do not throw exceptions `window.opener` existed but has already
   closed.
@@ -201,7 +216,7 @@ _BREAKING CHANGES_
   publish("event");
   ```
 
-  # 2.0.0
+  ## 2.0.0
 
 - Breaking change: use of `origin` as a parameter for `publish`,
   `subscribe` and `unsubscribe` has been moved to the
@@ -217,6 +232,6 @@ _BREAKING CHANGES_
 - Added feature: `window.opener` will now be included in framebus
   messaging, if available.
 
-  # 1.0.0
+  ## 1.0.0
 
 - Initial release
