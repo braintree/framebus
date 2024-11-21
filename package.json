@@ -38,7 +38,7 @@
     "@wdio/sync": "^7.25.2",
     "async": "^3.2.5",
     "browserify": "^17.0.0",
-    "chromedriver": "^125.0.3",
+    "chromedriver": "^129.0.4",
     "del": "^6.0.0",
     "ejs": "^3.1.10",
     "eslint": "^8.56.0",
