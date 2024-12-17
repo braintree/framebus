@@ -3,7 +3,7 @@
   "description": "Framebus allows you to easily send messages across frames (and iframes) with a simple bus.",
   "repository": {
     "type": "git",
-    "url": "git@github.com:braintree/framebus"
+    "url": "git://github.com/braintree/framebus.git"
   },
   "homepage": "https://github.com/braintree/framebus",
   "version": "6.0.2",
