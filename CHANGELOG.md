@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## UNRELEASED
+## 6.0.2
 
 - Update (sub-)dependencies
   - axios to 1.7.7
