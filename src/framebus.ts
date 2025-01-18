@@ -6,7 +6,6 @@ import {
   sendMessage,
   childWindows,
   subscribers,
-  originalToInternalHandlerMap,
 } from "./lib";
 
 import type {
@@ -203,8 +202,6 @@ export class Framebus {
         originalHandler(...args);
       };
       /* eslint-enable no-invalid-this, @typescript-eslint/ban-ts-comment */
-
-      originalToInternalHandlerMap.set(originalHandler, handler);
     }
 
     this.listeners.push({
@@ -227,7 +224,7 @@ export class Framebus {
       return false;
     }
 
-    if (this.verifyDomain) {
+    if (this.hasAdditionalChecksForOnListeners) {
       for (let i = 0; i < this.listeners.length; i++) {
         const listener = this.listeners[i];
 
@@ -250,17 +247,9 @@ export class Framebus {
       return false;
     }
 
-    const internalHandler = originalToInternalHandlerMap.get(handler);
     for (let i = 0; i < subscriberList.length; i++) {
-      if (
-        subscriberList[i] === handler ||
-        subscriberList[i] === internalHandler
-      ) {
+      if (subscriberList[i] === handler) {
         subscriberList.splice(i, 1);
-
-        if (internalHandler) {
-          originalToInternalHandlerMap.delete(handler);
-        }
 
         return true;
       }
