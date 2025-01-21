@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 6.0.3
+
+- Fix a bug with not being able to remove handlers when targetFrames are used.
+
 ## 6.0.2
 
 - Update (sub-)dependencies
