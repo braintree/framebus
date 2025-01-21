@@ -77,4 +77,20 @@ describe("off", () => {
 
     expect(actual).toBe(false);
   });
+
+  it("correctly removes the handler when there are additional checks", () => {
+    const event = "the event";
+    const origin = "https://example.com";
+    const originalHandler = jest.fn();
+
+    const framebus = Framebus.target({
+      origin,
+      targetFrames: [window],
+    });
+    const added = framebus.on(event, originalHandler);
+    const removed = framebus.off(event, originalHandler);
+
+    expect(added).toBe(true);
+    expect(removed).toBe(true);
+  });
 });

@@ -224,7 +224,7 @@ export class Framebus {
       return false;
     }
 
-    if (this.verifyDomain) {
+    if (this.hasAdditionalChecksForOnListeners) {
       for (let i = 0; i < this.listeners.length; i++) {
         const listener = this.listeners[i];
 
