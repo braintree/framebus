@@ -10,17 +10,13 @@ jobs:
   create_release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code  
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
 
       - name: Get version
-        run: |
-          git pull
-          latest_version=$(awk '/^## / { if (p) exit; p=1 } p' CHANGELOG.md | grep '##' | sed 's/## //')
-          if $(echo $latest_version | grep -q "(");then
-            latest_version=$(echo $latest_version | sed 's/\ (.*$//')
-          fi
-          echo "latest_version=$(echo $latest_version)" >> $GITHUB_ENV
+        run: echo "latest_version=$(npm pkg get version --workspaces=false | tr -d \")" >> $GITHUB_ENV
 
       - name: Get details
         run: |
