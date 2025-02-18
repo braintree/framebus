@@ -1,6 +1,13 @@
 name: "Functional Tests"
 
-on: [push]
+on:
+  push:
+    branches:
+      - 'main'
+  workflow_dispatch:
+  pull_request:
+    branches:
+        - '*'
 
 jobs:
   build:
@@ -10,9 +17,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: "18.x"
+          node-version-file: .nvmrc
       - run: npm install
       - run: sudo apt-get install xvfb
       # there's a weird typescript incompatibility with jest types and mocha types
