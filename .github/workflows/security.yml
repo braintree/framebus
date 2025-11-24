@@ -28,6 +28,6 @@ jobs:
   dependency-review:
     uses: braintree/security-workflows/.github/workflows/dependency-review.yml@addStatusChecks
     permissions:
-      contents: read
+      contents: write
       pull-requests: write
       statuses: write
