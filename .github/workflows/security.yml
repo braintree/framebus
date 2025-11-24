@@ -21,4 +21,4 @@ jobs:
     with:
       language: javascript-typescript
   dependency-review:
-    uses: braintree/security-workflows/.github/workflows/dependency-review.yml@main
+    uses: braintree/security-workflows/.github/workflows/dependency-review.yml@addStatusChecks
