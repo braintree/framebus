@@ -1,8 +1,4 @@
 describe("Popup Events", () => {
-  beforeEach(() => {
-    browser.url("http://localhost:3099");
-  });
-
   it("should be able to receive events from opener frames", () => {
     const expected = "hello from frame3!";
 
@@ -20,7 +16,7 @@ describe("Popup Events", () => {
 
     browser.switchWindow("localhost:3099");
 
-    browser.switchToFrame(2);
+    browser.switchFrame(2);
 
     $("#popup-message").setValue(expected);
     $("#send").click();
@@ -63,7 +59,7 @@ describe("Popup Events", () => {
     $("#send").click();
 
     browser.switchWindow("localhost:3099");
-    browser.switchToFrame(1);
+    browser.switchFrame(1);
 
     browser.waitUntil(
       () => {
@@ -101,7 +97,7 @@ describe("Popup Events", () => {
     $("#send").click();
 
     browser.switchWindow("localhost:3099");
-    browser.switchToFrame(1);
+    browser.switchFrame(1);
 
     browser.waitUntil(
       () => {
