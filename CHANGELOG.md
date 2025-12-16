@@ -3,7 +3,7 @@
 ## UUNRELEASED
 
 - Fix failing functional/smoke tests, largely by following updates
-- Update to node v24
+- Update to node v20
 - Update dev dependencies
   - @wdio/cli to 9.21.1
   - @wdio/local-runner to 9.21.0
