@@ -3,12 +3,12 @@ name: "Unit Tests"
 on:
   push:
     branches:
-      - 'main'
+      - "main"
   workflow_dispatch:
   workflow_call:
   pull_request:
     branches:
-        - '*'
+      - "*"
 
 jobs:
   build:

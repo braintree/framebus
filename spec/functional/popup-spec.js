@@ -1,10 +1,19 @@
+import { $, $$ } from "@wdio/globals";
+
 describe("Popup Events", () => {
-  it.only("should be able to receive events from opener frames", async () => {
+  beforeEach(async () => {
+    await browser.url("http://localhost:3099");
+  });
+
+  it("should be able to receive events from opener frames", async () => {
     const expected = "hello from frame3!";
+
+    const iframe = await $("iframe[name='frame3']");
+
     await $("#open-popup").click();
     await browser.switchWindow("popup");
-    
-await browser.waitUntil(
+
+    await browser.waitUntil(
       () => {
         return $("body").getHTML() != null;
       },
@@ -15,7 +24,7 @@ await browser.waitUntil(
     );
     await browser.switchWindow("localhost:3099");
 
-    await browser.switchFrame(2);
+    await browser.switchFrame(iframe);
 
     await $("#popup-message").setValue(expected);
     await $("#send").click();
@@ -30,12 +39,11 @@ await browser.waitUntil(
         timeout: 1000,
       }
     );
-    const text = await $("p")
-      .getText();
+    const text = await $("p").getText();
 
     const actual = await $$("p");
 
-    expect (actual.length).toBe(1);
+    expect(actual.length).toBe(1);
     expect(text).toBe(expected);
   });
 
@@ -107,7 +115,7 @@ await browser.waitUntil(
         timeout: 1000,
       }
     );
-     $("p")
+    $("p")
       .getText()
       .then((actual) => {
         expect($$("p").length).toBe(1);
