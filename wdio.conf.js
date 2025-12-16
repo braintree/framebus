@@ -25,11 +25,11 @@ exports.config = {
   //
   specs: [
     "spec/functional/popup-spec.js",
-    "spec/functional/reply-spec.js",
-    "spec/functional/target-frames.js",
   ],
   // Patterns to exclude.
   exclude: [
+    "spec/functional/reply-spec.js",
+    "spec/functional/target-frames.js",
     // 'path/to/excluded/files'
   ],
   //
