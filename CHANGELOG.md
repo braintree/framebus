@@ -9,8 +9,9 @@
   - @wdio/local-runner to 9.21.0
   - @wdio/mocha-framework to 9.21.0
   - @wdio/spec-reporter to 9.20.0
-  - @wdio/sync to 7.27.0
   - chromedriver to 143.0.1
+- removed @wdio/sync
+  - updated tests to be asynchronous
 
 ## 6.0.3
 
