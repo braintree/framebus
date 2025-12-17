@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## UUNRELEASED
+## UNRELEASED
 
 - Fix failing functional/smoke tests
 - Update to node v24
