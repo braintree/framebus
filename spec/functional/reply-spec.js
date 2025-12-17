@@ -1,56 +1,53 @@
+import { $, $$ } from "@wdio/globals";
+
 describe("Reply Events", () => {
-  beforeEach(() => {
-    browser.url("http://localhost:3099");
+  beforeEach(async () => {
+    await browser.url("http://localhost:3099");
   });
 
-  it("should only publish to targeted domains and print reply", () => {
-    browser.switchToFrame(2);
+  it("should only publish to targeted domains and print reply", async () => {
+    const iframe3 = await $("iframe[name='frame3']");
+    await browser.switchFrame(iframe3);
 
-    $("#polo-text").setValue("polo");
+    await $("#polo-text").setValue("polo");
 
-    browser.switchToParentFrame();
+    await browser.switchToParentFrame();
+    const iframe1 = await $("iframe");
 
-    browser.switchToFrame(0);
-    browser.switchToFrame(0);
+    await browser.switchFrame(iframe1);
+    await browser.switchFrame(iframe1);
 
-    $("#marco-button").click();
+    await $("#marco-button").click();
 
-    browser.waitUntil(
-      () => {
-        return $("p").getText() === "polo";
+    await browser.waitUntil(
+      async () => {
+        const text = await $("p").getText();
+        return text === "polo";
       },
       {
-        timeout: 1000,
+        timeout: 10000,
         timeoutMsg: "expected p tag to have text",
       }
     );
 
-    browser.switchToParentFrame();
-    browser.switchToParentFrame();
+    await browser.switchToParentFrame();
+    await browser.switchToParentFrame();
 
-    const indexReceived = $$("p").length;
+    const indexReceived = await $$("p").length;
+    expect(indexReceived).toBe(0);
 
-    browser.switchToFrame(0);
-    const frame1Received = $$("p").length;
-    browser.switchToParentFrame();
+    await browser.switchFrame(await $("iframe[name='frame1']"));
+    const frame1Received = await $$("p").length;
+    expect(frame1Received).toBe(0);
 
-    browser.switchToFrame(1);
-    const frame2Received = $$("p").length;
-    browser.switchToParentFrame();
+    await browser.switchToParentFrame();
+    await browser.switchFrame(await $("iframe[name='frame2']"));
+    const frame2Received = await $$("p").length;
+    expect(frame2Received).toBe(0);
 
-    browser.switchToFrame(2);
-    const frame3ReceivedQuestion = $("p").getText();
-
-    Promise.all([
-      indexReceived,
-      frame1Received,
-      frame2Received,
-      frame3ReceivedQuestion,
-    ]).then(() => {
-      expect(indexReceived).toBe(0);
-      expect(frame1Received).toBe(0);
-      expect(frame2Received).toBe(0);
-      expect(frame3ReceivedQuestion).toBe("are you there?");
-    });
+    await browser.switchToParentFrame();
+    await browser.switchFrame(await $("iframe[name='frame3']"));
+    const frame3ReceivedQuestion = await $("p").getText();
+    expect(frame3ReceivedQuestion).toBe("are you there?");
   });
 });

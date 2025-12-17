@@ -51,11 +51,11 @@ jobs:
         run: |
           new_version=$(npm version ${{ inputs.version_type }})
           echo "new_version=$(echo $new_version | sed 's/v//')" >> $GITHUB_ENV
-        
+
       - name: Update changelog
         run: |
-           today=$(date +'%Y-%m-%d')
-           sed -i "s/## unreleased/## ${{ env.new_version }} (${today})/i" CHANGELOG.md
+          today=$(date +'%Y-%m-%d')
+          sed -i "s/## unreleased/## ${{ env.new_version }} (${today})/i" CHANGELOG.md
 
       - name: Commit and push changes
         run: |

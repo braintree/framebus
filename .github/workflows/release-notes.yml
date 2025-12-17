@@ -1,7 +1,7 @@
-# This workflow will create a release for the most recent deploy 
+# This workflow will create a release for the most recent deploy
 
-name: Create release 
-run-name: Running github release 
+name: Create release
+run-name: Running github release
 on:
   workflow_dispatch:
   workflow_call:
@@ -36,4 +36,4 @@ jobs:
           release_name: v${{ env.latest_version }}
           body: "${{ env.release_details }}"
           draft: false
-          prerelease: false 
+          prerelease: false

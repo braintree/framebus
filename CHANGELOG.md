@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## UNRELEASED
+
+- Fix failing functional/smoke tests
+- Update to node v24
+- Update dev dependencies
+  - @wdio/cli to 9.21.1
+  - @wdio/local-runner to 9.21.0
+  - @wdio/mocha-framework to 9.21.0
+  - @wdio/spec-reporter to 9.20.0
+  - chromedriver to 143.0.1
+- removed @wdio/sync
+  - updated tests to be asynchronous
+
 ## 6.0.3
 
 - Fix a bug with not being able to remove handlers when targetFrames are used.
@@ -7,6 +20,7 @@
 ## 6.0.2
 
 - Update (sub-)dependencies
+
   - axios to 1.7.7
   - body-parse to 1.20.3
   - cookie to 0.7.1
@@ -20,6 +34,7 @@
   - express to 4.20.1
 
 ## 6.0.1
+
 - Update @braintree/uuid to v1.0.0
 - Update dev dependencies:
   - chromedriver to v125.0.3

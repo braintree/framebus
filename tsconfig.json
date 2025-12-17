@@ -6,9 +6,24 @@
     "outDir": "./dist",
     "module": "commonjs",
     "target": "es5",
-    "lib": ["es2015", "dom"],
-    "strict": true
+    "lib": [
+      "es2015",
+      "dom"
+    ],
+    "strict": true,
+    "types": [
+      "@wdio/types",
+      "@types/jest",
+      "@wdio/globals/types",
+      "@wdio/mocha-framework",
+      "node"
+    ]
   },
-  "include": ["./src/**/*"],
-  "exclude": ["./src/__tests__/**/*"]
+  "include": [
+    "./src/**/*",
+    "./spec/**/*"
+  ],
+  "exclude": [
+    "./src/__tests__/**/*"
+  ]
 }

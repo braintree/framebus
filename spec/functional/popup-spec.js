@@ -1,14 +1,22 @@
+import { $, $$ } from "@wdio/globals";
+
 describe("Popup Events", () => {
-  beforeEach(() => {
-    browser.url("http://localhost:3099");
+  beforeEach(async () => {
+    await browser.url("http://localhost:3099");
   });
 
-  it("should be able to receive events from opener frames", () => {
+  afterEach(async () => {
+    await browser.reloadSession();
+  });
+
+  it("should be able to receive events from opener frames", async () => {
     const expected = "hello from frame3!";
+    const iframe = await $("iframe[name='frame3']");
 
-    $("#open-popup").click();
-    browser.switchWindow("popup");
-    browser.waitUntil(
+    await $("#open-popup").click();
+    await browser.switchWindow("popup");
+
+    await browser.waitUntil(
       () => {
         return $("body").getHTML() != null;
       },
@@ -17,17 +25,16 @@ describe("Popup Events", () => {
         timeoutMsg: "expected body to exist",
       }
     );
+    await browser.switchWindow("localhost:3099");
 
-    browser.switchWindow("localhost:3099");
+    await browser.switchFrame(iframe);
 
-    browser.switchToFrame(2);
+    await $("#popup-message").setValue(expected);
+    await $("#send").click();
 
-    $("#popup-message").setValue(expected);
-    $("#send").click();
+    await browser.switchWindow("popup");
 
-    browser.switchWindow("popup");
-
-    browser.waitUntil(
+    await browser.waitUntil(
       () => {
         return $("p").getHTML !== "";
       },
@@ -35,21 +42,22 @@ describe("Popup Events", () => {
         timeout: 1000,
       }
     );
-    $("p")
-      .getText()
-      .then((actual) => {
-        expect($$("p").length).toBe(1);
-        expect(actual).toBe(expected);
-      });
+
+    const paragraphs = await $$("p");
+    expect(paragraphs.length).toBe(1);
+
+    const actual = await $("p").getText();
+    expect(actual).toBe(expected);
   });
 
-  it("should be able to send events to opener frames", () => {
+  it("should be able to send events to opener frames", async () => {
     const expected = "hello from popup!";
+    const iframe = await $("iframe[name='frame2']");
 
-    $("#open-popup").click();
+    await $("#open-popup").click();
 
-    browser.switchWindow("popup");
-    browser.waitUntil(
+    await browser.switchWindow("popup");
+    await browser.waitUntil(
       () => {
         return $("body").getHTML() != null;
       },
@@ -59,13 +67,13 @@ describe("Popup Events", () => {
       }
     );
 
-    $("#from-popup-message").setValue(expected);
-    $("#send").click();
+    await $("#from-popup-message").setValue(expected);
+    await $("#send").click();
 
-    browser.switchWindow("localhost:3099");
-    browser.switchToFrame(1);
+    await browser.switchWindow("localhost:3099");
+    await browser.switchFrame(iframe);
 
-    browser.waitUntil(
+    await browser.waitUntil(
       () => {
         return $("p").getHTML !== "";
       },
@@ -73,21 +81,22 @@ describe("Popup Events", () => {
         timeout: 1000,
       }
     );
-    $("p")
-      .getText()
-      .then((actual) => {
-        expect($$("p").length).toBe(1);
-        expect(actual).toContain(expected);
-      });
+
+    const paragraphs = await $$("p");
+    expect(paragraphs.length).toBe(1);
+
+    const actual = await $("p").getText();
+    expect(actual).toContain(expected);
   });
 
-  it("should not double-receive events in popups", () => {
+  it("should not double-receive events in popups", async () => {
     const expected = "hello from popup!";
+    const iframe = await $("iframe[name='frame2']");
 
-    $("#open-popup").click();
+    await $("#open-popup").click();
 
-    browser.switchWindow("popup");
-    browser.waitUntil(
+    await browser.switchWindow("popup");
+    await browser.waitUntil(
       () => {
         return $("body").getHTML() != null;
       },
@@ -97,13 +106,13 @@ describe("Popup Events", () => {
       }
     );
 
-    $("#from-popup-message").setValue(expected);
-    $("#send").click();
+    await $("#from-popup-message").setValue(expected);
+    await $("#send").click();
 
-    browser.switchWindow("localhost:3099");
-    browser.switchToFrame(1);
+    await browser.switchWindow("localhost:3099");
+    await browser.switchFrame(iframe);
 
-    browser.waitUntil(
+    await browser.waitUntil(
       () => {
         return $("p").getHTML !== "";
       },
@@ -111,20 +120,20 @@ describe("Popup Events", () => {
         timeout: 1000,
       }
     );
-    $("p")
-      .getText()
-      .then((actual) => {
-        expect($$("p").length).toBe(1);
-        expect(actual).not.toContain("FAILURE");
-      });
+
+    const paragraphs = await $$("p");
+    expect(paragraphs.length).toBe(1);
+
+    const actual = await $("p").getText();
+    expect(actual).not.toContain("FAILURE");
   });
 
-  it("should be able to receive messages from opener window", () => {
+  it("should be able to receive messages from opener window", async () => {
     const expected = "hello from opener!";
 
-    $("#open-popup").click();
-    browser.switchWindow("popup");
-    browser.waitUntil(
+    await $("#open-popup").click();
+    await browser.switchWindow("popup");
+    await browser.waitUntil(
       () => {
         return $("body").getHTML() != null;
       },
@@ -134,12 +143,12 @@ describe("Popup Events", () => {
       }
     );
 
-    browser.switchWindow("localhost:3099");
-    $("#from-top-message").setValue(expected);
-    $("#send-from-top").click();
+    await browser.switchWindow("localhost:3099");
+    await $("#from-top-message").setValue(expected);
+    await $("#send-from-top").click();
 
-    browser.switchWindow("popup");
-    browser.waitUntil(
+    await browser.switchWindow("popup");
+    await browser.waitUntil(
       () => {
         return $("p").getHTML !== "";
       },
