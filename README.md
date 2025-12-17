@@ -43,7 +43,7 @@ origin.
 
 The `channel` namespaces the events called with `on` and `emit` so you
 can have multiple bus instances on the page and have them only
-communicate with busses with the same channel value.
+communicate with buses with the same channel value.
 
 If a `verifyDomain` function is passed, then the `on` listener will only
 fire if the domain of the origin of the post message matches the
@@ -93,7 +93,7 @@ bus.addTargetFrame(myIframe);
 **returns**: a chainable instance of framebus that operates on the
 chosen origin.
 
-This method is used in conjuction with `emit`, `on`, and `off` to
+This method is used in conjunction with `emit`, `on`, and `off` to
 restrict their results to the given origin. By default, an origin of
 `'*'` is used.
 
@@ -124,7 +124,7 @@ otherwise
 #### `emitAsPromise('event', data?): Promise`
 
 **returns**: A promise that resolves when the emitted event is responded
-to the first time. It will reject if the event could not be succesfully
+to the first time. It will reject if the event could not be successfully
 published.
 
 | Argument | Type   | Description                     |
@@ -180,9 +180,9 @@ framebus.include(popup);
 framebus.emit("hello popup and friends!");
 ```
 
-| Argument | Type   | Description                                  |
-| -------- | ------ | -------------------------------------------- |
-| `popup`  | Window | The popup refrence returned by `window.open` |
+| Argument | Type   | Description                                   |
+| -------- | ------ | --------------------------------------------- |
+| `popup`  | Window | The popup reference returned by `window.open` |
 
 #### `addTargetFrame(frame): boolean`
 
@@ -194,7 +194,7 @@ noop.
 var frame = document.getElementById("my-iframe");
 
 framebus.addTargetFrame(frame);
-framebus.emit("hello targetted iframe!");
+framebus.emit("hello targeted iframe!");
 ```
 
 | Argument | Type                        | Description                                  |
@@ -293,6 +293,12 @@ occur as follows:
 
 6.  Back on `http://emitter.example.com`, the `callback` is called and
     unsubscribed from the special UUID event afterward.
+
+### Upgrading past 5.x.x
+
+If you are importing framebus via `import { Framebus } from 'framebus/dist/framebus'`, your functions may error out due to missing the `attach()` call done in `index.ts`. You may need to add an additional line, `import 'framebus/dist/index'` to ensure this call completes.
+
+See [here](https://github.com/braintree/framebus/issues/115) for more details.
 
 ## Development and contributing
 
