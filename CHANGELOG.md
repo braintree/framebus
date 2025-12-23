@@ -4,7 +4,13 @@
 
 - Fix failing functional/smoke tests
 - Update to node v24
+- `@braintree/uuid` to 1.0.1
 - Update dev dependencies
+  - async to 3.2.6
+  - browserify to 17.0.1
+  - chromedriver to 143.0.3
+  - del to 8.0.1
+  - gulp to 5.0.1
   - @wdio/cli to 9.21.1
   - @wdio/local-runner to 9.21.0
   - @wdio/mocha-framework to 9.21.0
