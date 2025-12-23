@@ -16,6 +16,7 @@
   - @wdio/mocha-framework to 9.21.0
   - @wdio/spec-reporter to 9.20.0
   - chromedriver to 143.0.1
+- add eslint-plugin-prettier
 - removed @wdio/sync
   - updated tests to be asynchronous
 
@@ -26,7 +27,6 @@
 ## 6.0.2
 
 - Update (sub-)dependencies
-
   - axios to 1.7.7
   - body-parse to 1.20.3
   - cookie to 0.7.1

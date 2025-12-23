@@ -5,13 +5,13 @@ import type { FramebusSubscriberArg, FramebusSubscribeHandler } from "./";
 
 export function subscribeReplier(
   fn: FramebusSubscribeHandler,
-  origin: string
+  origin: string,
 ): string {
   const uuid = generateUUID();
 
   function replier(
     data: FramebusSubscriberArg,
-    replyOriginHandler: FramebusSubscribeHandler
+    replyOriginHandler: FramebusSubscribeHandler,
   ): void {
     fn(data, replyOriginHandler);
     Framebus.target({

@@ -7,7 +7,7 @@ window.addEventListener(
   function (e) {
     console.log(e.data); // eslint-disable-line no-console
   },
-  false
+  false,
 );
 
 app.printToDOM = function (str, id) {

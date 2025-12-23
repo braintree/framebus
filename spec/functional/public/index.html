@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -46,7 +46,7 @@
             message: document.querySelector("#from-top-message").value,
           });
         },
-        false
+        false,
       );
 
       document.querySelector("#open-popup").addEventListener(
@@ -58,7 +58,7 @@
           var popup = window.open("/html/popup.html", "popup");
           bus.include(popup);
         },
-        false
+        false,
       );
     </script>
   </body>

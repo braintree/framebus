@@ -19,7 +19,7 @@ describe("subscriptionArgsInvalid", () => {
       "event",
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       "function" as any,
-      "*"
+      "*",
     );
 
     expect(actual).toBe(true);

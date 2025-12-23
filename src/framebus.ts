@@ -69,7 +69,7 @@ export class Framebus {
     this.listeners = [];
 
     this.hasAdditionalChecksForOnListeners = Boolean(
-      this.verifyDomain || this.limitBroadcastToFramesArray
+      this.verifyDomain || this.limitBroadcastToFramesArray,
     );
   }
 
@@ -115,7 +115,7 @@ export class Framebus {
   emit(
     eventName: string,
     data?: FramebusSubscriberArg | FramebusReplyHandler,
-    reply?: FramebusReplyHandler
+    reply?: FramebusReplyHandler,
   ): boolean {
     if (this.isDestroyed) {
       return false;
@@ -157,7 +157,7 @@ export class Framebus {
 
   emitAsPromise<T = void>(
     eventName: string,
-    data?: FramebusSubscriberArg
+    data?: FramebusSubscriberArg,
   ): Promise<T> {
     return new Framebus.Promise((resolve, reject) => {
       const didAttachListener = this.emit(eventName, data, (payload) => {

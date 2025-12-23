@@ -5,7 +5,7 @@ import type { FramebusOnHandler } from "./";
 export function subscriptionArgsInvalid(
   event: string,
   fn: FramebusOnHandler,
-  origin: string
+  origin: string,
 ): boolean {
   if (isntString(event)) {
     return true;

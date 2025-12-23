@@ -6,10 +6,7 @@
     "outDir": "./dist",
     "module": "commonjs",
     "target": "es5",
-    "lib": [
-      "es2015",
-      "dom"
-    ],
+    "lib": ["es2015", "dom"],
     "strict": true,
     "types": [
       "@wdio/types",
@@ -19,11 +16,6 @@
       "node"
     ]
   },
-  "include": [
-    "./src/**/*",
-    "./spec/**/*"
-  ],
-  "exclude": [
-    "./src/__tests__/**/*"
-  ]
+  "include": ["./src/**/*", "./spec/**/*"],
+  "exclude": ["./src/__tests__/**/*"]
 }

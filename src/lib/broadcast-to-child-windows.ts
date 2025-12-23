@@ -3,7 +3,7 @@ import { broadcast, childWindows } from "./";
 export function broadcastToChildWindows(
   payload: string,
   origin: string,
-  source: Window
+  source: Window,
 ): void {
   for (let i = childWindows.length - 1; i >= 0; i--) {
     const childWindow = childWindows[i];

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -16,7 +16,7 @@
         origin: "*",
       }).on("special-message-to-parent", function (payload) {
         app.printToDOM(
-          'FAIL: [inner frame 1] received "' + payload.message + '"'
+          'FAIL: [inner frame 1] received "' + payload.message + '"',
         );
       });
 
@@ -30,7 +30,7 @@
           },
           function (reply) {
             app.printToDOM(reply.message);
-          }
+          },
         );
       };
     </script>
