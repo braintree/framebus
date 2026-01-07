@@ -4,7 +4,7 @@
 export function sendMessage(
   frame: Window,
   payload: string,
-  origin: string
+  origin: string,
 ): void {
   try {
     frame.postMessage(payload, origin);

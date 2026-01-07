@@ -23,7 +23,7 @@ describe("Popup Events", () => {
       {
         timeout: 1000,
         timeoutMsg: "expected body to exist",
-      }
+      },
     );
     await browser.switchWindow("localhost:3099");
 
@@ -40,7 +40,7 @@ describe("Popup Events", () => {
       },
       {
         timeout: 1000,
-      }
+      },
     );
 
     const paragraphs = await $$("p");
@@ -64,7 +64,7 @@ describe("Popup Events", () => {
       {
         timeout: 1000,
         timeoutMsg: "expected body to exist",
-      }
+      },
     );
 
     await $("#from-popup-message").setValue(expected);
@@ -79,7 +79,7 @@ describe("Popup Events", () => {
       },
       {
         timeout: 1000,
-      }
+      },
     );
 
     const paragraphs = await $$("p");
@@ -103,7 +103,7 @@ describe("Popup Events", () => {
       {
         timeout: 1000,
         timeoutMsg: "expected body to exist",
-      }
+      },
     );
 
     await $("#from-popup-message").setValue(expected);
@@ -118,7 +118,7 @@ describe("Popup Events", () => {
       },
       {
         timeout: 1000,
-      }
+      },
     );
 
     const paragraphs = await $$("p");
@@ -140,7 +140,7 @@ describe("Popup Events", () => {
       {
         timeout: 1000,
         timeoutMsg: "expected body to exist",
-      }
+      },
     );
 
     await browser.switchWindow("localhost:3099");
@@ -154,7 +154,7 @@ describe("Popup Events", () => {
       },
       {
         timeout: 1000,
-      }
+      },
     );
     $("p")
       .getText()

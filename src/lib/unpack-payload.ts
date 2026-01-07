@@ -28,7 +28,7 @@ export function unpackPayload(e: MessageEvent): FramebusPayload | false {
       const replyPayload = packagePayload(
         replyEvent,
         replyOrigin,
-        replyData as FramebusSubscriberArg
+        replyData as FramebusSubscriberArg,
       );
 
       if (!replyPayload) {

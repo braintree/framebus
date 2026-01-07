@@ -18,7 +18,7 @@ export type FramebusPayload = {
 export type FramebusSubscriberArg = Record<string, unknown>;
 export type FramebusSubscribeHandler = (
   data?: FramebusSubscriberArg | FramebusSubscribeHandler,
-  reply?: FramebusSubscribeHandler
+  reply?: FramebusSubscribeHandler,
 ) => void;
 type FramebusSubscription = Record<string, FramebusSubscribeHandler[]>;
 export type FramebusSubscriber = Record<string, FramebusSubscription>;
@@ -26,5 +26,5 @@ export type FramebusSubscriber = Record<string, FramebusSubscription>;
 export type FramebusReplyHandler = (data: unknown) => void;
 export type FramebusOnHandler = (
   data: FramebusSubscriberArg,
-  reply: FramebusReplyHandler
+  reply: FramebusReplyHandler,
 ) => void;

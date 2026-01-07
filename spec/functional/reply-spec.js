@@ -27,7 +27,7 @@ describe("Reply Events", () => {
       {
         timeout: 10000,
         timeoutMsg: "expected p tag to have text",
-      }
+      },
     );
 
     await browser.switchToParentFrame();

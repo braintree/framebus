@@ -4,12 +4,19 @@
 
 - Fix failing functional/smoke tests
 - Update to node v24
+- `@braintree/uuid` to 1.0.1
 - Update dev dependencies
+  - async to 3.2.6
+  - browserify to 17.0.1
+  - chromedriver to 143.0.3
+  - del to 8.0.1
+  - gulp to 5.0.1
   - @wdio/cli to 9.21.1
   - @wdio/local-runner to 9.21.0
   - @wdio/mocha-framework to 9.21.0
   - @wdio/spec-reporter to 9.20.0
   - chromedriver to 143.0.1
+- add eslint-plugin-prettier
 - removed @wdio/sync
   - updated tests to be asynchronous
 
@@ -20,7 +27,6 @@
 ## 6.0.2
 
 - Update (sub-)dependencies
-
   - axios to 1.7.7
   - body-parse to 1.20.3
   - cookie to 0.7.1

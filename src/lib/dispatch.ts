@@ -7,7 +7,7 @@ export function dispatch(
   event: string,
   data?: FramebusSubscriberArg,
   reply?: FramebusSubscribeHandler,
-  e?: MessageEvent
+  e?: MessageEvent,
 ): void {
   if (!subscribers[origin]) {
     return;
@@ -18,7 +18,7 @@ export function dispatch(
 
   const args: [
     (FramebusSubscriberArg | FramebusSubscribeHandler)?,
-    FramebusSubscribeHandler?
+    FramebusSubscribeHandler?,
   ] = [];
 
   if (data) {

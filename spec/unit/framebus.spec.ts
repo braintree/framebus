@@ -94,7 +94,7 @@ describe("Framebus", () => {
         bus.include({
           // @ts-ignore
           Window: "fake window",
-        })
+        }),
       ).toBe(false);
     });
 
@@ -107,7 +107,7 @@ describe("Framebus", () => {
           Window: fakeWindow,
           // @ts-ignore
           constructor: fakeWindow,
-        })
+        }),
       ).toBe(true);
     });
   });
@@ -223,7 +223,7 @@ describe("Framebus", () => {
         {
           origin: "*",
           frame: window.top,
-        }
+        },
       );
     });
 
@@ -246,13 +246,13 @@ describe("Framebus", () => {
         1,
         iframe1.contentWindow,
         expect.stringContaining('"foo":"bar"'),
-        "*"
+        "*",
       );
       expect(sendMessage).toHaveBeenNthCalledWith(
         2,
         iframe2.contentWindow,
         expect.stringContaining('"foo":"bar"'),
-        "*"
+        "*",
       );
       expect(broadcast).not.toBeCalled();
     });
@@ -268,7 +268,7 @@ describe("Framebus", () => {
         {
           origin: "*",
           frame: window.top,
-        }
+        },
       );
     });
 
@@ -291,7 +291,7 @@ describe("Framebus", () => {
         {
           origin: "*",
           frame: window.top,
-        }
+        },
       );
     });
   });
@@ -306,7 +306,7 @@ describe("Framebus", () => {
         await bus.emitAsPromise("event-name");
       } catch (err) {
         expect((err as Error).message).toBe(
-          'Listener not added for "event-name"'
+          'Listener not added for "event-name"',
         );
       }
     });
@@ -329,7 +329,7 @@ describe("Framebus", () => {
         "event-name",
         // eslint-disable-next-line no-undefined
         undefined,
-        expect.any(Function)
+        expect.any(Function),
       );
       expect(result).toBe(payload);
     });
@@ -351,7 +351,7 @@ describe("Framebus", () => {
       expect(bus.emit).toBeCalledWith(
         "event-name",
         { foo: "bar" },
-        expect.any(Function)
+        expect.any(Function),
       );
     });
   });
@@ -431,7 +431,7 @@ describe("Framebus", () => {
         {
           data: "foo",
         },
-        cb
+        cb,
       );
 
       expect(handler).toBeCalledTimes(1);
@@ -457,7 +457,7 @@ describe("Framebus", () => {
         {
           data: "foo",
         },
-        cb
+        cb,
       );
 
       expect(handler).toBeCalledTimes(0);
@@ -485,7 +485,7 @@ describe("Framebus", () => {
         {
           data: "disallowed",
         },
-        cb
+        cb,
       );
 
       expect(handler).toBeCalledTimes(0);
@@ -497,7 +497,7 @@ describe("Framebus", () => {
         {
           data: "allowed",
         },
-        cb
+        cb,
       );
 
       expect(handler).toBeCalledTimes(1);
@@ -527,7 +527,7 @@ describe("Framebus", () => {
         {
           data: "allowed",
         },
-        cb
+        cb,
       );
 
       expect(handler).toBeCalledTimes(1);
@@ -557,7 +557,7 @@ describe("Framebus", () => {
         {
           data: "allowed",
         },
-        cb
+        cb,
       );
 
       expect(handler).toBeCalledTimes(1);
@@ -587,7 +587,7 @@ describe("Framebus", () => {
         {
           data: "allowed",
         },
-        cb
+        cb,
       );
 
       expect(handler).toBeCalledTimes(1);
@@ -617,7 +617,7 @@ describe("Framebus", () => {
         {
           data: "foo",
         },
-        cb
+        cb,
       );
 
       expect(handler).toBeCalledTimes(0);
@@ -646,7 +646,7 @@ describe("Framebus", () => {
         {
           data: "foo",
         },
-        cb
+        cb,
       );
 
       expect(handler).toBeCalledTimes(0);
@@ -675,7 +675,7 @@ describe("Framebus", () => {
         {
           data: "foo",
         },
-        cb
+        cb,
       );
 
       expect(handler).toBeCalledTimes(1);
@@ -702,7 +702,7 @@ describe("Framebus", () => {
         {
           data: "foo",
         },
-        cb
+        cb,
       );
 
       expect(handler).toBeCalledTimes(0);
@@ -731,7 +731,7 @@ describe("Framebus", () => {
         {
           data: "disallowed",
         },
-        cb
+        cb,
       );
 
       expect(handler).toBeCalledTimes(0);
@@ -744,7 +744,7 @@ describe("Framebus", () => {
         {
           data: "allowed",
         },
-        cb
+        cb,
       );
 
       expect(handler).toBeCalledTimes(1);

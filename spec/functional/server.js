@@ -75,7 +75,7 @@ function stop(cb) {
     }),
     () => {
       cb();
-    }
+    },
   );
 }
 

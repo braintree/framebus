@@ -21,7 +21,7 @@ describe("targetFrames Events", () => {
       {
         timeout: 1000,
         timeoutMsg: "expected p tag to have text",
-      }
+      },
     );
 
     const indexReceived = await $$("p").length;

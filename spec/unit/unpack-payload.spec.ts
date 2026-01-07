@@ -32,7 +32,7 @@ describe("_unpackPayload", () => {
     const actual = unpackPayload(
       makeEvent({
         data: messagePrefix + JSON.stringify({ event, eventData: data }),
-      })
+      }),
     ) as FramebusPayload;
     const eventData = actual.eventData as FramebusSubscriberArg;
 
@@ -49,7 +49,7 @@ describe("_unpackPayload", () => {
         data:
           messagePrefix +
           JSON.stringify({ event: event, reply, eventData: data }),
-      })
+      }),
     ) as FramebusPayload;
     const eventData = actual.eventData as FramebusSubscriberArg;
 
@@ -76,7 +76,7 @@ describe("_unpackPayload", () => {
             reply,
             eventData: data,
           }),
-      })
+      }),
     ) as FramebusPayload;
     const handler = actual.reply as FramebusSubscribeHandler;
 
@@ -99,7 +99,7 @@ describe("_unpackPayload", () => {
             reply,
             eventData: data,
           }),
-      })
+      }),
     ) as FramebusPayload;
     const handler = actual.reply as FramebusSubscribeHandler;
 

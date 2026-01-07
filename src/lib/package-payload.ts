@@ -10,7 +10,7 @@ export function packagePayload(
   event: string,
   origin: string,
   data?: FramebusSubscriberArg,
-  reply?: FramebusSubscribeHandler
+  reply?: FramebusSubscribeHandler,
 ): string {
   let packaged;
   const payload: FramebusPayload = {
