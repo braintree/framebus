@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## UNRELEASED
+## 6.0.4
 
 - Fix failing functional/smoke tests
 - Update to node v24
@@ -109,41 +109,38 @@
 
 - Add `teardown` method for easy cleanup
 
-_Breaking Changes_
+- BREAKING CHANGES
+  - Instantiate new instances of framebus
 
-- Instantiate new instances of framebus
+    ```js
+    // v4
+    var bus = require("framebus");
+    bus.on(/* args */);
+    bus.emit(/* args */);
 
-  ```js
-  // v4
-  var bus = require("framebus");
-  bus.on(/* args */);
-  bus.emit(/* args */);
+    // v5
+    var Framebus = require("framebus");
+    var bus = new Framebus();
+    bus.on(/* args */);
+    bus.emit(/* args */);
+    ```
 
-  // v5
-  var Framebus = require("framebus");
-  var bus = new Framebus();
-  bus.on(/* args */);
-  bus.emit(/* args */);
-  ```
+  - Instantiating a framebus with `target` method with an `origin` param now requires an options object (same object that is used to instantiate the instance)
 
-- Instantiating a framebus with `target` method with an `origin` param
-  now requires an options object (same object that is used to
-  instantiate the instance)
+    ```js
+    // v4
+    var bus = require("framebus");
+    var anotherBus = bus.target("example.com");
 
-  ```js
-  // v4
-  var bus = require("framebus");
-  var anotherBus = bus.target("example.com");
-
-  // v5
-  var Framebus = require("framebus");
-  var bus = Framebus.target({
-    origin: "example.com",
-  });
-  var anotherBus = bus.target({
-    origin: "example.com",
-  });
-  ```
+    // v5
+    var Framebus = require("framebus");
+    var bus = Framebus.target({
+      origin: "example.com",
+    });
+    var anotherBus = bus.target({
+      origin: "example.com",
+    });
+    ```
 
 ## 4.0.5
 
@@ -166,15 +163,13 @@ _Breaking Changes_
 
 ## v4.0.0
 
-_Breaking Changes_
-
-- Drop support for IE \< 9
-- Drop support for using methods standalone without using the bus
-- Drop `publish`, `pub`, and `trigger` methods. Use `emit`
-- Drop `subscribe` and `sub` methods. Use `on`
-- Drop `unsubscribe` and `unsub` methods. Use `off`
-- Drop support for passing multiple arguments to `emit`, not it only
-  supports passing `data` and `reply`
+- BREAKING CHANGES
+  - Drop support for IE \< 9
+  - Drop support for using methods standalone without using the bus
+  - Drop `publish`, `pub`, and `trigger` methods. Use `emit`
+  - Drop `subscribe` and `sub` methods. Use `on`
+  - Drop `unsubscribe` and `unsub` methods. Use `off`
+  - Drop support for passing multiple arguments to `emit`, not it only supports passing `data` and `reply`
 
 ## 3.0.2
 
@@ -188,12 +183,9 @@ _Breaking Changes_
 
   ## 3.0.0
 
-_BREAKING CHANGES_
-
-- Module is now CommonJS only, and must be used with npm with a build
-  tool (Browserify, Webpack, etc)
-
-- Bower support dropped
+- BREAKING CHANGES
+  - Module is now CommonJS only, and must be used with npm with a build tool (Browserify, Webpack, etc)
+  - Bower support dropped
 
   ## 2.0.8
 
