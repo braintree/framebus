@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## UNRELEASED
+
+- Bugfix: remove test files from tsconfig - fixes ([Issue #144](https://github.com/braintree/framebus/issues/144))
+
 ## 6.0.4
 
 - Fix failing functional/smoke tests
