@@ -7,7 +7,7 @@
   },
   "homepage": "https://github.com/braintree/framebus",
   "version": "6.0.4",
-  "main": "dist/index.js",
+  "main": "dist/src/index.js",
   "files": [
     "dist/"
   ],
