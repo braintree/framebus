@@ -6,7 +6,7 @@
     "url": "git://github.com/braintree/framebus.git"
   },
   "homepage": "https://github.com/braintree/framebus",
-  "version": "6.0.4",
+  "version": "6.0.5",
   "main": "dist/index.js",
   "files": [
     "dist/"
