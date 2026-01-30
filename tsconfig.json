@@ -16,6 +16,6 @@
       "node"
     ]
   },
-  "include": ["./src/**/*", "./spec/**/*"],
+  "include": ["./src/**/*"],
   "exclude": ["./src/__tests__/**/*"]
 }
