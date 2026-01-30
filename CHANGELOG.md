@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## UNRELEASED
+## 6.0.5
 
 - Bugfix: remove test files from tsconfig - fixes ([Issue #144](https://github.com/braintree/framebus/issues/144))
 
