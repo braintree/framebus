@@ -28,7 +28,8 @@
     "playwright:local": "npm run preplaywright && npx playwright test --config=spec/functional/playwright/playwright.local.ts && npm run postplaywright",
     "playwright:local:headed": "npm run preplaywright && npx playwright test --config=spec/functional/playwright/playwright.local.ts --headed && npm run postplaywright",
     "prestart": "npm run pretest:functional",
-    "start": "./bin/www"
+    "start": "./bin/www",
+    "prepare": "husky"
   },
   "license": "MIT",
   "author": "braintree <code@getbraintree.com>",
@@ -57,6 +58,7 @@
     "gulp-size": "^3.0.0",
     "gulp-streamify": "^1.0.2",
     "gulp-uglify": "^3.0.2",
+    "husky": "^9.1.7",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "morgan": "^1.10.0",
