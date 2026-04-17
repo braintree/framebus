@@ -15,7 +15,6 @@ const createWebProjects = (platform: "windows" | "osx") => {
       browser_Version: cap.browserVersion,
       os: cap.os,
       os_version: cap.osVersion,
-      name: `${cap.browserName} ${cap.osVersion}`,
     };
 
     return {
