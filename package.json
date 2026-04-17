@@ -29,7 +29,8 @@
     "playwright:local:headed": "npm run preplaywright && npx playwright test --config=spec/functional/playwright/playwright.local.ts --headed && npm run postplaywright",
     "prestart": "npm run pretest:functional",
     "start": "./bin/www",
-    "prepare": "husky"
+    "prepare": "husky",
+    "commit": "cz"
   },
   "license": "MIT",
   "author": "braintree <code@getbraintree.com>",
@@ -39,11 +40,15 @@
   "devDependencies": {
     "gulp-cli": "^3.1.0",
     "@playwright/test": "1.58.0",
+    "@commitlint/cli": "^20.5.0",
+    "@commitlint/config-conventional": "^20.5.0",
     "@types/jest": "^29.5.11",
     "async": "^3.2.6",
     "browserify": "^17.0.1",
     "browserstack-local": "^1.5.13",
     "browserstack-node-sdk": "^1.52.0",
+    "commitizen": "^4.3.1",
+    "cz-customizable": "^7.5.4",
     "del": "^8.0.1",
     "dotenv": "^17.4.2",
     "ejs": "^3.1.10",
@@ -78,7 +83,9 @@
     "restoreMocks": true,
     "resetMocks": true,
     "collectCoverage": true,
-    "collectCoverageFrom": ["src/**/*.ts"],
+    "collectCoverageFrom": [
+      "src/**/*.ts"
+    ],
     "coverageThreshold": {
       "global": {
         "lines": 80,
@@ -86,6 +93,11 @@
         "branches": 80,
         "functions": 80
       }
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-customizable"
     }
   }
 }

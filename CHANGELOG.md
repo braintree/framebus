@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## UNRELEASED
+
+- feat(deps): Add [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) to the repo
+
 ## 6.0.5
 
 - Bugfix: remove test files from tsconfig - fixes ([Issue #144](https://github.com/braintree/framebus/issues/144))
