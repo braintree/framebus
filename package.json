@@ -21,7 +21,7 @@
     "pretest:functional": "gulp functional:prep",
     "test:functional": "npm run playwright:local",
     "test": "npm run test:unit && npm run test:functional",
-    "clean:playwright": "find ./ -type f \\( -name \"local.log\" -or -name \"browserstack.err\" \\) -delete && find ./ -depth \\( -name \"log\" -or -name \"playwright-report\" -or -name \"test-results\" \\) -type d -exec rm -rf \"{}\" \\;",
+    "clean:playwright": "find ./ -type f \\( -name \"local.log\" -or -name \"browserstack.err\" \\) -delete && find ./ -depth -not -path \"*/node_modules/*\" \\( -name \"log\" -or -name \"playwright-report\" -or -name \"test-results\" \\) -type d -exec rm -rf \"{}\" \\;",
     "preplaywright": "npm run pretest:functional",
     "playwright": "npx playwright test --config=spec/functional/playwright/playwright.browserstack.config.ts",
     "postplaywright": "npm run clean:playwright",
