@@ -9,24 +9,28 @@ test.describe("Reply Events", () => {
     page,
   }) => {
     const frame3 = page.frame({ name: "frame3" });
-    await frame3!.locator("#polo-text").fill("polo");
+    if (!frame3) throw new Error('Frame "frame3" not found');
+    await frame3.locator("#polo-text").fill("polo");
 
     const frame1 = page.frame({ name: "frame1" });
-    const frame1Inner = frame1!
+    if (!frame1) throw new Error('Frame "frame1" not found');
+    const frame1Inner = frame1
       .childFrames()
       .find((f) => f.name() === "frame1-inner");
-    await frame1Inner!.locator("#marco-button").click();
+    if (!frame1Inner) throw new Error('Frame "frame1-inner" not found');
+    await frame1Inner.locator("#marco-button").click();
 
-    await expect(frame1Inner!.locator("p")).toHaveText("polo", {
+    await expect(frame1Inner.locator("p")).toHaveText("polo", {
       timeout: 10000,
     });
 
     await expect(page.locator("p")).toHaveCount(0);
-    await expect(frame1!.locator("p")).toHaveCount(0);
+    await expect(frame1.locator("p")).toHaveCount(0);
 
     const frame2 = page.frame({ name: "frame2" });
-    await expect(frame2!.locator("p")).toHaveCount(0);
+    if (!frame2) throw new Error('Frame "frame2" not found');
+    await expect(frame2.locator("p")).toHaveCount(0);
 
-    await expect(frame3!.locator("p")).toHaveText("are you there?");
+    await expect(frame3.locator("p")).toHaveText("are you there?");
   });
 });

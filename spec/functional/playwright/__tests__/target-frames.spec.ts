@@ -7,7 +7,8 @@ test.describe("targetFrames Events", () => {
 
   test("should only publish to targeted frames", async ({ page }) => {
     const frame3 = page.frame({ name: "frame3" });
-    await frame3!.locator("#send-to-parent").click();
+    if (!frame3) throw new Error('Frame "frame3" not found');
+    await frame3.locator("#send-to-parent").click();
 
     await expect(page.locator("p")).toHaveText(
       "Special targetted message to only parent.",
@@ -16,16 +17,19 @@ test.describe("targetFrames Events", () => {
     await expect(page.locator("p")).toHaveCount(1);
 
     const frame1 = page.frame({ name: "frame1" });
-    await expect(frame1!.locator("p")).toHaveCount(0);
+    if (!frame1) throw new Error('Frame "frame1" not found');
+    await expect(frame1.locator("p")).toHaveCount(0);
 
-    const frame1Inner = frame1!
+    const frame1Inner = frame1
       .childFrames()
       .find((f) => f.name() === "frame1-inner");
-    await expect(frame1Inner!.locator("p")).toHaveCount(0);
+    if (!frame1Inner) throw new Error('Frame "frame1-inner" not found');
+    await expect(frame1Inner.locator("p")).toHaveCount(0);
 
     const frame2 = page.frame({ name: "frame2" });
-    await expect(frame2!.locator("p")).toHaveCount(0);
+    if (!frame2) throw new Error('Frame "frame2" not found');
+    await expect(frame2.locator("p")).toHaveCount(0);
 
-    await expect(frame3!.locator("p")).toHaveCount(0);
+    await expect(frame3.locator("p")).toHaveCount(0);
   });
 });

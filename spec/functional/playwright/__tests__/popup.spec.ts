@@ -1,4 +1,10 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, Frame } from "@playwright/test";
+
+function getFrame(frames: (Frame | null)[], name: string): Frame {
+  const frame = frames.find((f) => f && f.name() === name);
+  if (!frame) throw new Error(`Frame "${name}" not found`);
+  return frame;
+}
 
 test.describe("Popup Events", () => {
   test.beforeEach(async ({ page }) => {
@@ -17,9 +23,9 @@ test.describe("Popup Events", () => {
     ]);
     await popup.waitForLoadState();
 
-    const frame3 = page.frame({ name: "frame3" });
-    await frame3!.locator("#popup-message").fill(expected);
-    await frame3!.locator("#send").click();
+    const frame3 = getFrame(page.frames(), "frame3");
+    await frame3.locator("#popup-message").fill(expected);
+    await frame3.locator("#send").click();
 
     await popup.waitForSelector("p");
     await expect(popup.locator("p")).toHaveCount(1);
@@ -41,10 +47,10 @@ test.describe("Popup Events", () => {
     await popup.locator("#from-popup-message").fill(expected);
     await popup.locator("#send").click();
 
-    const frame2 = page.frame({ name: "frame2" });
-    await frame2!.waitForSelector("p");
-    await expect(frame2!.locator("p")).toHaveCount(1);
-    await expect(frame2!.locator("p")).toContainText(expected);
+    const frame2 = getFrame(page.frames(), "frame2");
+    await frame2.waitForSelector("p");
+    await expect(frame2.locator("p")).toHaveCount(1);
+    await expect(frame2.locator("p")).toContainText(expected);
   });
 
   test("should not double-receive events in popups", async ({
@@ -62,10 +68,10 @@ test.describe("Popup Events", () => {
     await popup.locator("#from-popup-message").fill(expected);
     await popup.locator("#send").click();
 
-    const frame2 = page.frame({ name: "frame2" });
-    await frame2!.waitForSelector("p");
-    await expect(frame2!.locator("p")).toHaveCount(1);
-    await expect(frame2!.locator("p")).not.toContainText("FAILURE");
+    const frame2 = getFrame(page.frames(), "frame2");
+    await frame2.waitForSelector("p");
+    await expect(frame2.locator("p")).toHaveCount(1);
+    await expect(frame2.locator("p")).not.toContainText("FAILURE");
   });
 
   test("should be able to receive messages from opener window", async ({
