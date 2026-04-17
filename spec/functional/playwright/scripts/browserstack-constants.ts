@@ -53,5 +53,6 @@ export const commonCaps = {
   "browserstack.playwrightLogs": "true",
   "browserstack.idleTimeout": "300",
   "client.playwrightVersion": "1.57.0",
+  project: "Framebus",
   build: `Framebus Integration Tests #${BUILD_NUMBER}`,
 } as Record<string, string>;
