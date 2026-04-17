@@ -34,17 +34,11 @@ const createWebProjects = (platform: "windows" | "osx") => {
 };
 
 export default defineConfig({
-  globalSetup: require.resolve(
-    "./scripts/playwright.browserstack.setup.ts",
-  ),
-  globalTeardown: require.resolve(
-    "./scripts/playwright.browserstack.teardown.ts",
-  ),
+  globalSetup: require.resolve("./scripts/playwright.browserstack.setup.ts"),
+  globalTeardown:
+    require.resolve("./scripts/playwright.browserstack.teardown.ts"),
 
-  projects: [
-    ...createWebProjects("windows"),
-    ...createWebProjects("osx"),
-  ],
+  projects: [...createWebProjects("windows"), ...createWebProjects("osx")],
   timeout: 60000,
   retries: 0,
   webServer: {
