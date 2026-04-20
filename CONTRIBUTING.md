@@ -31,12 +31,21 @@ Replace any `nvm` references with the tool of your choice below.
 
 This library uses a combination of unit-style testing and
 functional/smoke style testing. The unit tests use
-[Jest](http://jestjs.io) while the functional tests use a combination of
-[Webdriver.io](http://webdriver.io/) and Mocha. All testing dependencies
+[Jest](http://jestjs.io) while the functional tests use
+[Playwright](https://playwright.dev/). All testing dependencies
 will be installed upon `npm install` and the test suite executed with
 `npm test`.
 
     npm test
+
+To run only the functional tests locally across Chrome, Firefox, Edge, and Safari:
+
+    npm run playwright:local
+
+To run against BrowserStack, copy `example.env` to `.env` and fill in your credentials:
+
+    cp example.env .env
+    npm run playwright
 
 ### Servers for manual testing
 
