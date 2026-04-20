@@ -13,16 +13,19 @@ describe("Framebus", () => {
   beforeEach(() => {
     bus = new Framebus();
     attach();
-    // @ts-ignore
-    delete window.location;
-    // @ts-ignore
-    window.location = {
-      href: "",
-    };
+    Object.defineProperty(window, "location", {
+      value: { href: "" },
+      writable: true,
+      configurable: true,
+    });
   });
 
   afterAll(() => {
-    window.location = location;
+    Object.defineProperty(window, "location", {
+      value: location,
+      writable: true,
+      configurable: true,
+    });
   });
 
   afterEach(() => {

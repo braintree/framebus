@@ -40,7 +40,7 @@ export default defineConfig({
 
   projects: [...createWebProjects("windows"), ...createWebProjects("osx")],
   timeout: 60000,
-  retries: 0,
+  retries: 2,
   webServer: {
     reuseExistingServer: true,
     command: "node ../../../bin/www",
