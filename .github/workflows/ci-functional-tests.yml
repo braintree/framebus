@@ -21,6 +21,7 @@ jobs:
         with:
           node-version-file: .nvmrc
       - run: npm install
+      - run: npx playwright install --with-deps
       - run: sudo apt-get install xvfb
       # there's a weird typescript incompatibility with jest types and mocha types
       # for whatever reason, just removing the mocha types module fixes the issue
