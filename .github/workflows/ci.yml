@@ -21,5 +21,7 @@ jobs:
         with:
           node-version-file: .nvmrc
       - run: npm ci
+      - run: npx playwright install --with-deps
+      - run: sudo apt-get install xvfb
       - run: npx eslint . --ext .js,.ts
-      - run: npm test
+      - run: xvfb-run --auto-servernum npm test
