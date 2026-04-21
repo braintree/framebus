@@ -18,7 +18,7 @@
     "lint": "eslint --ext js,ts .",
     "pretest": "npm run lint",
     "test:unit": "jest spec/unit/",
-    "pretest:functional": "gulp functional:prep",
+    "pretest:functional": "gulp functional:prep && npx playwright install --with-deps",
     "test:functional": "npm run playwright:local",
     "test": "npm run test:unit && npm run test:functional",
     "clean:playwright": "find ./ -type f \\( -name \"local.log\" -or -name \"browserstack.err\" \\) -delete && find ./ -depth -not -path \"*/node_modules/*\" \\( -name \"log\" -or -name \"playwright-report\" -or -name \"test-results\" \\) -type d -exec rm -rf \"{}\" \\;",
