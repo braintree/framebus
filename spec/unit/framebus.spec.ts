@@ -35,7 +35,7 @@ describe("Framebus", () => {
   });
 
   describe("target", () => {
-    it("returns a new Framebus isntance", () => {
+    it("returns a new Framebus instance", () => {
       const instance = Framebus.target();
 
       expect(instance).toBeInstanceOf(Framebus);
@@ -87,7 +87,7 @@ describe("Framebus", () => {
       expect(bus.include()).toBe(false);
     });
 
-    it("returns false if window has no Window propeerty", () => {
+    it("returns false if window has no Window property", () => {
       // @ts-ignore
       expect(bus.include({})).toBe(false);
     });
@@ -537,7 +537,7 @@ describe("Framebus", () => {
       expect(handler).toBeCalledWith({ data: "allowed" }, cb);
     });
 
-    it("does call original handler when a verification domain method fails, but post message origin matches location.href (ignoringg ssl port)", () => {
+    it("does call original handler when a verification domain method fails, but post message origin matches location.href (ignoring ssl port)", () => {
       window.location.href = "https://example.com:443";
       bus = new Framebus({
         verifyDomain() {
@@ -567,7 +567,7 @@ describe("Framebus", () => {
       expect(handler).toBeCalledWith({ data: "allowed" }, cb);
     });
 
-    it("does call original handler when a verification domain method fails, but post message origin matches location.href (ignoringg http port)", () => {
+    it("does call original handler when a verification domain method fails, but post message origin matches location.href (ignoring http port)", () => {
       window.location.href = "http://example.com:80";
       bus = new Framebus({
         verifyDomain() {
@@ -659,11 +659,11 @@ describe("Framebus", () => {
       const iframe = document.createElement("iframe");
       document.body.append(iframe);
 
-      const busWithTargettedFrames = new Framebus({
+      const busWithTargetedFrames = new Framebus({
         targetFrames: [iframe],
       });
       const handler = jest.fn();
-      busWithTargettedFrames.on("event-name", handler);
+      busWithTargetedFrames.on("event-name", handler);
 
       const newHandler = subscribers["*"]["event-name"][0];
 

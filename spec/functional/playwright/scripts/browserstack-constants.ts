@@ -1,5 +1,17 @@
 import * as path from "path";
+import { readFileSync } from "fs";
+
 import * as dotenv from "dotenv";
+
+const { version: playwrightVersion } = JSON.parse(
+  readFileSync(
+    path.resolve(
+      __dirname,
+      "../../../../node_modules/@playwright/test/package.json",
+    ),
+    "utf-8",
+  ),
+) as { version: string };
 
 dotenv.config({
   path: path.resolve(__dirname, "../../../../.env"),
@@ -52,7 +64,7 @@ export const commonCaps = {
   "browserstack.networkLogs": "true",
   "browserstack.playwrightLogs": "true",
   "browserstack.idleTimeout": "300",
-  "client.playwrightVersion": "1.57.0",
+  "client.playwrightVersion": playwrightVersion,
   project: "Framebus",
   build: `Framebus Integration Tests #${BUILD_NUMBER}`,
 } as Record<string, string>;

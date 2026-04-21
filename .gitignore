@@ -4,3 +4,7 @@ node_modules/
 spec/functional/public/js/test-app.js
 npm-debug.log
 phantomjsdriver.log
+.env
+playwright-report/
+local.log
+test-results/
