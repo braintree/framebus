@@ -8,13 +8,7 @@
     "target": "es5",
     "lib": ["es2015", "dom"],
     "strict": true,
-    "types": [
-      "@wdio/types",
-      "@types/jest",
-      "@wdio/globals/types",
-      "@wdio/mocha-framework",
-      "node"
-    ]
+    "types": ["@types/jest", "node"]
   },
   "include": ["./src/**/*"],
   "exclude": ["./src/__tests__/**/*"]
