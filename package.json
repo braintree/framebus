@@ -40,7 +40,7 @@
   "devDependencies": {
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^20.5.0",
-    "@playwright/test": "1.58.2",
+    "@playwright/test": "1.59.1",
     "@types/jest": "^29.5.14",
     "async": "^3.2.6",
     "browserify": "^17.0.1",
