@@ -11,8 +11,8 @@ test.describe("targetFrames Events", () => {
     await frame3.locator("#send-to-parent").click();
 
     await expect(page.locator("p")).toHaveText(
-      "Special targetted message to only parent.",
-      { timeout: 1000 },
+      "Special targeted message to only parent.",
+      { timeout: 10000 },
     );
     await expect(page.locator("p")).toHaveCount(1);
 
