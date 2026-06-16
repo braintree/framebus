@@ -110,3 +110,16 @@ Quarantined tests must be remedied within **30 days** of being quarantined. Reme
 - **Deleted**: If the test is no longer valuable or the feature it covers has changed, delete the test and close the tracking issue.
 
 If a quarantined test exceeds **14 days** without progress, it should be escalated and prioritized. Tests that remain skipped indefinitely are not acceptable.
+
+## Branch and PR Lifecycle
+
+To keep the repository healthy, an automated workflow runs weekly:
+
+- **Branches**: flagged after 21 days of inactivity; deleted 7 days later if
+  still inactive. To keep a branch, add new commits or remove the bot's comment.
+- **Pull requests**: commented on after 14 days of inactivity; closed 7 days
+  later if still inactive. Closed PRs can be reopened at any time.
+- **Issues**: commented on after 14 days of inactivity; closed 7 days later if
+  still inactive.
+
+You can open a fresh PR or issue at any time if automated cleanup closes yours.
