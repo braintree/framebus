@@ -2,6 +2,8 @@
 
 ## UNRELEASED
 
+## 6.1.0
+
 - feat(deps): Add [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) to the repo
 - Update dependencies
   - @braintree/uuid to 2.0.0
