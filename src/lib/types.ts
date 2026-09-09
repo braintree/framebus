@@ -8,6 +8,9 @@ declare global {
 
 type ReplyFunction = (...args: unknown[]) => void;
 
+export type VerifyDomainMethod = (domain: string) => boolean;
+export type IFrameOrWindowList = Array<HTMLIFrameElement | Window>;
+
 export type FramebusPayload = {
   data?: string;
   event: string;

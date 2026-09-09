@@ -1,4 +1,4 @@
-import { packagePayload } from "../../src/lib";
+import { packagePayload, subscribers } from "../../src/lib";
 
 const messagePrefix = "/*framebus*/";
 
@@ -27,6 +27,28 @@ describe("packagePayload", () => {
 
     expect(typeof actual.reply).toBe("string");
     expect(actual.eventData).toEqual({});
+  });
+
+  it("threads verifyDomain through to the reply listener", () => {
+    const fn = jest.fn();
+    const verifyDomain = (domain: string): boolean =>
+      domain === "https://trusted.example.com";
+    const result = packagePayload("event", "*", {}, fn, verifyDomain);
+    const replyEvent = JSON.parse(result.replace(messagePrefix, "")).reply;
+
+    // a forged reply from an untrusted origin is ignored
+    subscribers["*"][replyEvent][0].apply(
+      { origin: "https://evil.example.com" },
+      [{}],
+    );
+    expect(fn).not.toHaveBeenCalled();
+
+    // the legitimate reply from a trusted origin is delivered
+    subscribers["*"][replyEvent][0].apply(
+      { origin: "https://trusted.example.com" },
+      [{}],
+    );
+    expect(fn).toHaveBeenCalledTimes(1);
   });
 
   it("should throw error with prefix text when element cannot be stringified", () => {

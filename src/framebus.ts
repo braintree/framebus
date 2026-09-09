@@ -137,7 +137,19 @@ export class Framebus {
       data = undefined; // eslint-disable-line no-undefined
     }
 
-    const payload = packagePayload(eventName, origin, data, reply);
+    // targetFrames only applies when broadcasts are limited to a frame array.
+    const replyTargetFrames = this.limitBroadcastToFramesArray
+      ? this.targetFrames
+      : undefined; // eslint-disable-line no-undefined
+
+    const payload = packagePayload(
+      eventName,
+      origin,
+      data,
+      reply,
+      this.verifyDomain,
+      replyTargetFrames,
+    );
     if (!payload) {
       return false;
     }
