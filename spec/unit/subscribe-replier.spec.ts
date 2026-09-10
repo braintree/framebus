@@ -24,4 +24,22 @@ describe("subscribeReplier", () => {
 
     expect(subscribers[origin][event][0]).not.toBeDefined();
   });
+
+  it("does not invoke the reply handler when verifyDomain rejects the sender", () => {
+    const fn = jest.fn();
+    const origin = "*";
+    const verifyDomain = (domain: string): boolean =>
+      domain === "https://trusted.example.com";
+    const event = subscribeReplier(fn, origin, verifyDomain);
+
+    // simulate a dispatch from an untrusted origin
+    subscribers[origin][event][0].apply(
+      { origin: "https://evil.example.com" },
+      [{}],
+    );
+
+    expect(fn).not.toHaveBeenCalled();
+    // the listener remains so the legitimate reply can still arrive
+    expect(subscribers[origin][event][0]).toBeInstanceOf(Function);
+  });
 });

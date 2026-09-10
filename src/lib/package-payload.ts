@@ -4,6 +4,8 @@ import type {
   FramebusPayload,
   FramebusSubscriberArg,
   FramebusSubscribeHandler,
+  VerifyDomainMethod,
+  IFrameOrWindowList,
 } from "./types";
 
 export function packagePayload(
@@ -11,6 +13,8 @@ export function packagePayload(
   origin: string,
   data?: FramebusSubscriberArg,
   reply?: FramebusSubscribeHandler,
+  verifyDomain?: VerifyDomainMethod,
+  targetFrames?: IFrameOrWindowList,
 ): string {
   let packaged;
   const payload: FramebusPayload = {
@@ -19,7 +23,7 @@ export function packagePayload(
   };
 
   if (typeof reply === "function") {
-    payload.reply = subscribeReplier(reply, origin);
+    payload.reply = subscribeReplier(reply, origin, verifyDomain, targetFrames);
   }
 
   payload.eventData = data;

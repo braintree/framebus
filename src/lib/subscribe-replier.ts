@@ -1,27 +1,31 @@
 import { Framebus } from "../framebus";
 import generateUUID from "@braintree/uuid";
 
-import type { FramebusSubscriberArg, FramebusSubscribeHandler } from "./";
+import type {
+  FramebusSubscriberArg,
+  FramebusSubscribeHandler,
+  VerifyDomainMethod,
+  IFrameOrWindowList,
+} from "./";
 
 export function subscribeReplier(
   fn: FramebusSubscribeHandler,
   origin: string,
+  verifyDomain?: VerifyDomainMethod,
+  targetFrames?: IFrameOrWindowList,
 ): string {
   const uuid = generateUUID();
+  const bus = Framebus.target({ origin, verifyDomain, targetFrames });
 
   function replier(
     data: FramebusSubscriberArg,
     replyOriginHandler: FramebusSubscribeHandler,
   ): void {
     fn(data, replyOriginHandler);
-    Framebus.target({
-      origin,
-    }).off(uuid, replier);
+    bus.off(uuid, replier);
   }
 
-  Framebus.target({
-    origin,
-  }).on(uuid, replier);
+  bus.on(uuid, replier);
 
   return uuid;
 }

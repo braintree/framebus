@@ -13,6 +13,8 @@ import type {
   FramebusSubscribeHandler,
   FramebusOnHandler,
   FramebusReplyHandler,
+  VerifyDomainMethod,
+  IFrameOrWindowList,
 } from "./lib";
 
 type Listener = {
@@ -20,14 +22,6 @@ type Listener = {
   handler: FramebusOnHandler;
   originalHandler: FramebusOnHandler;
 };
-
-type VerifyDomainMethod = (domain: string) => boolean;
-// this is a mixed type so that users can add iframes to the array
-// before they have been added to the DOM (in which case, they
-// would not have a contentWindow yet). When accessing these
-// windows in Framebus, the targetFramesAsWindows private
-// method should be used
-type IFrameOrWindowList = Array<HTMLIFrameElement | Window>;
 
 type FramebusOptions = {
   channel?: string;
@@ -137,7 +131,19 @@ export class Framebus {
       data = undefined; // eslint-disable-line no-undefined
     }
 
-    const payload = packagePayload(eventName, origin, data, reply);
+    // targetFrames only applies when broadcasts are limited to a frame array.
+    const replyTargetFrames = this.limitBroadcastToFramesArray
+      ? this.targetFrames
+      : undefined; // eslint-disable-line no-undefined
+
+    const payload = packagePayload(
+      eventName,
+      origin,
+      data,
+      reply,
+      this.verifyDomain,
+      replyTargetFrames,
+    );
     if (!payload) {
       return false;
     }
