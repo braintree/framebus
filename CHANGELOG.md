@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## UNRELEASED
+## 6.2.0
 
 - Reply listeners now inherit the Bus's `verifyDomain`/`targetFrames`
 
