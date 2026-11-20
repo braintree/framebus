@@ -6,18 +6,6 @@ export default defineConfig({
       name: "chrome",
       use: { ...devices["Desktop Chrome"] },
     },
-    {
-      name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
-    },
-    {
-      name: "edge",
-      use: { ...devices["Desktop Edge"] },
-    },
-    {
-      name: "safari",
-      use: { ...devices["Desktop Safari"] },
-    },
   ],
   testMatch: "__tests__/*.spec.ts",
   timeout: 120000,

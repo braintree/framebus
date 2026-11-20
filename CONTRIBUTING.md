@@ -38,14 +38,9 @@ will be installed upon `npm install` and the test suite executed with
 
     npm test
 
-To run only the functional tests locally across Chrome, Firefox, Edge, and Safari:
+To run only the functional tests locally in Chrome:
 
     npm run playwright:local
-
-To run against BrowserStack, copy `example.env` to `.env` and fill in your credentials:
-
-    cp example.env .env
-    npm run playwright
 
 ### Servers for manual testing
 
